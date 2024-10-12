@@ -1,5 +1,5 @@
 
-package gui;
+package gui.frontDesk;
 
 import com.formdev.flatlaf.FlatClientProperties;
 
