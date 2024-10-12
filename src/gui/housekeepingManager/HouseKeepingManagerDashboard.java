@@ -1,36 +1,29 @@
-package gui.frontDesk;
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
+ */
+package gui.housekeepingManager;
 
 import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.extras.FlatSVGIcon;
 import com.formdev.flatlaf.themes.FlatMacLightLaf;
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Dimension;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JButton;
 import javax.swing.JFrame;
-import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
-public class FrontDeskDashBoard extends javax.swing.JFrame {
+/**
+ *
+ * @author kovid
+ */
+public class HouseKeepingManagerDashboard extends javax.swing.JFrame {
 
     private static List<JButton> sideBarButtons = new ArrayList<>();
 
-    public FrontDeskDashBoard() {
+    public HouseKeepingManagerDashboard() {
         initComponents();
         init();
-        loadSvg();
-        loadOverview();
-//        roundPannels(); /////////////Round veka eka hadanna one//////////////
-    }
-
-    private void loadOverview() {
-
-        FaontDeskOverview productPannel = new FaontDeskOverview();
-        jPanel2.add(productPannel, BorderLayout.NORTH);
-        SwingUtilities.updateComponentTreeUI(jPanel2);
-
     }
 
     private void init() {
@@ -115,33 +108,12 @@ public class FrontDeskDashBoard extends javax.swing.JFrame {
 
     }
 
-    private static void scalePanelWidth(JPanel panelToScale, JPanel referencePanel) {
-        int referenceWidth = referencePanel.getWidth();
-        // Set the preferred size based on the reference panel's width
-        panelToScale.setPreferredSize(new Dimension(referenceWidth, panelToScale.getHeight()));
-        // Update the UI to reflect changes
-        SwingUtilities.updateComponentTreeUI(referencePanel.getParent());
-    }
-
-    private void loadSvg() {
-//        FlatSVGIcon icon = new FlatSVGIcon("resource//veloraCrestSVG.svg", 100, 100);
-//        jLabel1.setIcon(icon);
-
-//        FlatSVGIcon micon = new FlatSVGIcon("resource//message.svg", massageIcon.getHeight(), massageIcon.getWidth());
-//        massageIcon.setIcon(micon);
-//
-//        FlatSVGIcon nicon = new FlatSVGIcon("resource//notification.svg", notificationIcon.getHeight(), notificationIcon.getWidth());
-//        notificationIcon.setIcon(nicon);
-//
-//        FlatSVGIcon logouticon = new FlatSVGIcon("resource//loguot.svg", 30, 30);
-//        logoutIcon.setIcon(logouticon);
-    }
-
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
+        jLabel1 = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
@@ -153,7 +125,6 @@ public class FrontDeskDashBoard extends javax.swing.JFrame {
         jButton9 = new javax.swing.JButton();
         jButton10 = new javax.swing.JButton();
         jButton11 = new javax.swing.JButton();
-        jLabel1 = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
         jButton12 = new javax.swing.JButton();
@@ -161,7 +132,7 @@ public class FrontDeskDashBoard extends javax.swing.JFrame {
         jPanel3 = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("Dashboard | Front Desk");
+        setTitle("Dashboard | Housekeeping Manager");
 
         jPanel1.setBackground(new java.awt.Color(0, 140, 130));
 
@@ -174,7 +145,7 @@ public class FrontDeskDashBoard extends javax.swing.JFrame {
         });
 
         jButton2.setFont(new java.awt.Font("Poppins", 0, 12)); // NOI18N
-        jButton2.setText("Booking Calendar");
+        jButton2.setText("Financial Overview");
         jButton2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton2ActionPerformed(evt);
@@ -198,7 +169,7 @@ public class FrontDeskDashBoard extends javax.swing.JFrame {
         });
 
         jButton5.setFont(new java.awt.Font("Poppins", 0, 12)); // NOI18N
-        jButton5.setText("Room Management");
+        jButton5.setText("Employee Attendance");
         jButton5.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton5ActionPerformed(evt);
@@ -206,7 +177,7 @@ public class FrontDeskDashBoard extends javax.swing.JFrame {
         });
 
         jButton6.setFont(new java.awt.Font("Poppins", 0, 12)); // NOI18N
-        jButton6.setText("Room Food Orders");
+        jButton6.setText("Rooms & Floor Info");
         jButton6.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton6ActionPerformed(evt);
@@ -214,7 +185,7 @@ public class FrontDeskDashBoard extends javax.swing.JFrame {
         });
 
         jButton7.setFont(new java.awt.Font("Poppins", 0, 12)); // NOI18N
-        jButton7.setText("Food Orders");
+        jButton7.setText("Meals & Menu");
         jButton7.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton7ActionPerformed(evt);
@@ -238,7 +209,7 @@ public class FrontDeskDashBoard extends javax.swing.JFrame {
         });
 
         jButton10.setFont(new java.awt.Font("Poppins", 0, 12)); // NOI18N
-        jButton10.setText("Maintenance Requests");
+        jButton10.setText("Maintenance Approval");
         jButton10.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton10ActionPerformed(evt);
@@ -253,6 +224,10 @@ public class FrontDeskDashBoard extends javax.swing.JFrame {
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(86, 86, 86)
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 123, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(96, Short.MAX_VALUE))
+            .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                     .addComponent(jButton1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jButton10, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 234, Short.MAX_VALUE)
@@ -265,18 +240,14 @@ public class FrontDeskDashBoard extends javax.swing.JFrame {
                     .addComponent(jButton3, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jButton2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jButton11, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(0, 71, Short.MAX_VALUE))
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(86, 86, 86)
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 123, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(50, 50, 50)
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(49, 49, 49)
+                .addGap(48, 48, 48)
                 .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -316,7 +287,7 @@ public class FrontDeskDashBoard extends javax.swing.JFrame {
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addContainerGap(816, Short.MAX_VALUE)
+                .addContainerGap(843, Short.MAX_VALUE)
                 .addComponent(jButton13, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jButton12, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -370,6 +341,7 @@ public class FrontDeskDashBoard extends javax.swing.JFrame {
         );
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
@@ -414,15 +386,17 @@ public class FrontDeskDashBoard extends javax.swing.JFrame {
         sideBarButtonAnimate(jButton10);
     }//GEN-LAST:event_jButton10ActionPerformed
 
+    /**
+     * @param args the command line arguments
+     */
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
-
         FlatMacLightLaf.setup();
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new FrontDeskDashBoard().setVisible(true);
+                new HouseKeepingManagerDashboard().setVisible(true);
             }
         });
     }
