@@ -1,4 +1,4 @@
-package gui;
+package gui.frontDesk;
 
 import com.formdev.flatlaf.extras.FlatSVGIcon;
 import javax.swing.JDialog;

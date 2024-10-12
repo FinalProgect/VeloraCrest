@@ -1,4 +1,4 @@
-package gui;
+package gui.frontDesk;
 
 
 public class CustomerRegistration extends javax.swing.JPanel {
