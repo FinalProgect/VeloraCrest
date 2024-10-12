@@ -139,8 +139,6 @@ public class ManagerDashboard extends javax.swing.JFrame {
 
         jPanel1.setBackground(new java.awt.Color(0, 140, 130));
 
-        jLabel1.setText("Label here");
-
         jButton1.setFont(new java.awt.Font("Poppins SemiBold", 0, 16)); // NOI18N
         jButton1.setText("Overview");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
