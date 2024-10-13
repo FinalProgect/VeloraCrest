@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package model;
 
 import com.formdev.flatlaf.FlatClientProperties;
@@ -16,12 +12,8 @@ import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.JTableHeader;
 
-/**
- *
- * @author kovid
- */
 public class ModifyTables {
-
+    
     private JTable table;
     private JScrollPane scrollpane;
     private JPanel panel;

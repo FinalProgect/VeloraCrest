@@ -32,27 +32,7 @@ public class RoomReservation extends javax.swing.JPanel {
         ModifyTables tableModify = new ModifyTables();
         tableModify.modifyTables(jPanel1, jTable1, jScrollPane1);
         
-        
-//        jPanel1.putClientProperty(FlatClientProperties.STYLE, "arc:90");
-//        DefaultTableCellRenderer renderer = new DefaultTableCellRenderer();
-//        renderer.setHorizontalAlignment(SwingConstants.CENTER);
-//
-//
-//        jTable1.setDefaultRenderer(Object.class, renderer);
-//        JTableHeader header = jTable1.getTableHeader();
-//        header.setDefaultRenderer(new DefaultTableCellRenderer() {
-//            @Override
-//            public Component getTableCellRendererComponent(JTable table, Object value,
-//                    boolean isSelected, boolean hasFocus, int row, int column) {
-//                JLabel label = (JLabel) super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
-//                label.setFont(new Font("Poppins", Font.BOLD, 12)); // Set font to bold
-//                label.setHorizontalAlignment(SwingConstants.CENTER); // Center the text
-//                label.setBorder(BorderFactory.createEmptyBorder()); // Remove border
-//                return label;
-//            }
-//        });
-//        jScrollPane1.setBorder(BorderFactory.createEmptyBorder()); // Remove JScrollPane border
-//        
+             
         
     }
 
