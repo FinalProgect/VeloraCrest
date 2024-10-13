@@ -48,4 +48,11 @@ public class ModifyTables {
         
         modifyProcess();
     }
+    
+    public void modifyTables(JTable table, JScrollPane scrollpane) {
+        this.scrollpane = scrollpane;
+        this.table = table;
+        
+        modifyProcess();
+    }
 }
