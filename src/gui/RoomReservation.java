@@ -18,21 +18,12 @@ import model.ModifyTables;
  * @author vindu
  */
 public class RoomReservation extends javax.swing.JPanel {
-
     
-     public static void main(String[] args) {
-       new RoomReservation().setVisible(true);
-    }
-    /**
-     * Creates new form RoomReservation
-     */
     public RoomReservation() {
         initComponents();
         
         ModifyTables tableModify = new ModifyTables();
-        tableModify.modifyTables(jPanel1, jTable1, jScrollPane1);
-        
-             
+        tableModify.modifyTables(jPanel1, jTable1, jScrollPane1);          
         
     }
 
