@@ -215,7 +215,7 @@ public class HouseKeepingManagerDashboard extends javax.swing.JFrame {
                 .addGap(18, 18, 18))
         );
 
-        jPanel2.setBackground(new java.awt.Color(250, 250, 250));
+        jPanel2.setBackground(new java.awt.Color(255, 255, 255));
 
         jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resource/userIcon.png"))); // NOI18N
 
@@ -249,7 +249,7 @@ public class HouseKeepingManagerDashboard extends javax.swing.JFrame {
                 .addContainerGap(10, Short.MAX_VALUE))
         );
 
-        jPanel3.setBackground(new java.awt.Color(250, 250, 250));
+        jPanel3.setBackground(new java.awt.Color(255, 255, 255));
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);

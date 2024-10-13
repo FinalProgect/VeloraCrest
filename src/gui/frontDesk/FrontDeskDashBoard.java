@@ -3,6 +3,7 @@ package gui.frontDesk;
 import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.extras.FlatSVGIcon;
 import com.formdev.flatlaf.themes.FlatMacLightLaf;
+import gui.RoomReservation;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -301,7 +302,7 @@ public class FrontDeskDashBoard extends javax.swing.JFrame {
                 .addGap(18, 18, 18))
         );
 
-        jPanel2.setBackground(new java.awt.Color(250, 250, 250));
+        jPanel2.setBackground(new java.awt.Color(255, 255, 255));
 
         jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resource/userIcon.png"))); // NOI18N
 
@@ -364,6 +365,8 @@ public class FrontDeskDashBoard extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         sideBarButtonAnimate(jButton1);
+        jPanel3.removeAll();
+        loadOverview();
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
@@ -376,6 +379,11 @@ public class FrontDeskDashBoard extends javax.swing.JFrame {
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
         sideBarButtonAnimate(jButton4);
+
+        jPanel3.removeAll();
+        RoomReservation reserationPanel = new RoomReservation();
+        jPanel3.add(reserationPanel, BorderLayout.CENTER);
+        SwingUtilities.updateComponentTreeUI(jPanel3);
 
     }//GEN-LAST:event_jButton4ActionPerformed
 
