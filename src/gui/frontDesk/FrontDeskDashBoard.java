@@ -28,8 +28,8 @@ public class FrontDeskDashBoard extends javax.swing.JFrame {
     private void loadOverview() {
 
         FaontDeskOverview productPannel = new FaontDeskOverview();
-        jPanel2.add(productPannel, BorderLayout.NORTH);
-        SwingUtilities.updateComponentTreeUI(jPanel2);
+        jPanel3.add(productPannel, BorderLayout.NORTH);
+        SwingUtilities.updateComponentTreeUI(jPanel3);
 
     }
 
@@ -336,17 +336,7 @@ public class FrontDeskDashBoard extends javax.swing.JFrame {
         );
 
         jPanel3.setBackground(new java.awt.Color(250, 250, 250));
-
-        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
-        jPanel3.setLayout(jPanel3Layout);
-        jPanel3Layout.setHorizontalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
-        jPanel3Layout.setVerticalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
+        jPanel3.setLayout(new java.awt.BorderLayout());
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
