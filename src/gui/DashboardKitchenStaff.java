@@ -13,13 +13,10 @@ public class DashboardKitchenStaff extends javax.swing.JPanel {
      public static void main(String[] args) {
        new DashboardKitchenStaff().setVisible(true);
     }
-    /**
-     * Creates new form DashboardKitchenStaff
-     */
     public DashboardKitchenStaff() {
         initComponents();
     }
-
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
