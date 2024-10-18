@@ -1,7 +1,8 @@
-package gui.frontDesk;
+package gui;
 
 import com.formdev.flatlaf.extras.FlatSVGIcon;
 import com.formdev.flatlaf.themes.FlatMacLightLaf;
+import gui.SignIn;
 import java.awt.Color;
 import java.awt.SplashScreen;
 
