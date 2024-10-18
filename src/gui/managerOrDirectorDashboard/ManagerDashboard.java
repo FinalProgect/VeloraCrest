@@ -17,7 +17,6 @@ import javax.swing.SwingUtilities;
  *
  * @author kovid
  */
-
 public class ManagerDashboard extends javax.swing.JFrame {
 // Add all the sidebar buttons to this list
 
@@ -49,11 +48,16 @@ public class ManagerDashboard extends javax.swing.JFrame {
         sideBarButtons.add(jButton8);
         sideBarButtons.add(jButton9);
         sideBarButtons.add(jButton10);
-    sideBarButtonAnimate(jButton1);
-    
+        sideBarButtonAnimate(jButton1);
+
         for (JButton sideBarButton : sideBarButtons) {
             sideBarButton.putClientProperty(FlatClientProperties.STYLE, "arc:50");
         }
+
+        ManagerOverview overView = new ManagerOverview();
+        jPanel3.removeAll();
+        jPanel3.add(overView);
+        SwingUtilities.updateComponentTreeUI(jPanel3);
     }
 
     private void sideBarButtonAnimate(JButton button) {
@@ -80,7 +84,6 @@ public class ManagerDashboard extends javax.swing.JFrame {
                     }
                 }
         );
-
 
         int restHeight = newButtons.get(1).getHeight();
 
@@ -320,17 +323,7 @@ public class ManagerDashboard extends javax.swing.JFrame {
         );
 
         jPanel3.setBackground(new java.awt.Color(250, 250, 250));
-
-        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
-        jPanel3.setLayout(jPanel3Layout);
-        jPanel3Layout.setHorizontalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
-        jPanel3Layout.setVerticalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
+        jPanel3.setLayout(new java.awt.BorderLayout());
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -359,6 +352,10 @@ public class ManagerDashboard extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         sideBarButtonAnimate(jButton1);
+        ManagerOverview overView = new ManagerOverview();
+        jPanel3.removeAll();
+        jPanel3.add(overView);
+        SwingUtilities.updateComponentTreeUI(jPanel3);
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
@@ -371,48 +368,48 @@ public class ManagerDashboard extends javax.swing.JFrame {
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
         sideBarButtonAnimate(jButton4);
-   
+
     }//GEN-LAST:event_jButton4ActionPerformed
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
-sideBarButtonAnimate(jButton5);
-                            
+        sideBarButtonAnimate(jButton5);
+
     }//GEN-LAST:event_jButton5ActionPerformed
 
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
-sideBarButtonAnimate(jButton6);
+        sideBarButtonAnimate(jButton6);
     }//GEN-LAST:event_jButton6ActionPerformed
 
     private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
-sideBarButtonAnimate(jButton7);
+        sideBarButtonAnimate(jButton7);
     }//GEN-LAST:event_jButton7ActionPerformed
 
     private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton8ActionPerformed
-sideBarButtonAnimate(jButton8);
+        sideBarButtonAnimate(jButton8);
     }//GEN-LAST:event_jButton8ActionPerformed
 
     private void jButton9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton9ActionPerformed
-sideBarButtonAnimate(jButton9);
+        sideBarButtonAnimate(jButton9);
     }//GEN-LAST:event_jButton9ActionPerformed
 
     private void jButton10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton10ActionPerformed
-sideBarButtonAnimate(jButton10);
+        sideBarButtonAnimate(jButton10);
     }//GEN-LAST:event_jButton10ActionPerformed
 
     /**
      * @param args the command line arguments
      */
     public static void main(String args[]) {
-    /* Set the Nimbus look and feel */
-    FlatMacLightLaf.setup();
+        /* Set the Nimbus look and feel */
+        FlatMacLightLaf.setup();
 
-    /* Create and display the form */
-    java.awt.EventQueue.invokeLater(new Runnable() {
-        public void run() {
-            new ManagerDashboard().setVisible(true);
-        }
-    });
-}
+        /* Create and display the form */
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                new ManagerDashboard().setVisible(true);
+            }
+        });
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
