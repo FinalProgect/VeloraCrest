@@ -13,14 +13,15 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.JTableHeader;
 
 public class ModifyTables {
-    
+
     private JTable table;
     private JScrollPane scrollpane;
     private JPanel panel;
 
     private void modifyProcess() {
-
-        this.panel.putClientProperty(FlatClientProperties.STYLE, "arc:90");
+        if (panel != null) {
+            this.panel.putClientProperty(FlatClientProperties.STYLE, "arc:90");
+        }
         DefaultTableCellRenderer renderer = new DefaultTableCellRenderer();
         renderer.setHorizontalAlignment(SwingConstants.CENTER);
 
@@ -45,14 +46,14 @@ public class ModifyTables {
         this.panel = panel;
         this.scrollpane = scrollpane;
         this.table = table;
-        
+
         modifyProcess();
     }
-    
+
     public void modifyTables(JTable table, JScrollPane scrollpane) {
         this.scrollpane = scrollpane;
         this.table = table;
-        
+
         modifyProcess();
     }
 }
