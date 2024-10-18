@@ -3,7 +3,7 @@ package gui.frontDesk;
 import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.extras.FlatSVGIcon;
 import com.formdev.flatlaf.themes.FlatMacLightLaf;
-import gui.RoomReservation;
+import gui.FoodOrders;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -26,6 +26,50 @@ public class FrontDeskDashBoard extends javax.swing.JFrame {
 //        roundPannels(); /////////////Round veka eka hadanna one//////////////
     }
 
+    
+    //Load room room management
+    private void loadRoomManagement(){
+        RoomManagement roomManagement = new RoomManagement();
+        jPanel3.add(roomManagement, BorderLayout.NORTH);
+        SwingUtilities.updateComponentTreeUI(jPanel3);
+    }
+    //Load room room management
+    
+    
+    //Load Foog orders
+    private void loadFoodOrders(){
+        FoodOrders foodOrders = new FoodOrders();
+        jPanel3.add(foodOrders, BorderLayout.NORTH);
+        SwingUtilities.updateComponentTreeUI(jPanel3);
+    }
+    //Load Foog orders
+    
+    
+    //Load Room Booking
+    private void loadRoomBooking(){
+        RoomsBooking roomsBooking = new RoomsBooking();
+        jPanel3.add(roomsBooking, BorderLayout.NORTH);
+        SwingUtilities.updateComponentTreeUI(jPanel3);
+    }
+    //Load Room Booking
+    
+    //Load Rooms Booking
+    private void loadCheckInOut() {
+        RoomReservation roomreservation = new RoomReservation();
+        jPanel3.add(roomreservation, BorderLayout.CENTER);
+        SwingUtilities.updateComponentTreeUI(jPanel3);
+    }
+    //Load Rooms Booking
+
+    //private Load Booking calander
+    private void loadBookingCalender() {
+        BookingCalendar bookingCalender = new BookingCalendar();
+        jPanel3.add(bookingCalender, BorderLayout.NORTH);
+        SwingUtilities.updateComponentTreeUI(jPanel3);
+    }
+    //private Load Booking calander
+
+    //Load over view Pannel
     private void loadOverview() {
 
         FaontDeskOverview productPannel = new FaontDeskOverview();
@@ -33,7 +77,11 @@ public class FrontDeskDashBoard extends javax.swing.JFrame {
         SwingUtilities.updateComponentTreeUI(jPanel3);
 
     }
+    //Load over view Pannel
 
+    
+    
+    
     private void init() {
         this.setExtendedState(JFrame.MAXIMIZED_BOTH);
         FlatSVGIcon icon = new FlatSVGIcon("resource//veloraCrestSVG.svg", jLabel1.getWidth(), jLabel1.getHeight());
@@ -160,6 +208,7 @@ public class FrontDeskDashBoard extends javax.swing.JFrame {
         jButton12 = new javax.swing.JButton();
         jButton13 = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
+        jScrollPane1 = new javax.swing.JScrollPane();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Dashboard | Front Desk");
@@ -338,6 +387,7 @@ public class FrontDeskDashBoard extends javax.swing.JFrame {
 
         jPanel3.setBackground(new java.awt.Color(250, 250, 250));
         jPanel3.setLayout(new java.awt.BorderLayout());
+        jPanel3.add(jScrollPane1, java.awt.BorderLayout.CENTER);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -371,24 +421,28 @@ public class FrontDeskDashBoard extends javax.swing.JFrame {
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         sideBarButtonAnimate(jButton2);
+        jPanel3.removeAll();
+        loadBookingCalender();
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         sideBarButtonAnimate(jButton3);
+        jPanel3.removeAll();
+        loadRoomBooking();
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
         sideBarButtonAnimate(jButton4);
 
         jPanel3.removeAll();
-        RoomReservation reserationPanel = new RoomReservation();
-        jPanel3.add(reserationPanel, BorderLayout.CENTER);
-        SwingUtilities.updateComponentTreeUI(jPanel3);
+        loadCheckInOut();
 
     }//GEN-LAST:event_jButton4ActionPerformed
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
         sideBarButtonAnimate(jButton5);
+        jPanel3.removeAll();
+        loadRoomManagement();
 
     }//GEN-LAST:event_jButton5ActionPerformed
 
@@ -398,6 +452,8 @@ public class FrontDeskDashBoard extends javax.swing.JFrame {
 
     private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
         sideBarButtonAnimate(jButton7);
+        jPanel3.removeAll();
+        loadFoodOrders();
     }//GEN-LAST:event_jButton7ActionPerformed
 
     private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton8ActionPerformed
@@ -444,5 +500,6 @@ public class FrontDeskDashBoard extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
+    private javax.swing.JScrollPane jScrollPane1;
     // End of variables declaration//GEN-END:variables
 }
