@@ -25,6 +25,14 @@ public class FrontDeskDashBoard extends javax.swing.JFrame {
         loadOverview();
 //        roundPannels(); /////////////Round veka eka hadanna one//////////////
     }
+    
+    //Load room food Orders Panel
+    private void loadRoomFoodOrder(){
+        RoomFoodOrder roomFoodOrder = new RoomFoodOrder();
+        jPanel3.add(roomFoodOrder, BorderLayout.NORTH);
+        SwingUtilities.updateComponentTreeUI(jPanel3);
+    }
+    //Load room food Orders Panel
 
     
     //Load room room management
@@ -448,6 +456,8 @@ public class FrontDeskDashBoard extends javax.swing.JFrame {
 
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
         sideBarButtonAnimate(jButton6);
+        jPanel3.removeAll();
+        loadRoomFoodOrder();
     }//GEN-LAST:event_jButton6ActionPerformed
 
     private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
