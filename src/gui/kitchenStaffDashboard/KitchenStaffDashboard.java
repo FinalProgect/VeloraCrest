@@ -3,6 +3,7 @@ package gui.kitchenStaffDashboard;
 import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.extras.FlatSVGIcon;
 import com.formdev.flatlaf.themes.FlatMacLightLaf;
+import java.awt.BorderLayout;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JButton;
@@ -289,6 +290,11 @@ public class KitchenStaffDashboard extends javax.swing.JFrame {
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         sideBarButtonAnimate(jButton2);
+        
+//        Select_Ingridients selectIngridents = new Select_Ingridients();
+//        jPanel3.add(selectIngridents, BorderLayout.NORTH);
+//        SwingUtilities.updateComponentTreeUI(jPanel3);
+        
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed

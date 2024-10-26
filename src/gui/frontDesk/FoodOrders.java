@@ -4,6 +4,8 @@
  */
 package gui;
 
+import model.ModifyTables;
+
 /**
  *
  * @author KASUNEE
@@ -15,6 +17,12 @@ public class FoodOrders extends javax.swing.JPanel {
      */
     public FoodOrders() {
         initComponents();
+    }
+
+    private void init(){
+     ModifyTables modifyTable = new ModifyTables();
+    modifyTable.modifyTables(jPanel1, jTable1, jScrollPane1);
+    
     }
 
     /**
