@@ -17,6 +17,8 @@ public class Stock_Re_Check extends javax.swing.JPanel {
      */
     public Stock_Re_Check() {
         initComponents();
+        init();
+        inittable();
     }
     
     private void init(){
@@ -27,7 +29,7 @@ public class Stock_Re_Check extends javax.swing.JPanel {
 
     private void inittable(){
      ModifyTables modifyTables1 = new ModifyTables();
-    modifyTables1.modifyTables(jPanel2, jTable1, jScrollPane1);
+    modifyTables1.modifyTables(jPanel3, jTable2, jScrollPane2);
     
     }
 

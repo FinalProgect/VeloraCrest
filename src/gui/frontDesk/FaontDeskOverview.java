@@ -172,6 +172,7 @@ public class FaontDeskOverview extends javax.swing.JPanel {
 
         add(jPanel1, java.awt.BorderLayout.PAGE_START);
 
+        jPanel2.setBackground(new java.awt.Color(255, 255, 255));
         jPanel2.setPreferredSize(new java.awt.Dimension(1037, 250));
 
         jPanel3.setBackground(new java.awt.Color(240, 240, 240));
@@ -526,6 +527,8 @@ public class FaontDeskOverview extends javax.swing.JPanel {
         );
 
         add(jPanel2, java.awt.BorderLayout.CENTER);
+
+        jPanel16.setBackground(new java.awt.Color(255, 255, 255));
 
         jPanel17.setPreferredSize(new java.awt.Dimension(500, 305));
         jPanel17.setLayout(new java.awt.GridLayout(5, 1, 10, 5));
@@ -1119,6 +1122,8 @@ public class FaontDeskOverview extends javax.swing.JPanel {
         );
 
         jPanel18.add(jPanel34);
+
+        jPanel35.setBackground(new java.awt.Color(255, 255, 255));
 
         jPanel36.setBackground(new java.awt.Color(240, 240, 240));
 

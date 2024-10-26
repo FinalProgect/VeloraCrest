@@ -1,8 +1,14 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
+ */
 package gui.managerOrDirectorDashboard;
 
 import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.extras.FlatSVGIcon;
 import com.formdev.flatlaf.themes.FlatMacLightLaf;
+import gui.frontDesk.CustomerRegistration;
+import gui.frontDesk.RoomsBooking;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JButton;
@@ -17,6 +23,7 @@ public class ManagerDashboard extends javax.swing.JFrame {
 // Add all the sidebar buttons to this list
 
     private static List<JButton> sideBarButtons = new ArrayList<>();
+    private JButton activeButton;
 
     public ManagerDashboard() {
         initComponents();
@@ -57,6 +64,7 @@ public class ManagerDashboard extends javax.swing.JFrame {
     }
 
     private void sideBarButtonAnimate(JButton button) {
+        activeButton = button;
         List<JButton> newButtons = new ArrayList<>();
         newButtons.addAll(sideBarButtons);
         newButtons.remove(button);
@@ -139,6 +147,12 @@ public class ManagerDashboard extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Dashboard | Manager");
+        setUndecorated(true);
+        addComponentListener(new java.awt.event.ComponentAdapter() {
+            public void componentResized(java.awt.event.ComponentEvent evt) {
+                formComponentResized(evt);
+            }
+        });
 
         jPanel1.setBackground(new java.awt.Color(0, 140, 130));
 
@@ -226,6 +240,11 @@ public class ManagerDashboard extends javax.swing.JFrame {
 
         jButton11.setFont(new java.awt.Font("Poppins", 0, 14)); // NOI18N
         jButton11.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resource/LogoutPng.png"))); // NOI18N
+        jButton11.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton11ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -356,10 +375,18 @@ public class ManagerDashboard extends javax.swing.JFrame {
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         sideBarButtonAnimate(jButton2);
+        FinancialOverview financialOV = new FinancialOverview();
+        jPanel3.removeAll();
+        jPanel3.add(financialOV);
+        SwingUtilities.updateComponentTreeUI(jPanel3);
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         sideBarButtonAnimate(jButton3);
+        RoomsBooking roomsBooking = new RoomsBooking();
+        jPanel3.removeAll();
+        jPanel3.add(roomsBooking);
+        SwingUtilities.updateComponentTreeUI(jPanel3);
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
@@ -374,6 +401,10 @@ public class ManagerDashboard extends javax.swing.JFrame {
 
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
         sideBarButtonAnimate(jButton6);
+        RoomAndFloorManagement rmflr = new RoomAndFloorManagement();
+        jPanel3.removeAll();
+        jPanel3.add(rmflr);
+        SwingUtilities.updateComponentTreeUI(jPanel3);
     }//GEN-LAST:event_jButton6ActionPerformed
 
     private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
@@ -382,6 +413,7 @@ public class ManagerDashboard extends javax.swing.JFrame {
 
     private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton8ActionPerformed
         sideBarButtonAnimate(jButton8);
+
     }//GEN-LAST:event_jButton8ActionPerformed
 
     private void jButton9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton9ActionPerformed
@@ -391,6 +423,17 @@ public class ManagerDashboard extends javax.swing.JFrame {
     private void jButton10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton10ActionPerformed
         sideBarButtonAnimate(jButton10);
     }//GEN-LAST:event_jButton10ActionPerformed
+
+    private void formComponentResized(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_formComponentResized
+        if (this.getExtendedState() == JFrame.NORMAL || this.getExtendedState() == JFrame.MAXIMIZED_BOTH) {
+            sideBarButtonAnimate(activeButton);
+
+        }
+    }//GEN-LAST:event_formComponentResized
+
+    private void jButton11ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton11ActionPerformed
+        System.exit(0);
+    }//GEN-LAST:event_jButton11ActionPerformed
 
     /**
      * @param args the command line arguments
