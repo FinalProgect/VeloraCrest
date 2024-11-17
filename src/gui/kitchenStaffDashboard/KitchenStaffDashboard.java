@@ -291,9 +291,10 @@ public class KitchenStaffDashboard extends javax.swing.JFrame {
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         sideBarButtonAnimate(jButton2);
         
-//        Select_Ingridients selectIngridents = new Select_Ingridients();
-//        jPanel3.add(selectIngridents, BorderLayout.NORTH);
-//        SwingUtilities.updateComponentTreeUI(jPanel3);
+        Select_Ingredients selectIngridents = new Select_Ingredients();
+        jPanel3.removeAll();
+        jPanel3.add(selectIngridents, BorderLayout.NORTH);
+        SwingUtilities.updateComponentTreeUI(jPanel3);
         
     }//GEN-LAST:event_jButton2ActionPerformed
 
