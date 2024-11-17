@@ -10,6 +10,7 @@ import javax.swing.BorderFactory;
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.DefaultListModel;
 import javax.swing.SwingConstants;
+import model.ModifyJList;
 
 /**
  *
@@ -25,15 +26,11 @@ public class RoomAndFloorManagement extends javax.swing.JPanel {
 
     private void init() {
         jTextField1.putClientProperty(FlatClientProperties.STYLE, "arc:80");
-        jPanel1.putClientProperty(FlatClientProperties.STYLE, "arc:80");
 
-        DefaultListCellRenderer listRenderer = new DefaultListCellRenderer();
-        listRenderer.setHorizontalAlignment(SwingConstants.CENTER);
-        listRenderer.setBorder(BorderFactory.createEmptyBorder());
-        jScrollPane1.setBorder(BorderFactory.createEmptyBorder());
-
-        jList1.setCellRenderer(listRenderer);
-
+        ModifyJList modifyList = new ModifyJList();
+        modifyList.modifyJlist(jList1, jScrollPane1,jPanel1);
+  
+        
         DefaultListModel<String> model = new DefaultListModel<>();
         for (int i = 0; i < 100; i++) {
             model.addElement("Room " + i);
