@@ -5,8 +5,13 @@ import com.formdev.flatlaf.themes.FlatMacLightLaf;
 import gui.SignIn;
 import java.awt.Color;
 import java.awt.SplashScreen;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import model.ConnecctionChecker;
 
 public class SplshWindow extends javax.swing.JFrame {
+
+    public static boolean connectionIsDone = false;
 
     public SplshWindow() {
         initComponents();
@@ -32,8 +37,16 @@ public class SplshWindow extends javax.swing.JFrame {
                             break;
 
                         case 15:
+                            ConnecctionChecker connectionChecker = new ConnecctionChecker();
+
+                            connectionChecker.start();
                             lodingText.setText("Connected to the Inernet");
-                            break;
+                            if (connectionIsDone) {
+                                break;
+                            } else {
+                                x = 10;
+                                break;
+                            }
 
                         case 18:
                             lodingText.setText("Loding Files . . .");
@@ -246,7 +259,7 @@ public class SplshWindow extends javax.swing.JFrame {
                     }
                 }
                 dispose();
-               signInWindow();
+                signInWindow();
             }
         });
         lodingThread.start();
