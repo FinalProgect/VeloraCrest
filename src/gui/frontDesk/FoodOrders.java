@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JPanel.java to edit this template
  */
-package gui;
+package gui.frontDesk;
 
 import model.ModifyTables;
 
@@ -17,6 +17,7 @@ public class FoodOrders extends javax.swing.JPanel {
      */
     public FoodOrders() {
         initComponents();
+        init();
     }
 
     private void init(){
