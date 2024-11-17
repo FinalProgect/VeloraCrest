@@ -13,6 +13,7 @@ public class FoodOrders extends javax.swing.JPanel {
      */
     public FoodOrders() {
         initComponents();
+        init();
     }
 
     private void init(){

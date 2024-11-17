@@ -72,7 +72,7 @@ public class Stock_Re_Check extends javax.swing.JPanel {
         jLabel1.setText("Stock Re-Check");
 
         jLabel2.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jLabel2.setText("Tagline comes here");
+        jLabel2.setText("Tag line here");
 
         jPanel2.setBackground(new java.awt.Color(255, 255, 255));
 
