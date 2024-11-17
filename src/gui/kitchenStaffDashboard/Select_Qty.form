@@ -199,7 +199,7 @@
             <Property name="text" type="java.lang.String" value="Select Qty"/>
           </Properties>
         </Component>
-        <Container class="model.RoundPanel" name="roundPanel1">
+        <Container class="org.netbeans.modules.form.InvalidComponent" name="roundPanel1">
 
           <Layout>
             <DimensionLayout dim="0">
