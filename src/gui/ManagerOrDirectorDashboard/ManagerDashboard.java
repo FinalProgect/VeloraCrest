@@ -1,13 +1,9 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
- */
 package gui.managerOrDirectorDashboard;
 
 import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.extras.FlatSVGIcon;
 import com.formdev.flatlaf.themes.FlatMacLightLaf;
-import gui.frontDesk.CustomerRegistration;
+import gui.ManagerOrDirectorDashboard.MaintenanceApproval;
 import gui.frontDesk.RoomsBooking;
 import java.util.ArrayList;
 import java.util.List;
@@ -422,6 +418,10 @@ public class ManagerDashboard extends javax.swing.JFrame {
 
     private void jButton10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton10ActionPerformed
         sideBarButtonAnimate(jButton10);
+        MaintenanceApproval maintainance = new MaintenanceApproval();
+        jPanel3.removeAll();
+        jPanel3.add(maintainance);
+        SwingUtilities.updateComponentTreeUI(jPanel3);
     }//GEN-LAST:event_jButton10ActionPerformed
 
     private void formComponentResized(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_formComponentResized
