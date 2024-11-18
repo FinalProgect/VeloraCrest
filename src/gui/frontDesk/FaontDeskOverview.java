@@ -43,7 +43,7 @@ public class FaontDeskOverview extends javax.swing.JPanel {
 
         for (Map.Entry<String, Rooms> room : roomsMap.entrySet()) {
 
-            String key = room.getKey();
+//            String key = room.getKey();
             
             // Create the panel
             JPanel roomPanel = new JPanel();

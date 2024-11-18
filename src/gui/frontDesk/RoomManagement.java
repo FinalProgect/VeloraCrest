@@ -163,9 +163,9 @@ public class RoomManagement extends javax.swing.JPanel {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        itemsPanel.setBackground(new java.awt.Color(252, 252, 252));
+        itemsPanel.setBackground(new java.awt.Color(240, 240, 240));
 
-        jList1.setBackground(new java.awt.Color(252, 252, 252));
+        jList1.setBackground(new java.awt.Color(240, 240, 240));
         jList1.setFont(new java.awt.Font("Poppins", 0, 14)); // NOI18N
         jList1.setModel(new javax.swing.AbstractListModel<String>() {
             String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
