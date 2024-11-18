@@ -3,7 +3,7 @@ package gui;
 import com.formdev.flatlaf.extras.FlatSVGIcon;
 import gui.frontDesk.FrontDeskDashBoard;
 import gui.housekeepingManager.HouseKeepingManagerDashboard;
-import gui.housekeepingStaff.HousekeepingStaffDashboard;
+import gui.housekeepingStaff.housekeepingStaffDashboard;
 import gui.hrManager.HRManagerDashboard;
 import gui.kitchenManagerDashboard.KitchenManagerDashboard;
 import gui.managerOrDirectorDashboard.ManagerDashboard;
@@ -22,6 +22,7 @@ public class SignIn extends javax.swing.JDialog {
     public static final Logger logger = Loggers.getLogger();
 
     public static HashMap<String, EmployeeDetails> employeeMap = new HashMap();
+    
 
     public SignIn(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
@@ -41,11 +42,10 @@ public class SignIn extends javax.swing.JDialog {
         logo.setIcon(vclogo);
 
     }
-
+    
+    
     //Direct Employee to His Window
     private void openEmployeeWindow() {
-        
-        this.dispose();
 
         if (employeeMap.get("employee").getEmployeeDepartment() == 1) { //Front Desk Department
 
@@ -55,7 +55,7 @@ public class SignIn extends javax.swing.JDialog {
 //                frontDesk.setVisible(true);
             } else if (employeeMap.get("employee").getEmployeeType() == 2) {
 
-                
+                this.dispose();
 
                 FrontDeskDashBoard frontDesk = new FrontDeskDashBoard();
                 frontDesk.setVisible(true);
@@ -93,7 +93,7 @@ public class SignIn extends javax.swing.JDialog {
 
             } else if (employeeMap.get("employee").getEmployeeType() == 2) {
 
-                HousekeepingStaffDashboard houseKeepingStaff = new HousekeepingStaffDashboard();
+                housekeepingStaffDashboard houseKeepingStaff = new housekeepingStaffDashboard();
                 houseKeepingStaff.setVisible(true);
 
                 Loggers.logInfo("Housekeeping Staff member " + employeeMap.get("employee").getEmployeeName() + " Log In To System");
@@ -117,8 +117,6 @@ public class SignIn extends javax.swing.JDialog {
 
             if (employeeMap.get("employee").getEmployeeType() == 1) {
 
-                
-                
                 ManagerDashboard genaralManager = new ManagerDashboard();
                 genaralManager.setVisible(true);
 
@@ -132,6 +130,7 @@ public class SignIn extends javax.swing.JDialog {
 
     }
     //Direct Employee to His Window
+    
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -274,18 +273,18 @@ public class SignIn extends javax.swing.JDialog {
                 ResultSet result = MYsql.execute(quary);
 
                 if (result.next()) {
-
+                    
                     EmployeeDetails employeeDetails = new EmployeeDetails();
-
-                    employeeDetails.setEmployeeName(result.getString("fname") + " " + result.getString("lname"));
+                    
+                    employeeDetails.setEmployeeName(result.getString("fname") + " "+ result.getString("lname"));
                     employeeDetails.setEmployeeId(result.getInt("id"));
                     employeeDetails.setEmployeeEmail(result.getString("email"));
                     employeeDetails.setEmployeeDepartment(result.getInt("department_id"));
                     employeeDetails.setEmployeeType(result.getInt("Employee_type_id"));
-
+                    
                     employeeMap.put("employee", employeeDetails);
-
-                    openEmployeeWindow();
+                    
+                    
 
                 } else {
                     JOptionPane.showMessageDialog(this, "Invalid Email or Password", "Warning", JOptionPane.WARNING_MESSAGE);
