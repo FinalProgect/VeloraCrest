@@ -30,7 +30,7 @@ public class FrontDeskDashBoard extends javax.swing.JFrame {
 
     // Load Maintenance Request
     private void loadMaintenanceRequst() {
-        
+
         MaintenanceRequest maintenanceRequest = new MaintenanceRequest();
         landPanel.add(maintenanceRequest, BorderLayout.NORTH);
         SwingUtilities.updateComponentTreeUI(landPanel);
@@ -50,7 +50,7 @@ public class FrontDeskDashBoard extends javax.swing.JFrame {
     private void loadGuestRegistration() {
 
         CustomerRegistration customerRegistration = new CustomerRegistration();
-        landPanel.add(customerRegistration, BorderLayout.NORTH);
+        landPanel.add(customerRegistration, BorderLayout.CENTER);
         SwingUtilities.updateComponentTreeUI(landPanel);
 
     }
@@ -107,7 +107,7 @@ public class FrontDeskDashBoard extends javax.swing.JFrame {
     //Load over view Pannel
     private void loadOverview() {
 
-        FaontDeskOverview productPannel = new FaontDeskOverview();
+        FaontDeskOverview productPannel = new FaontDeskOverview(this);
         landPanel.add(productPannel, BorderLayout.NORTH);
         SwingUtilities.updateComponentTreeUI(landPanel);
 
@@ -562,4 +562,13 @@ public class FrontDeskDashBoard extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JPanel landPanel;
     // End of variables declaration//GEN-END:variables
+
+    public JButton pressBookNowButton() {
+        return jButton3;
+    }
+
+    public JButton pressSelectCustomerButton() {
+        return jButton8;
+    }
+
 }

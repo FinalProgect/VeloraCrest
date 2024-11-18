@@ -2,32 +2,32 @@ package gui.frontDesk;
 
 import com.formdev.flatlaf.FlatClientProperties;
 
-
 public class FaontDeskOverview extends javax.swing.JPanel {
 
+    private FrontDeskDashBoard parentFrame;
 
-    public FaontDeskOverview() {
+    public FaontDeskOverview(FrontDeskDashBoard parentFrame) {
         initComponents();
+        this.parentFrame = parentFrame;
         roungEdges();
     }
 
+    private void roungEdges() {
+        jPanel3.putClientProperty(FlatClientProperties.STYLE, "arc:100");
+        jPanel4.putClientProperty(FlatClientProperties.STYLE, "arc:100");
+        jPanel5.putClientProperty(FlatClientProperties.STYLE, "arc:100");
+        jPanel6.putClientProperty(FlatClientProperties.STYLE, "arc:100");
+        jPanel10.putClientProperty(FlatClientProperties.STYLE, "arc:100");
+        jPanel11.putClientProperty(FlatClientProperties.STYLE, "arc:100");
+        jPanel12.putClientProperty(FlatClientProperties.STYLE, "arc:100");
+        jPanel13.putClientProperty(FlatClientProperties.STYLE, "arc:100");
+        jPanel14.putClientProperty(FlatClientProperties.STYLE, "arc:100");
+        jPanel15.putClientProperty(FlatClientProperties.STYLE, "arc:100");
+        jPanel36.putClientProperty(FlatClientProperties.STYLE, "arc:100");
+        jPanel37.putClientProperty(FlatClientProperties.STYLE, "arc:100");
+        jPanel38.putClientProperty(FlatClientProperties.STYLE, "arc:100");
+    }
 
-    private void roungEdges(){
-    jPanel3.putClientProperty(FlatClientProperties.STYLE, "arc:100");
-    jPanel4.putClientProperty(FlatClientProperties.STYLE, "arc:100");
-    jPanel5.putClientProperty(FlatClientProperties.STYLE, "arc:100");
-    jPanel6.putClientProperty(FlatClientProperties.STYLE, "arc:100");
-    jPanel10.putClientProperty(FlatClientProperties.STYLE, "arc:100");
-    jPanel11.putClientProperty(FlatClientProperties.STYLE, "arc:100");
-    jPanel12.putClientProperty(FlatClientProperties.STYLE, "arc:100");
-    jPanel13.putClientProperty(FlatClientProperties.STYLE, "arc:100");
-    jPanel14.putClientProperty(FlatClientProperties.STYLE, "arc:100");
-    jPanel15.putClientProperty(FlatClientProperties.STYLE, "arc:100");
-    jPanel36.putClientProperty(FlatClientProperties.STYLE, "arc:100");
-    jPanel37.putClientProperty(FlatClientProperties.STYLE, "arc:100");
-    jPanel38.putClientProperty(FlatClientProperties.STYLE, "arc:100");
-}
-    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -139,8 +139,14 @@ public class FaontDeskOverview extends javax.swing.JPanel {
         jLabel2.setText("Seamless Check-ins, Superior Service.");
 
         jButton1.setBackground(new java.awt.Color(15, 140, 130));
+        jButton1.setFont(new java.awt.Font("Poppins", 0, 14)); // NOI18N
         jButton1.setForeground(new java.awt.Color(255, 255, 255));
         jButton1.setText("Book Now");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -1245,6 +1251,10 @@ public class FaontDeskOverview extends javax.swing.JPanel {
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+parentFrame.pressBookNowButton().doClick();
+    }//GEN-LAST:event_jButton1ActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

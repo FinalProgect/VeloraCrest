@@ -4,11 +4,13 @@ import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.extras.FlatSVGIcon;
 import com.formdev.flatlaf.themes.FlatMacLightLaf;
 import gui.ManagerOrDirectorDashboard.MaintenanceApproval;
+import gui.frontDesk.CustomerRegistration;
 import gui.frontDesk.RoomsBooking;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
 /**
@@ -409,7 +411,8 @@ public class ManagerDashboard extends javax.swing.JFrame {
 
     private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton8ActionPerformed
         sideBarButtonAnimate(jButton8);
-
+        CustomerRegistration cstmrReg = new CustomerRegistration();
+        loadPanel(cstmrReg);
     }//GEN-LAST:event_jButton8ActionPerformed
 
     private void jButton9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton9ActionPerformed
@@ -470,4 +473,10 @@ public class ManagerDashboard extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     // End of variables declaration//GEN-END:variables
+
+    private void loadPanel(JPanel panel){
+        jPanel3.removeAll();
+        jPanel3.add(panel);
+        SwingUtilities.updateComponentTreeUI(jPanel3);
+    }
 }

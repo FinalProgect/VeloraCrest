@@ -15,13 +15,14 @@ import javax.swing.SwingUtilities;
  */
 public class HRManagerDashboard extends javax.swing.JFrame {
 
-     private static List<JButton> sideBarButtons = new ArrayList<>();
+    private static List<JButton> sideBarButtons = new ArrayList<>();
+
     public HRManagerDashboard() {
         initComponents();
         init();
     }
 
-   private void init() {
+    private void init() {
         this.setExtendedState(JFrame.MAXIMIZED_BOTH);
         FlatSVGIcon icon = new FlatSVGIcon("resource//veloraCrestSVG.svg", jLabel1.getWidth(), jLabel1.getHeight());
         jLabel1.setIcon(icon);
@@ -42,11 +43,12 @@ public class HRManagerDashboard extends javax.swing.JFrame {
         sideBarButtons.add(jButton8);
         sideBarButtons.add(jButton9);
         sideBarButtons.add(jButton10);
-    sideBarButtonAnimate(jButton1);
-    
+        sideBarButtonAnimate(jButton1);
+
         for (JButton sideBarButton : sideBarButtons) {
             sideBarButton.putClientProperty(FlatClientProperties.STYLE, "arc:50");
         }
+        loadOverview();
     }
 
     private void sideBarButtonAnimate(JButton button) {
@@ -73,7 +75,6 @@ public class HRManagerDashboard extends javax.swing.JFrame {
                     }
                 }
         );
-
 
         int restHeight = newButtons.get(1).getHeight();
 
@@ -313,17 +314,7 @@ public class HRManagerDashboard extends javax.swing.JFrame {
         );
 
         jPanel3.setBackground(new java.awt.Color(250, 250, 250));
-
-        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
-        jPanel3.setLayout(jPanel3Layout);
-        jPanel3Layout.setHorizontalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
-        jPanel3Layout.setVerticalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
+        jPanel3.setLayout(new java.awt.BorderLayout());
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -351,10 +342,12 @@ public class HRManagerDashboard extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         sideBarButtonAnimate(jButton1);
+loadOverview();
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         sideBarButtonAnimate(jButton2);
+
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
@@ -426,4 +419,10 @@ public class HRManagerDashboard extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     // End of variables declaration//GEN-END:variables
+private void loadOverview() {
+        HROverview hrOverview = new HROverview();
+        jPanel3.removeAll();
+        jPanel3.add(hrOverview);
+        SwingUtilities.updateComponentTreeUI(jPanel3);
+    }
 }
