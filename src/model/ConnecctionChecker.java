@@ -31,6 +31,7 @@ public class ConnecctionChecker extends Thread{
             } catch (SQLException e) {
                 
                 System.out.println("No internet connection or database is not reachable.");
+                
             }
             
             // Sleep for a specified time (e.g., 5 seconds) before checking again
