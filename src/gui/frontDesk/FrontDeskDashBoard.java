@@ -59,7 +59,7 @@ public class FrontDeskDashBoard extends javax.swing.JFrame {
     //Load room food Orders Panel
     private void loadRoomFoodOrder() {
         RoomFoodOrder roomFoodOrder = new RoomFoodOrder();
-        landPanel.add(roomFoodOrder, BorderLayout.NORTH);
+        landPanel.add(roomFoodOrder, BorderLayout.CENTER);
         SwingUtilities.updateComponentTreeUI(landPanel);
     }
     //Load room food Orders Panel
@@ -67,7 +67,7 @@ public class FrontDeskDashBoard extends javax.swing.JFrame {
     //Load room room management
     private void loadRoomManagement() {
         RoomManagement roomManagement = new RoomManagement();
-        landPanel.add(roomManagement, BorderLayout.NORTH);
+        landPanel.add(roomManagement, BorderLayout.CENTER);
         SwingUtilities.updateComponentTreeUI(landPanel);
     }
     //Load room room management
@@ -75,7 +75,7 @@ public class FrontDeskDashBoard extends javax.swing.JFrame {
     //Load Foog orders
     private void loadFoodOrders() {
         FoodOrders foodOrders = new FoodOrders();
-        landPanel.add(foodOrders, BorderLayout.NORTH);
+        landPanel.add(foodOrders, BorderLayout.CENTER);
         SwingUtilities.updateComponentTreeUI(landPanel);
     }
     //Load Foog orders
@@ -83,7 +83,7 @@ public class FrontDeskDashBoard extends javax.swing.JFrame {
     //Load Room Booking
     private void loadRoomBooking() {
         RoomsBooking roomsBooking = new RoomsBooking();
-        landPanel.add(roomsBooking, BorderLayout.NORTH);
+        landPanel.add(roomsBooking, BorderLayout.CENTER);
         SwingUtilities.updateComponentTreeUI(landPanel);
     }
     //Load Room Booking
@@ -99,7 +99,7 @@ public class FrontDeskDashBoard extends javax.swing.JFrame {
     //private Load Booking calander
     private void loadBookingCalender() {
         BookingCalendar bookingCalender = new BookingCalendar();
-        landPanel.add(bookingCalender, BorderLayout.NORTH);
+        landPanel.add(bookingCalender, BorderLayout.CENTER);
         SwingUtilities.updateComponentTreeUI(landPanel);
     }
     //private Load Booking calander
@@ -108,7 +108,7 @@ public class FrontDeskDashBoard extends javax.swing.JFrame {
     private void loadOverview() {
 
         FaontDeskOverview productPannel = new FaontDeskOverview(this);
-        landPanel.add(productPannel, BorderLayout.NORTH);
+        landPanel.add(productPannel, BorderLayout.CENTER);
         SwingUtilities.updateComponentTreeUI(landPanel);
 
     }
