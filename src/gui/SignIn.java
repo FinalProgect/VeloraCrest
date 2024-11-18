@@ -286,7 +286,7 @@ public class SignIn extends javax.swing.JDialog {
                     
                     employeeMap.put("employee", employeeDetails);
                     
-                    
+                    openEmployeeWindow();
 
                 } else {
                     JOptionPane.showMessageDialog(this, "Invalid Email or Password", "Warning", JOptionPane.WARNING_MESSAGE);
