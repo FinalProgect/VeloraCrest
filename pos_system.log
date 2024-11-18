@@ -1,0 +1,30 @@
+Nov 18, 2024 9:31:37 AM model.Loggers logInfo
+INFO: Application started successfully.
+Nov 18, 2024 9:31:37 AM model.Loggers logWarning
+WARNING: Disk space is running low.
+Nov 18, 2024 9:31:37 AM model.Loggers logError
+SEVERE: Database connection failed.
+Nov 18, 2024 9:31:37 AM model.testLog main
+FINE: This is a FINE level log message.
+Nov 18, 2024 9:31:37 AM model.testLog main
+CONFIG: Configuration settings loaded.
+Nov 18, 2024 9:32:24 AM model.Loggers logInfo
+INFO: Application started successfully.
+Nov 18, 2024 9:32:24 AM model.Loggers logWarning
+WARNING: Disk space is running low.
+Nov 18, 2024 9:32:24 AM model.Loggers logError
+SEVERE: Database connection failed.
+Nov 18, 2024 9:32:24 AM model.testLog main
+FINE: This is a FINE level log message.
+Nov 18, 2024 9:32:24 AM model.testLog main
+CONFIG: Configuration settings loaded.
+Nov 18, 2024 11:49:41 AM gui.SignIn loginButtonActionPerformed
+WARNING: User try to login to system wothout enter email address.
+Nov 18, 2024 11:49:57 AM gui.SignIn loginButtonActionPerformed
+WARNING: User try to login to system wothout enter email address.
+Nov 18, 2024 11:50:01 AM gui.SignIn loginButtonActionPerformed
+WARNING: User try to login to system wothout enter Password.
+Nov 18, 2024 11:50:10 AM gui.SignIn loginButtonActionPerformed
+WARNING: User Enterd Invalid email or password.
+Nov 18, 2024 11:50:47 AM model.Loggers logInfo
+INFO: Human resorses Manager Amal Perera Log In To System
