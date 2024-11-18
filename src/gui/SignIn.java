@@ -46,7 +46,9 @@ public class SignIn extends javax.swing.JDialog {
     
     //Direct Employee to His Window
     private void openEmployeeWindow() {
-
+        
+        this.dispose();
+        
         if (employeeMap.get("employee").getEmployeeDepartment() == 1) { //Front Desk Department
 
             if (employeeMap.get("employee").getEmployeeType() == 1) { // employee
@@ -55,7 +57,7 @@ public class SignIn extends javax.swing.JDialog {
 //                frontDesk.setVisible(true);
             } else if (employeeMap.get("employee").getEmployeeType() == 2) {
 
-                this.dispose();
+                
 
                 FrontDeskDashBoard frontDesk = new FrontDeskDashBoard();
                 frontDesk.setVisible(true);
