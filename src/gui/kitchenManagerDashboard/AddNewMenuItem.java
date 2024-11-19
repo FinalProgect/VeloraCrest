@@ -1,28 +1,18 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JPanel.java to edit this template
- */
 package gui.kitchenManagerDashboard;
 
 import com.formdev.flatlaf.FlatClientProperties;
 import javax.swing.BorderFactory;
+import model.ComponentStorage;
 import model.ModifyTables;
 
-/**
- *
- * @author vindu
- */
 public class AddNewMenuItem extends javax.swing.JPanel {
-
-    /**
-     * Creates new form AddNewMenuItem
-     */
+    
     public AddNewMenuItem() {
         initComponents();
         init();
     }
-
-    private void init(){
+    
+    private void init() {
         jScrollPane1.setBorder(BorderFactory.createEmptyBorder());
         jPanel2.putClientProperty(FlatClientProperties.STYLE, "arc:80");
         jPanel3.putClientProperty(FlatClientProperties.STYLE, "arc:80");
@@ -31,6 +21,7 @@ public class AddNewMenuItem extends javax.swing.JPanel {
         modifytables.modifyTables(jPanel4, jTable1, jScrollPane2);
         modifytables.modifyTables(jPanel5, jTable2, jScrollPane3);
     }
+    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -274,6 +265,11 @@ public class AddNewMenuItem extends javax.swing.JPanel {
         jButton1.setFont(new java.awt.Font("Poppins SemiBold", 0, 14)); // NOI18N
         jButton1.setForeground(new java.awt.Color(255, 255, 255));
         jButton1.setText("Meals");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         jButton4.setBackground(new java.awt.Color(15, 140, 130));
         jButton4.setFont(new java.awt.Font("Poppins", 0, 14)); // NOI18N
@@ -356,9 +352,22 @@ public class AddNewMenuItem extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
-   ViewMenuItemsFrame viewMenuItems = new ViewMenuItemsFrame();
-   viewMenuItems.setVisible(true);
+        ViewMenuItemsFrame viewMenuItems = new ViewMenuItemsFrame();
+        viewMenuItems.setVisible(true);
     }//GEN-LAST:event_jButton5ActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        MealDashBoard mealBoard;
+        if (ComponentStorage.mealDashboard == null) {
+            mealBoard = new MealDashBoard();
+            mealBoard.setVisible(true);
+            ComponentStorage.mealDashboard = mealBoard;
+        } else if (ComponentStorage.mealDashboard.isVisible()) {
+            ComponentStorage.mealDashboard.toFront();
+        } else {
+            ComponentStorage.mealDashboard.setVisible(true);
+        }
+    }//GEN-LAST:event_jButton1ActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

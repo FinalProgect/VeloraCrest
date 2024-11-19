@@ -16,6 +16,7 @@ public class AddNewMeal extends javax.swing.JPanel {
     public AddNewMeal() {
         initComponents();
         init();
+        
        }
     
 private void init(){
