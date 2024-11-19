@@ -12,6 +12,7 @@ import java.util.List;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
+import model.ComponentStorage;
 
 /**
  *
@@ -113,17 +114,22 @@ public class MealDashBoard extends javax.swing.JFrame {
         jButton3 = new javax.swing.JButton();
         jButton11 = new javax.swing.JButton();
         jButton4 = new javax.swing.JButton();
-        jPanel2 = new javax.swing.JPanel();
         jPanel3 = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setUndecorated(true);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosed(java.awt.event.WindowEvent evt) {
+                formWindowClosed(evt);
+            }
+        });
 
         jPanel1.setBackground(new java.awt.Color(0, 140, 130));
 
         jLabel1.setText("Label here");
 
         jButton1.setFont(new java.awt.Font("Poppins SemiBold", 0, 16)); // NOI18N
-        jButton1.setText("Overview");
+        jButton1.setText("Add New Meal");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);
@@ -131,7 +137,7 @@ public class MealDashBoard extends javax.swing.JFrame {
         });
 
         jButton2.setFont(new java.awt.Font("Poppins", 0, 12)); // NOI18N
-        jButton2.setText("Financial Overview");
+        jButton2.setText("Approve New Meal");
         jButton2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton2ActionPerformed(evt);
@@ -139,7 +145,7 @@ public class MealDashBoard extends javax.swing.JFrame {
         });
 
         jButton3.setFont(new java.awt.Font("Poppins", 0, 12)); // NOI18N
-        jButton3.setText("Rooms Booking");
+        jButton3.setText("Meal List");
         jButton3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton3ActionPerformed(evt);
@@ -204,19 +210,6 @@ public class MealDashBoard extends javax.swing.JFrame {
                 .addGap(18, 18, 18))
         );
 
-        jPanel2.setBackground(new java.awt.Color(255, 255, 255));
-
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-        jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1111, Short.MAX_VALUE)
-        );
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 72, Short.MAX_VALUE)
-        );
-
         jPanel3.setBackground(new java.awt.Color(250, 250, 250));
         jPanel3.setLayout(new java.awt.BorderLayout());
 
@@ -227,16 +220,13 @@ public class MealDashBoard extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, 0)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, 1111, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, 0)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap()
                 .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
         );
@@ -249,13 +239,12 @@ public class MealDashBoard extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton11ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        sideBarButtonAnimate(jButton3);
+        loadMealList();
 
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        sideBarButtonAnimate(jButton2);
-
+        loadApproveNewMeal();
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
@@ -265,6 +254,10 @@ public class MealDashBoard extends javax.swing.JFrame {
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
         this.dispose();
     }//GEN-LAST:event_jButton4ActionPerformed
+
+    private void formWindowClosed(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosed
+ComponentStorage.mealDashboard = null;
+    }//GEN-LAST:event_formWindowClosed
 
     /**
      * @param args the command line arguments
@@ -289,7 +282,6 @@ public class MealDashBoard extends javax.swing.JFrame {
     private javax.swing.JButton jButton4;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     // End of variables declaration//GEN-END:variables
 
@@ -298,6 +290,21 @@ public class MealDashBoard extends javax.swing.JFrame {
         AddNewMeal addNM = new AddNewMeal();
         jPanel3.removeAll();
         jPanel3.add(addNM);
+        SwingUtilities.updateComponentTreeUI(jPanel3);
+    }
+
+    private void loadApproveNewMeal() {
+        sideBarButtonAnimate(jButton2);
+        ApproveNewMeal appNM = new ApproveNewMeal();
+        jPanel3.removeAll();
+        jPanel3.add(appNM);
+        SwingUtilities.updateComponentTreeUI(jPanel3);
+    }
+    private void loadMealList() {
+        sideBarButtonAnimate(jButton3);
+        MealList mealList = new MealList();
+        jPanel3.removeAll();
+        jPanel3.add(mealList);
         SwingUtilities.updateComponentTreeUI(jPanel3);
     }
 }

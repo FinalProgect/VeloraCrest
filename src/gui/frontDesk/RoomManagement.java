@@ -155,8 +155,8 @@ public class RoomManagement extends javax.swing.JPanel {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(26, 26, 26)
-                .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
                     .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -201,6 +201,8 @@ public class RoomManagement extends javax.swing.JPanel {
         roomStatusBox.setForeground(new java.awt.Color(255, 255, 255));
         roomStatusBox.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         roomStatusBox.setText("Occupied");
+        roomStatusBox.setDisabledTextColor(new java.awt.Color(255, 255, 255));
+        roomStatusBox.setEnabled(false);
 
         jLabel3.setFont(new java.awt.Font("Poppins", 0, 14)); // NOI18N
         jLabel3.setText("Guest ID :");
