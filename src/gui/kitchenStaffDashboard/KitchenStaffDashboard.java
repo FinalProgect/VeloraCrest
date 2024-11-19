@@ -3,6 +3,8 @@ package gui.kitchenStaffDashboard;
 import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.extras.FlatSVGIcon;
 import com.formdev.flatlaf.themes.FlatMacLightLaf;
+import gui.DashboardKitchenStaff;
+import gui.kitchenManagerDashboard.AddNewMeal;
 import java.awt.BorderLayout;
 import java.util.ArrayList;
 import java.util.List;
@@ -46,6 +48,9 @@ public class KitchenStaffDashboard extends javax.swing.JFrame {
         for (JButton sideBarButton : sideBarButtons) {
             sideBarButton.putClientProperty(FlatClientProperties.STYLE, "arc:50");
         }
+        
+        
+        loadOverview();
     }
 
     private void sideBarButtonAnimate(JButton button) {
@@ -126,6 +131,7 @@ public class KitchenStaffDashboard extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Dashboard | Kitchen Staff");
+        setUndecorated(true);
 
         jPanel2.setBackground(new java.awt.Color(255, 255, 255));
 
@@ -162,17 +168,7 @@ public class KitchenStaffDashboard extends javax.swing.JFrame {
         );
 
         jPanel3.setBackground(new java.awt.Color(255, 255, 255));
-
-        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
-        jPanel3.setLayout(jPanel3Layout);
-        jPanel3Layout.setHorizontalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
-        jPanel3Layout.setVerticalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
+        jPanel3.setLayout(new java.awt.BorderLayout());
 
         jPanel1.setBackground(new java.awt.Color(0, 140, 130));
 
@@ -285,20 +281,27 @@ public class KitchenStaffDashboard extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        sideBarButtonAnimate(jButton1);
+        loadOverview();
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         sideBarButtonAnimate(jButton2);
         
-//        Select_Ingridients selectIngridents = new Select_Ingridients();
-//        jPanel3.add(selectIngridents, BorderLayout.NORTH);
-//        SwingUtilities.updateComponentTreeUI(jPanel3);
+        OrderList ordList = new OrderList();
+        jPanel3.removeAll();
+        jPanel3.add(ordList, BorderLayout.CENTER);
+        SwingUtilities.updateComponentTreeUI(jPanel3);
         
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         sideBarButtonAnimate(jButton3);
+        AddNewMeal adNwMl = new AddNewMeal();
+        jPanel3.removeAll();
+        jPanel3.add(adNwMl, BorderLayout.CENTER);
+        SwingUtilities.updateComponentTreeUI(jPanel3);
+        
+        
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
@@ -309,9 +312,14 @@ public class KitchenStaffDashboard extends javax.swing.JFrame {
         sideBarButtonAnimate(jButton5);
     }//GEN-LAST:event_jButton5ActionPerformed
 
-    /**
-     * @param args the command line arguments
-     */
+    private void loadOverview(){
+         sideBarButtonAnimate(jButton1);
+        
+        DashboardKitchenStaff1 selectIngridents = new DashboardKitchenStaff1();
+        jPanel3.removeAll();
+        jPanel3.add(selectIngridents, BorderLayout.CENTER);
+        SwingUtilities.updateComponentTreeUI(jPanel3);
+    }
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         FlatMacLightLaf.setup();
