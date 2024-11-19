@@ -1,3 +1,4 @@
+
 package gui.kitchenStaffDashboard;
 
 import com.formdev.flatlaf.FlatClientProperties;
