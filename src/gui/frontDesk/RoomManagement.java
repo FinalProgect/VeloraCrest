@@ -20,6 +20,17 @@ public class RoomManagement extends javax.swing.JPanel {
    
     
     
+    private void loadRoomsTojList(){
+        
+//        for (Map.Entry<Object, Object> en : m.entrySet()) {
+//            Object key = en.getKey();
+//            Object value = en.getValue();
+//            
+//        }
+    
+    }
+    
+    
 
     //Load SVG 
     private void loadSvg() {

@@ -7,6 +7,7 @@ public class Rooms {
     private String roomNo;
     private int roomPersonCount;
     private Double price;
+    private int type;
 
     /**
      * @return the roomId
@@ -64,6 +65,20 @@ public class Rooms {
      */
     public void setPrice(Double price) {
         this.price = price;
+    }
+
+    /**
+     * @return the type
+     */
+    public int getType() {
+        return type;
+    }
+
+    /**
+     * @param type the type to set
+     */
+    public void setType(int type) {
+        this.type = type;
     }
     
     
