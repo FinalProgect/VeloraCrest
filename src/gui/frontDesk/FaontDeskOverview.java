@@ -1,6 +1,7 @@
 package gui.frontDesk;
 
 import com.formdev.flatlaf.FlatClientProperties;
+import com.formdev.flatlaf.util.SwingUtils;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -11,10 +12,13 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
+import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import model.Rooms;
+import javax.swing.JToggleButton;
+import javax.swing.SwingUtilities;
 
 public class FaontDeskOverview extends javax.swing.JPanel {
 
@@ -36,6 +40,96 @@ public class FaontDeskOverview extends javax.swing.JPanel {
         loadRoomsToPanal();
         loadRoomsToPanal();
         loadRoomsToPanal();
+        loadRoomsToPanal();
+        loadRoomsToPanal();
+        loadRoomsToPanal();
+        loadRoomsToPanal();
+        loadRoomsToPanal();
+        loadRoomsToPanal();
+        loadRoomsToPanal();
+       
+
+        loadFloorButtons();
+
+    }
+
+    private void loadFloorButtons() {
+
+        try {
+
+            String quary = "SELECT * FROM `roomtype`";
+
+            ResultSet result = MYsql.execute(quary);
+
+            while (result.next()) {
+
+                int id = result.getInt("id");
+
+                JButton jButton3;
+                jButton3 = new JButton();
+
+                jButton3.setName(String.valueOf(id));
+
+                jButton3.setFont(new java.awt.Font("Poppins", 0, 12)); // NOI18N
+                jButton3.setText(result.getString("type"));
+                jButton3.addActionListener(new java.awt.event.ActionListener() {
+                    public void actionPerformed(java.awt.event.ActionEvent evt) {
+                        floorButton(evt, jButton3.getName());
+                    }
+                });
+                jPanel17.add(jButton3);
+
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    private void floorButton(java.awt.event.ActionEvent evt, String id) {
+
+        System.out.println(id);
+        
+        jPanel19.removeAll();
+        
+        for (Map.Entry<String, Rooms> room : roomsMap.entrySet()) {
+
+//            String key = room.getKey();
+            // Create the panel
+            if (room.getValue().getType() == Integer.parseInt(id)) {
+
+                JPanel roomPanel = new JPanel();
+                roomPanel.setPreferredSize(new Dimension(200, 100)); // Set panel size
+                roomPanel.setBackground(new Color(60, 179, 113)); // Set background color
+                roomPanel.setLayout(new BorderLayout()); // Set layout for alignment
+
+                // Create the "Room No" label
+                JLabel titleLabel = new JLabel("Room No", SwingConstants.CENTER);
+                titleLabel.setFont(new Font("Poppins", Font.PLAIN, 16)); // Set font
+                titleLabel.setForeground(Color.WHITE); // Set text color
+
+                // Create the "101" label
+                JLabel roomNoLabel = new JLabel(room.getValue().getRoomNo(), SwingConstants.CENTER);
+                roomNoLabel.setFont(new Font("Poppins", Font.BOLD, 24)); // Set font
+                roomNoLabel.setForeground(Color.WHITE); // Set text color
+
+                // Add labels to the panel
+                roomPanel.add(titleLabel, BorderLayout.NORTH);
+                roomPanel.add(roomNoLabel, BorderLayout.CENTER);
+
+                
+                
+                jPanel19.add(roomPanel);
+                
+                System.out.println(String.valueOf(room.getValue().getType()));
+
+            }
+
+        }
+        
+        SwingUtilities.updateComponentTreeUI(jPanel18);
+
     }
 
     //Load Rooms To Panel
@@ -44,7 +138,6 @@ public class FaontDeskOverview extends javax.swing.JPanel {
         for (Map.Entry<String, Rooms> room : roomsMap.entrySet()) {
 
 //            String key = room.getKey();
-            
             // Create the panel
             JPanel roomPanel = new JPanel();
             roomPanel.setPreferredSize(new Dimension(200, 100)); // Set panel size
@@ -65,10 +158,7 @@ public class FaontDeskOverview extends javax.swing.JPanel {
             roomPanel.add(titleLabel, BorderLayout.NORTH);
             roomPanel.add(roomNoLabel, BorderLayout.CENTER);
 
-            jPanel18.add(roomPanel);
-            
-            
-           
+            jPanel19.add(roomPanel);
 
         }
     }
@@ -93,6 +183,7 @@ public class FaontDeskOverview extends javax.swing.JPanel {
                 rooms.setRoomNo(result.getString("no"));
                 rooms.setRoomPersonCount(result.getInt("personCount"));
                 rooms.setPrice(result.getDouble("price"));
+                rooms.setType(result.getInt("roomType_id"));
 
                 roomsMap.put(result.getString("no"), rooms);
 
@@ -160,11 +251,9 @@ public class FaontDeskOverview extends javax.swing.JPanel {
         jPanel16 = new javax.swing.JPanel();
         jPanel17 = new javax.swing.JPanel();
         jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
-        jButton5 = new javax.swing.JButton();
-        jButton6 = new javax.swing.JButton();
         jPanel18 = new javax.swing.JPanel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jPanel19 = new javax.swing.JPanel();
         jPanel35 = new javax.swing.JPanel();
         jPanel36 = new javax.swing.JPanel();
         jLabel46 = new javax.swing.JLabel();
@@ -586,7 +675,7 @@ public class FaontDeskOverview extends javax.swing.JPanel {
         jPanel17.setLayout(new java.awt.GridLayout(5, 1, 10, 5));
 
         jButton2.setFont(new java.awt.Font("Poppins", 0, 12)); // NOI18N
-        jButton2.setText("room type");
+        jButton2.setText("All ");
         jButton2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton2ActionPerformed(evt);
@@ -594,30 +683,14 @@ public class FaontDeskOverview extends javax.swing.JPanel {
         });
         jPanel17.add(jButton2);
 
-        jButton3.setFont(new java.awt.Font("Poppins", 0, 12)); // NOI18N
-        jButton3.setText("room type");
-        jButton3.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton3ActionPerformed(evt);
-            }
-        });
-        jPanel17.add(jButton3);
-
-        jButton4.setFont(new java.awt.Font("Poppins", 0, 12)); // NOI18N
-        jButton4.setText("room type");
-        jPanel17.add(jButton4);
-
-        jButton5.setFont(new java.awt.Font("Poppins", 0, 12)); // NOI18N
-        jButton5.setText("room type");
-        jPanel17.add(jButton5);
-
-        jButton6.setFont(new java.awt.Font("Poppins", 0, 12)); // NOI18N
-        jButton6.setText("room type");
-        jPanel17.add(jButton6);
-
         jPanel18.setBackground(new java.awt.Color(255, 255, 255));
         jPanel18.setPreferredSize(new java.awt.Dimension(864, 200));
-        jPanel18.setLayout(new java.awt.GridLayout(2, 8, 10, 10));
+        jPanel18.setLayout(new java.awt.BorderLayout());
+
+        jPanel19.setLayout(new java.awt.GridLayout(2, 8, 10, 10));
+        jScrollPane1.setViewportView(jPanel19);
+
+        jPanel18.add(jScrollPane1, java.awt.BorderLayout.CENTER);
 
         jPanel35.setBackground(new java.awt.Color(255, 255, 255));
 
@@ -735,12 +808,11 @@ public class FaontDeskOverview extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        // TODO add your handling code here:
+       jPanel19.removeAll();
+        loadRoomsToPanal();
+         SwingUtilities.updateComponentTreeUI(jPanel19);
+        
     }//GEN-LAST:event_jButton2ActionPerformed
-
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         parentFrame.pressBookNowButton().doClick();
@@ -750,10 +822,6 @@ public class FaontDeskOverview extends javax.swing.JPanel {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
-    private javax.swing.JButton jButton5;
-    private javax.swing.JButton jButton6;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -782,6 +850,7 @@ public class FaontDeskOverview extends javax.swing.JPanel {
     private javax.swing.JPanel jPanel16;
     private javax.swing.JPanel jPanel17;
     private javax.swing.JPanel jPanel18;
+    private javax.swing.JPanel jPanel19;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel35;
@@ -794,5 +863,6 @@ public class FaontDeskOverview extends javax.swing.JPanel {
     private javax.swing.JPanel jPanel7;
     private javax.swing.JPanel jPanel8;
     private javax.swing.JPanel jPanel9;
+    private javax.swing.JScrollPane jScrollPane1;
     // End of variables declaration//GEN-END:variables
 }
