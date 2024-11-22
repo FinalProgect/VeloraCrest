@@ -1,6 +1,7 @@
 package gui.kitchenManagerDashboard;
 
 import com.formdev.flatlaf.FlatClientProperties;
+import model.ComponentStorage;
 import model.ModifyTables;
 
 /**
@@ -55,6 +56,11 @@ public class ViewMenuItemsFrame extends javax.swing.JFrame {
         setTitle("View Menu Items");
         setBackground(new java.awt.Color(255, 255, 255));
         setUndecorated(true);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosed(java.awt.event.WindowEvent evt) {
+                formWindowClosed(evt);
+            }
+        });
 
         jPanel10.setBackground(new java.awt.Color(15, 140, 130));
 
@@ -279,6 +285,10 @@ public class ViewMenuItemsFrame extends javax.swing.JFrame {
     private void jToggleButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jToggleButton2ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jToggleButton2ActionPerformed
+
+    private void formWindowClosed(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosed
+        ComponentStorage.viewMenuItems = null;
+    }//GEN-LAST:event_formWindowClosed
 
     /**
      * @param args the command line arguments
