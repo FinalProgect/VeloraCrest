@@ -6,22 +6,22 @@ import model.ComponentStorage;
 import model.ModifyTables;
 
 public class AddNewMenuItem extends javax.swing.JPanel {
-    
+
     public AddNewMenuItem() {
         initComponents();
         init();
     }
-    
+
     private void init() {
         jScrollPane1.setBorder(BorderFactory.createEmptyBorder());
         jPanel2.putClientProperty(FlatClientProperties.STYLE, "arc:80");
         jPanel3.putClientProperty(FlatClientProperties.STYLE, "arc:80");
-        
+
         ModifyTables modifytables = new ModifyTables();
         modifytables.modifyTables(jPanel4, jTable1, jScrollPane2);
         modifytables.modifyTables(jPanel5, jTable2, jScrollPane3);
     }
-    
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -352,8 +352,16 @@ public class AddNewMenuItem extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
-        ViewMenuItemsFrame viewMenuItems = new ViewMenuItemsFrame();
-        viewMenuItems.setVisible(true);
+        ViewMenuItemsFrame viewMenuItems;
+        if (ComponentStorage.viewMenuItems == null) {
+            viewMenuItems = new ViewMenuItemsFrame();
+            viewMenuItems.setVisible(true);
+            ComponentStorage.viewMenuItems = viewMenuItems;
+        } else if (ComponentStorage.viewMenuItems.isVisible()) {
+            ComponentStorage.viewMenuItems.toFront();
+        } else {
+            ComponentStorage.viewMenuItems.setVisible(true);
+        }
     }//GEN-LAST:event_jButton5ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed

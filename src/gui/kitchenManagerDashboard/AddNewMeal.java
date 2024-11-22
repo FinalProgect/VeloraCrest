@@ -2,6 +2,7 @@ package gui.kitchenManagerDashboard;
 
 import com.formdev.flatlaf.FlatClientProperties;
 import gui.kitchenStaffDashboard.*;
+import model.ComponentStorage;
 import model.ModifyTables;
 
 /**
@@ -67,6 +68,11 @@ private void init(){
         jButton1.setFont(new java.awt.Font("Poppins", 0, 14)); // NOI18N
         jButton1.setForeground(new java.awt.Color(255, 255, 255));
         jButton1.setText("Select");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         jPanel1.setBackground(new java.awt.Color(252, 252, 252));
 
@@ -101,6 +107,7 @@ private void init(){
         jTextField2.setFont(new java.awt.Font("Poppins", 0, 14)); // NOI18N
 
         jTable1.setBackground(new java.awt.Color(246, 246, 246));
+        jTable1.setFont(new java.awt.Font("Poppins", 0, 14)); // NOI18N
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
@@ -197,7 +204,16 @@ private void init(){
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
+ SelectIngridients selectIngridients;
+        if (ComponentStorage.selectIngredients == null) {
+            selectIngridients = new SelectIngridients();
+            selectIngridients.setVisible(true);
+            ComponentStorage.selectIngredients = selectIngridients;
+        } else if (ComponentStorage.selectIngredients.isVisible()) {
+            ComponentStorage.selectIngredients.toFront();
+        } else {
+            ComponentStorage.selectIngredients.setVisible(true);
+        }
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed

@@ -32,7 +32,7 @@ public class FrontDeskDashBoard extends javax.swing.JFrame {
     private void loadMaintenanceRequst() {
 
         MaintenanceRequest maintenanceRequest = new MaintenanceRequest();
-        landPanel.add(maintenanceRequest, BorderLayout.NORTH);
+        landPanel.add(maintenanceRequest, BorderLayout.CENTER);
         SwingUtilities.updateComponentTreeUI(landPanel);
 
     }
@@ -41,7 +41,7 @@ public class FrontDeskDashBoard extends javax.swing.JFrame {
     // Load Guest Inquaries
     private void loadGuestInquries() {
         GuestInquiries guestInquaris = new GuestInquiries();
-        landPanel.add(guestInquaris, BorderLayout.NORTH);
+        landPanel.add(guestInquaris, BorderLayout.CENTER);
         SwingUtilities.updateComponentTreeUI(landPanel);
     }
     // Load Guest Inquaries
