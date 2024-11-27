@@ -3,24 +3,23 @@ package gui.kitchenStaffDashboard;
 import gui.kitchenManagerDashboard.*;
 import com.formdev.flatlaf.FlatClientProperties;
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import javax.swing.JToggleButton;
 import model.ComponentStorage;
 import model.ModifyJList;
 
-
-/**
- *
- * @author kovid
- */
 public class SelectIngridients extends javax.swing.JFrame {
-
+    
+    private final SelectIngridients frame = this;
+    
     public SelectIngridients() {
         initComponents();
         init();
     }
-
+    
     private void init() {
         setExtendedState(SelectIngridients.MAXIMIZED_BOTH);
         
@@ -30,7 +29,7 @@ public class SelectIngridients extends javax.swing.JFrame {
         
         loadIngredients();
     }
-
+    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -242,7 +241,7 @@ public class SelectIngridients extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void formWindowClosed(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosed
-ComponentStorage.selectIngredients = null;
+        ComponentStorage.selectIngredients = null;
     }//GEN-LAST:event_formWindowClosed
 
     /**
@@ -302,7 +301,7 @@ ComponentStorage.selectIngredients = null;
     // End of variables declaration//GEN-END:variables
 
     private void loadIngredients() {
-        int j = 1;   
+        int j = 1;
         
         jPanel1.setLayout(new GridLayout(10, 10, 10, 10));
         for (int i = 0; i < 50; i++) {
@@ -310,8 +309,15 @@ ComponentStorage.selectIngredients = null;
 //            JToggleButton togglebtn = new JToggleButton(String.valueOf(i));
             JToggleButton togglebtn = new JToggleButton("Chicken");
             togglebtn.putClientProperty(FlatClientProperties.STYLE, "arc:50");
-             togglebtn.setFont(new java.awt.Font("Poppins", 0, 14));
-             togglebtn.setBackground(new java.awt.Color(252, 252, 252));
+            togglebtn.setFont(new java.awt.Font("Poppins", 0, 14));
+            togglebtn.setBackground(new java.awt.Color(252, 252, 252));
+            togglebtn.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    Select_Qty selectQty = new Select_Qty(frame, true);
+                    selectQty.setVisible(true);
+                }
+            });
             buttonGroup1.add(togglebtn);
             jPanel1.add(togglebtn);
         }

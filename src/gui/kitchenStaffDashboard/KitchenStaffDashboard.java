@@ -42,14 +42,12 @@ public class KitchenStaffDashboard extends javax.swing.JFrame {
         sideBarButtons.add(jButton4);
         sideBarButtons.add(jButton5);
 
-
         sideBarButtonAnimate(jButton1);
-        
+
         for (JButton sideBarButton : sideBarButtons) {
             sideBarButton.putClientProperty(FlatClientProperties.STYLE, "arc:50");
         }
-        
-        
+
         loadOverview();
     }
 
@@ -286,12 +284,12 @@ public class KitchenStaffDashboard extends javax.swing.JFrame {
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         sideBarButtonAnimate(jButton2);
-        
+
         OrderList ordList = new OrderList();
         jPanel3.removeAll();
         jPanel3.add(ordList, BorderLayout.CENTER);
         SwingUtilities.updateComponentTreeUI(jPanel3);
-        
+
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
@@ -300,26 +298,35 @@ public class KitchenStaffDashboard extends javax.swing.JFrame {
         jPanel3.removeAll();
         jPanel3.add(adNwMl, BorderLayout.CENTER);
         SwingUtilities.updateComponentTreeUI(jPanel3);
-        
-        
+
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
         sideBarButtonAnimate(jButton4);
+        InventoryManagement invMngmnt = new InventoryManagement();
+        jPanel3.removeAll();
+        jPanel3.add(invMngmnt, BorderLayout.CENTER);
+        SwingUtilities.updateComponentTreeUI(jPanel3);
+
     }//GEN-LAST:event_jButton4ActionPerformed
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
         sideBarButtonAnimate(jButton5);
+        Stock_Re_Check stkRchk = new Stock_Re_Check();
+        jPanel3.removeAll();
+        jPanel3.add(stkRchk , BorderLayout.CENTER);
+        SwingUtilities.updateComponentTreeUI(jPanel3);
     }//GEN-LAST:event_jButton5ActionPerformed
 
-    private void loadOverview(){
-         sideBarButtonAnimate(jButton1);
-        
+    private void loadOverview() {
+        sideBarButtonAnimate(jButton1);
+
         DashboardKitchenStaff1 selectIngridents = new DashboardKitchenStaff1();
         jPanel3.removeAll();
         jPanel3.add(selectIngridents, BorderLayout.CENTER);
         SwingUtilities.updateComponentTreeUI(jPanel3);
     }
+
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         FlatMacLightLaf.setup();
