@@ -2,10 +2,22 @@ package gui.frontDesk;
 
 import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.extras.FlatSVGIcon;
+import static gui.frontDesk.FaontDeskOverview.roomsMap;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.util.Map;
+import java.util.Vector;
 import javax.swing.BorderFactory;
 import javax.swing.DefaultListCellRenderer;
+import javax.swing.DefaultListModel;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
 import javax.swing.SwingConstants;
+import model.ComponentStorage;
 import model.ModifyTables;
+import model.Rooms;
 
 public class RoomManagement extends javax.swing.JPanel {
 
@@ -14,6 +26,7 @@ public class RoomManagement extends javax.swing.JPanel {
         roundEges();
         jlistDisgn();
         disagnTable();
+        loadRoomsTojList();
 
     }
     
@@ -22,11 +35,17 @@ public class RoomManagement extends javax.swing.JPanel {
     
     private void loadRoomsTojList(){
         
-//        for (Map.Entry<Object, Object> en : m.entrySet()) {
-//            Object key = en.getKey();
-//            Object value = en.getValue();
-//            
-//        }
+        Vector<String> vector = new Vector();
+        DefaultListModel listModel = new DefaultListModel();
+        
+        for (Map.Entry<String, Rooms> room : roomsMap.entrySet()) {
+
+          vector.add(room.getValue().getRoomNo());        
+
+        }
+        
+        jList1.setModel(listModel);
+
     
     }
     
