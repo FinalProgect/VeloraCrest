@@ -19,7 +19,7 @@ public class MYsql{
             
                 Class.forName("com.mysql.cj.jdbc.Driver");
                 
-                connection = DriverManager.getConnection("jdbc:mysql://sql12.freesqldatabase.com:3306/sql12745120", "sql12745120", "pgJ5XhU1fT");
+                connection = DriverManager.getConnection("jdbc:mysql://sql12.freesqldatabase.com:3306/sql12748971", "sql12748971", "34IFX3NkRl");
                 
             }catch(ClassNotFoundException e){
                 e.printStackTrace();

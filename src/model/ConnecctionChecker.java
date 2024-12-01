@@ -13,9 +13,9 @@ public class ConnecctionChecker extends Thread{
     
     
      // Database connection details 
-    private static final String DB_URL = "jdbc:mysql://sql12.freesqldatabase.com:3306/sql12745120";
-    private static final String USER = "sql12745120";
-    private static final String PASS = "pgJ5XhU1fT";
+    private static final String DB_URL = "jdbc:mysql://sql12.freesqldatabase.com:3306/sql12748971";
+    private static final String USER = "sql12748971";
+    private static final String PASS = "34IFX3NkRl";
     
      @Override
     public void run() {
