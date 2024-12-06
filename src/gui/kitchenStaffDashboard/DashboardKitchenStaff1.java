@@ -79,7 +79,7 @@ public class DashboardKitchenStaff1 extends javax.swing.JPanel {
         jLabel1.setText("Overview");
 
         jLabel2.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        jLabel2.setText("Tagline text here");
+        jLabel2.setText("Today Date");
 
         jLabel3.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel3.setText("Order List");

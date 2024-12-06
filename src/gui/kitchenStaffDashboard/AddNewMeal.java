@@ -52,7 +52,7 @@ private void init(){
         jLabel1.setText("Add New Meal");
 
         jLabel2.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jLabel2.setText("Tag line text here");
+        jLabel2.setText("Today Date");
 
         jLabel3.setText("Meal Name :");
 

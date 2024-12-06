@@ -93,7 +93,7 @@ public class ViewMenuItems extends javax.swing.JPanel {
         jLabel1.setText("Menu Items");
 
         jLabel2.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        jLabel2.setText("Tagline comes here");
+        jLabel2.setText("2024-10-29");
 
         jLabel3.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jLabel3.setForeground(new java.awt.Color(102, 102, 102));
