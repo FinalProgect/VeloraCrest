@@ -1,18 +1,19 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
- */
 package gui.managerOrDirectorDashboard;
 
 import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.extras.FlatSVGIcon;
 import com.formdev.flatlaf.themes.FlatMacLightLaf;
+import gui.ManagerOrDirectorDashboard.MaintenanceApproval;
 import gui.frontDesk.CustomerRegistration;
+import gui.frontDesk.RoomManagement;
+import gui.frontDesk.RoomReservation;
 import gui.frontDesk.RoomsBooking;
+import gui.kitchenManagerDashboard.AddNewMenuItem;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
 /**
@@ -22,7 +23,7 @@ import javax.swing.SwingUtilities;
 public class ManagerDashboard extends javax.swing.JFrame {
 // Add all the sidebar buttons to this list
 
-    private static List<JButton> sideBarButtons = new ArrayList<>();
+    private static final List<JButton> sideBarButtons = new ArrayList<>();
     private JButton activeButton;
 
     public ManagerDashboard() {
@@ -391,7 +392,10 @@ public class ManagerDashboard extends javax.swing.JFrame {
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
         sideBarButtonAnimate(jButton4);
-
+        RoomReservation RoomRes = new RoomReservation();
+        jPanel3.removeAll();
+        jPanel3.add(RoomRes);
+        SwingUtilities.updateComponentTreeUI(jPanel3);
     }//GEN-LAST:event_jButton4ActionPerformed
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
@@ -401,7 +405,7 @@ public class ManagerDashboard extends javax.swing.JFrame {
 
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
         sideBarButtonAnimate(jButton6);
-        RoomAndFloorManagement rmflr = new RoomAndFloorManagement();
+        RoomManagement rmflr = new RoomManagement();
         jPanel3.removeAll();
         jPanel3.add(rmflr);
         SwingUtilities.updateComponentTreeUI(jPanel3);
@@ -409,11 +413,17 @@ public class ManagerDashboard extends javax.swing.JFrame {
 
     private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
         sideBarButtonAnimate(jButton7);
+        AddNewMenuItem addmenu = new AddNewMenuItem();
+        jPanel3.removeAll();
+        jPanel3.add(addmenu);
+        SwingUtilities.updateComponentTreeUI(jPanel3);
+
     }//GEN-LAST:event_jButton7ActionPerformed
 
     private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton8ActionPerformed
         sideBarButtonAnimate(jButton8);
-
+        CustomerRegistration cstmrReg = new CustomerRegistration();
+        loadPanel(cstmrReg);
     }//GEN-LAST:event_jButton8ActionPerformed
 
     private void jButton9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton9ActionPerformed
@@ -422,6 +432,10 @@ public class ManagerDashboard extends javax.swing.JFrame {
 
     private void jButton10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton10ActionPerformed
         sideBarButtonAnimate(jButton10);
+        MaintenanceApproval maintainance = new MaintenanceApproval();
+        jPanel3.removeAll();
+        jPanel3.add(maintainance);
+        SwingUtilities.updateComponentTreeUI(jPanel3);
     }//GEN-LAST:event_jButton10ActionPerformed
 
     private void formComponentResized(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_formComponentResized
@@ -470,4 +484,10 @@ public class ManagerDashboard extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     // End of variables declaration//GEN-END:variables
+
+    private void loadPanel(JPanel panel) {
+        jPanel3.removeAll();
+        jPanel3.add(panel);
+        SwingUtilities.updateComponentTreeUI(jPanel3);
+    }
 }
