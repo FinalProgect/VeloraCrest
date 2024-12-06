@@ -274,7 +274,7 @@ public class SignIn extends javax.swing.JDialog {
 
                 if (result.next()) {
 
-                    if (result.getString("employee_status_id").equals(1)) {
+                    if (result.getString("employee_status_id").equals("1")) {
 
                         EmployeeDetails employeeDetails = new EmployeeDetails();
 
