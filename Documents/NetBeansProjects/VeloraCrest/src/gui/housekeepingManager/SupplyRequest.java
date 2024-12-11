@@ -10,12 +10,12 @@ import model.ModifyTables;
  *
  * @author ASUS
  */
-public class ReportNewSupply extends javax.swing.JPanel {
+public class SupplyRequest extends javax.swing.JPanel {
 
     /**
      * Creates new form ReportNewSupply
      */
-    public ReportNewSupply() {
+    public SupplyRequest() {
         initComponents();
         
         ModifyTables tableModify = new ModifyTables();
@@ -56,7 +56,7 @@ public class ReportNewSupply extends javax.swing.JPanel {
         jTextArea2 = new javax.swing.JTextArea();
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
-        jLabel1.setText("Reqest  New Supplies");
+        jLabel1.setText("Supply  Requst");
 
         jLabel2.setText("Type of supply     :");
 
@@ -87,10 +87,7 @@ public class ReportNewSupply extends javax.swing.JPanel {
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null}
+
             },
             new String [] {
                 "Requested Date", "EMP ID", "Type of Supply", "Supply Name", "QTY"
