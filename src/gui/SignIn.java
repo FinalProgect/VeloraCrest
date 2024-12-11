@@ -6,6 +6,7 @@ import gui.housekeepingManager.HouseKeepingManagerDashboard;
 import gui.housekeepingStaff.housekeepingStaffDashboard;
 import gui.hrManager.HRManagerDashboard;
 import gui.kitchenManagerDashboard.KitchenManagerDashboard;
+import gui.kitchenStaffDashboard.KitchenStaffDashboard;
 import gui.managerOrDirectorDashboard.ManagerDashboard;
 import javax.swing.JDialog;
 import model.Loggers;
@@ -73,7 +74,7 @@ public class SignIn extends javax.swing.JDialog {
 
             } else if (employeeMap.get("employee").getEmployeeType() == 2) {  //Kitchen Staff
 
-                KitchenManagerDashboard kishenStaffDashbord = new KitchenManagerDashboard();
+                KitchenStaffDashboard kishenStaffDashbord = new KitchenStaffDashboard();
                 kishenStaffDashbord.setVisible(true);
 
                 Loggers.logInfo("Ktchen Staff Member " + employeeMap.get("employee").getEmployeeName() + " Log In To System");
