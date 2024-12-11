@@ -318,12 +318,12 @@ public class HRManagerDashboard extends javax.swing.JFrame {
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
         sideBarButtonAnimate(jButton4);
-
+        loadTraining();
     }//GEN-LAST:event_jButton4ActionPerformed
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
         sideBarButtonAnimate(jButton5);
-
+        loadDiversityMetrics();
     }//GEN-LAST:event_jButton5ActionPerformed
 
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
@@ -376,6 +376,18 @@ private void loadPayroll() {
         SalaryManagement salaryManagement = new SalaryManagement();
         jPanel3.removeAll();
         jPanel3.add(salaryManagement);
+        SwingUtilities.updateComponentTreeUI(jPanel3);
+    }
+private void loadTraining() {
+        TrainingAndDevelopment TandDevelopment = new TrainingAndDevelopment();
+        jPanel3.removeAll();
+        jPanel3.add(TandDevelopment);
+        SwingUtilities.updateComponentTreeUI(jPanel3);
+    }
+private void loadDiversityMetrics() {
+        DiversityInclusionMetrics Dmatrics = new DiversityInclusionMetrics();
+        jPanel3.removeAll();
+        jPanel3.add(Dmatrics);
         SwingUtilities.updateComponentTreeUI(jPanel3);
     }
 }
