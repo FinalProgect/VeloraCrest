@@ -20,6 +20,7 @@ import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.plot.CategoryPlot;
 import org.jfree.chart.plot.Plot;
+import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.renderer.category.BarRenderer;
 import org.jfree.data.category.DefaultCategoryDataset;
 
@@ -83,13 +84,12 @@ public class ManagerOverview extends javax.swing.JPanel {
         xxDataSet.addValue(60, "Kitchen", "Kitchen");
         xxDataSet.addValue(77, "Finance", "Finance");
         xxDataSet.addValue(98, "Management", "Management");
-        xxDataSet.addValue(76, "Maintenance", "Maintenance");
 
         JFreeChart chart = ChartFactory.createBarChart("Employees by Department", "Department", "Employees",
                 xxDataSet);
         CategoryPlot plot = chart.getCategoryPlot();
         BarRenderer renderer = (BarRenderer) plot.getRenderer();
-        
+
         plot.setBackgroundPaint(new java.awt.Color(252, 252, 252));
         chart.setBackgroundPaint(new java.awt.Color(252, 252, 252));
 
@@ -100,19 +100,20 @@ public class ManagerOverview extends javax.swing.JPanel {
         renderer.setSeriesPaint(4, new Color(152, 251, 152)); // Management - light green
         renderer.setSeriesPaint(5, new Color(65, 105, 225));  // Maintenance - blue
 //        renderer.set
-        
+
         chart.getTitle().setFont(new java.awt.Font("Poppins", 0, 14));
-        plot.getDomainAxis().setLabelFont(new Font("Poppins",0,14));
-        plot.getDomainAxis().setTickLabelFont(new Font("Poppins",0,12));
-        plot.getRangeAxis().setLabelFont(new Font("Poppins",0,14));
-        plot.getRangeAxis().setTickLabelFont(new Font("Poppins",0,12));
-        
-        
+        plot.getDomainAxis().setLabelFont(new Font("Poppins", 0, 14));
+        plot.getDomainAxis().setTickLabelFont(new Font("Poppins", 0, 12));
+        plot.getRangeAxis().setLabelFont(new Font("Poppins", 0, 14));
+        plot.getRangeAxis().setTickLabelFont(new Font("Poppins", 0, 12));
 
         ChartPanel empByDip = new ChartPanel(chart);
-         empByDip.setBorder(BorderFactory.createLineBorder(UIManager.getColor("Component.borderColor")));
+        empByDip.setBorder(BorderFactory.createLineBorder(UIManager.getColor("Component.borderColor")));
         empByDip.setPreferredSize(new java.awt.Dimension(400, 300));  // Adjust size as needed
-        
+
+        renderer.setMaximumBarWidth(5);  // Set bar width to 40% of available space
+        plot.getDomainAxis().setCategoryMargin(0.0002);  // Reduce space between bars
+
         jPanel2.setLayout(new BorderLayout());
         jPanel2.add(empByDip, BorderLayout.CENTER);
         jPanel2.validate();
