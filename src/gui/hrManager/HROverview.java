@@ -118,7 +118,7 @@ public class HROverview extends javax.swing.JPanel {
         plot.setSectionPaint("Training", new Color(244, 81, 30));   // Orange color for Training
 
         // Set the plot to be a donut (create a hole in the middle)
-        plot.setInteriorGap(0.40);  // Adjust this value to make the hole bigger or smaller
+        plot.setInteriorGap(0.02);  // Adjust this value to make the hole bigger or smaller
         plot.setOutlineVisible(false);
 
         // Remove default label generation and legend formatting
@@ -132,9 +132,13 @@ public class HROverview extends javax.swing.JPanel {
         // Customize chart appearance
         chart.setBackgroundPaint(Color.white);
 
+        
+        plot.setBackgroundPaint(new java.awt.Color(252, 252, 252));
+        chart.setBackgroundPaint(new java.awt.Color(252, 252, 252));
+
         // Create ChartPanel
         ChartPanel chartPanel = new ChartPanel(chart);
-        chartPanel.setPreferredSize(new Dimension(500, 500));
+        chartPanel.setPreferredSize(new Dimension(500, 300));
 
         jPanel5.setLayout(new BorderLayout());
         jPanel5.add(chartPanel, BorderLayout.CENTER);
