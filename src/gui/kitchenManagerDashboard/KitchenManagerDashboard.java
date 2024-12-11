@@ -3,6 +3,10 @@ package gui.kitchenManagerDashboard;
 import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.extras.FlatSVGIcon;
 import com.formdev.flatlaf.themes.FlatMacLightLaf;
+import gui.kitchenStaffDashboard.InventoryManagement;
+import gui.kitchenStaffDashboard.OrderList;
+import gui.kitchenStaffDashboard.Stock_Re_Check;
+import java.awt.BorderLayout;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JButton;
@@ -17,9 +21,8 @@ public class KitchenManagerDashboard extends javax.swing.JFrame {
         initComponents();
         init();
     }
-    
-    
-     private void init() {
+
+    private void init() {
         this.setExtendedState(JFrame.MAXIMIZED_BOTH);
         FlatSVGIcon icon = new FlatSVGIcon("resource//veloraCrestSVG.svg", jLabel1.getWidth(), jLabel1.getHeight());
         jLabel1.setIcon(icon);
@@ -36,12 +39,12 @@ public class KitchenManagerDashboard extends javax.swing.JFrame {
         sideBarButtons.add(jButton4);
         sideBarButtons.add(jButton5);
         sideBarButtons.add(jButton6);
-     
+
         sideBarButtonAnimate(jButton1);
-        
-         for (JButton sideBarButton : sideBarButtons) {
-             sideBarButton.putClientProperty(FlatClientProperties.STYLE, "arc:50");
-         }
+
+        for (JButton sideBarButton : sideBarButtons) {
+            sideBarButton.putClientProperty(FlatClientProperties.STYLE, "arc:50");
+        }
     }
 
     private void sideBarButtonAnimate(JButton button) {
@@ -125,17 +128,7 @@ public class KitchenManagerDashboard extends javax.swing.JFrame {
         setTitle("Dashboard | Kitchen Manager");
 
         jPanel3.setBackground(new java.awt.Color(255, 255, 255));
-
-        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
-        jPanel3.setLayout(jPanel3Layout);
-        jPanel3Layout.setHorizontalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 869, Short.MAX_VALUE)
-        );
-        jPanel3Layout.setVerticalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 823, Short.MAX_VALUE)
-        );
+        jPanel3.setLayout(new java.awt.BorderLayout());
 
         jPanel2.setBackground(new java.awt.Color(255, 255, 255));
 
@@ -298,20 +291,36 @@ public class KitchenManagerDashboard extends javax.swing.JFrame {
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         sideBarButtonAnimate(jButton2);
+        OrderList ordList = new OrderList();
+        jPanel3.removeAll();
+        jPanel3.add(ordList, BorderLayout.CENTER);
+        SwingUtilities.updateComponentTreeUI(jPanel3);
+
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         sideBarButtonAnimate(jButton3);
+        AddNewMenuItem adNwMl = new AddNewMenuItem();
+        jPanel3.removeAll();
+        jPanel3.add(adNwMl, BorderLayout.CENTER);
+        SwingUtilities.updateComponentTreeUI(jPanel3);
+
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
         sideBarButtonAnimate(jButton4);
-
+        InventoryManagement invMngmnt = new InventoryManagement();
+        jPanel3.removeAll();
+        jPanel3.add(invMngmnt, BorderLayout.CENTER);
+        SwingUtilities.updateComponentTreeUI(jPanel3);
     }//GEN-LAST:event_jButton4ActionPerformed
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
         sideBarButtonAnimate(jButton5);
-
+    Stock_Re_Check stkRchk = new Stock_Re_Check();
+        jPanel3.removeAll();
+        jPanel3.add(stkRchk , BorderLayout.CENTER);
+        SwingUtilities.updateComponentTreeUI(jPanel3);
     }//GEN-LAST:event_jButton5ActionPerformed
 
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed

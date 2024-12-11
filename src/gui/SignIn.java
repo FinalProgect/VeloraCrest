@@ -73,7 +73,7 @@ public class SignIn extends javax.swing.JDialog {
 
             } else if (employeeMap.get("employee").getEmployeeType() == 2) {  //Kitchen Staff
 
-                DashboardKitchenStaff kishenStaffDashbord = new DashboardKitchenStaff();
+                KitchenManagerDashboard kishenStaffDashbord = new KitchenManagerDashboard();
                 kishenStaffDashbord.setVisible(true);
 
                 Loggers.logInfo("Ktchen Staff Member " + employeeMap.get("employee").getEmployeeName() + " Log In To System");

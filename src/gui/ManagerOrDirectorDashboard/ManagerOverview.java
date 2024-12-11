@@ -5,12 +5,23 @@
 package gui.managerOrDirectorDashboard;
 
 import com.formdev.flatlaf.FlatClientProperties;
+import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.LayoutManager;
+import java.net.URLConnection;
 import javax.swing.BorderFactory;
 import javax.swing.SwingUtilities;
+import javax.swing.UIManager;
 import model.ModifyTables;
 import org.jfree.chart.ChartFactory;
+import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
+import org.jfree.chart.plot.CategoryPlot;
+import org.jfree.chart.plot.Plot;
+import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.chart.renderer.category.BarRenderer;
 import org.jfree.data.category.DefaultCategoryDataset;
 
 /**
@@ -62,18 +73,50 @@ public class ManagerOverview extends javax.swing.JPanel {
         modifyTables.modifyTables(jTable1, jScrollPane1);
         modifyTables.modifyTables(jTable2, jScrollPane2);
         modifyTables.modifyTables(jTable3, jScrollPane3);
+        loadExpensesChart();
     }
 
     private void loadExpensesChart() {
 //        jPanel2.
         DefaultCategoryDataset xxDataSet = new DefaultCategoryDataset();
-        for (int i = 0; i < 10; i++) {
-            xxDataSet.addValue((double)i, "i", String.valueOf(i));
-        }
-        
-        
-//        JFreeChart chart = ChartFactory.createLineChart();
+        xxDataSet.addValue(40, "Front Desk", "Front Desk");
+        xxDataSet.addValue(88, "HouseKeeping", "HouseKeeping");
+        xxDataSet.addValue(60, "Kitchen", "Kitchen");
+        xxDataSet.addValue(77, "Finance", "Finance");
+        xxDataSet.addValue(98, "Management", "Management");
 
+        JFreeChart chart = ChartFactory.createBarChart("Employees by Department", "Department", "Employees",
+                xxDataSet);
+        CategoryPlot plot = chart.getCategoryPlot();
+        BarRenderer renderer = (BarRenderer) plot.getRenderer();
+
+        plot.setBackgroundPaint(new java.awt.Color(252, 252, 252));
+        chart.setBackgroundPaint(new java.awt.Color(252, 252, 252));
+
+        renderer.setSeriesPaint(0, new Color(60, 179, 113));  // Front Desk - greenish
+        renderer.setSeriesPaint(1, new Color(255, 165, 0));   // HouseKeeping - orange
+        renderer.setSeriesPaint(2, new Color(147, 112, 219)); // Kitchen - purple
+        renderer.setSeriesPaint(3, new Color(139, 69, 19));   // Finance - brown
+        renderer.setSeriesPaint(4, new Color(152, 251, 152)); // Management - light green
+        renderer.setSeriesPaint(5, new Color(65, 105, 225));  // Maintenance - blue
+//        renderer.set
+
+        chart.getTitle().setFont(new java.awt.Font("Poppins", 0, 14));
+        plot.getDomainAxis().setLabelFont(new Font("Poppins", 0, 14));
+        plot.getDomainAxis().setTickLabelFont(new Font("Poppins", 0, 12));
+        plot.getRangeAxis().setLabelFont(new Font("Poppins", 0, 14));
+        plot.getRangeAxis().setTickLabelFont(new Font("Poppins", 0, 12));
+
+        ChartPanel empByDip = new ChartPanel(chart);
+        empByDip.setBorder(BorderFactory.createLineBorder(UIManager.getColor("Component.borderColor")));
+        empByDip.setPreferredSize(new java.awt.Dimension(400, 300));  // Adjust size as needed
+
+        renderer.setMaximumBarWidth(5);  // Set bar width to 40% of available space
+        plot.getDomainAxis().setCategoryMargin(0.0002);  // Reduce space between bars
+
+        jPanel2.setLayout(new BorderLayout());
+        jPanel2.add(empByDip, BorderLayout.CENTER);
+        jPanel2.validate();
     }
 
     private void loadOccupancy(double vac, double occu, double notClean) {
