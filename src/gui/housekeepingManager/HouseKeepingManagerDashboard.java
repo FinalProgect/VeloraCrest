@@ -1,8 +1,13 @@
+/*//GEN-FIRST:event_jButton1ActionPerformed
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license//GEN-LAST:event_jButton1ActionPerformed
+ * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
+ */
 package gui.housekeepingManager;
 
 import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.extras.FlatSVGIcon;
 import com.formdev.flatlaf.themes.FlatMacLightLaf;
+import java.awt.BorderLayout;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JButton;
@@ -104,7 +109,7 @@ public class HouseKeepingManagerDashboard extends javax.swing.JFrame {
     }
 
     @SuppressWarnings("unchecked")
-    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">                          
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
@@ -281,29 +286,36 @@ public class HouseKeepingManagerDashboard extends javax.swing.JFrame {
 
         pack();
         setLocationRelativeTo(null);
-    }// </editor-fold>//GEN-END:initComponents
+    }// </editor-fold>                        
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {                                         
         sideBarButtonAnimate(jButton1);
-    }//GEN-LAST:event_jButton1ActionPerformed
+        
+        
+    }                                        
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {                                         
         sideBarButtonAnimate(jButton2);
-    }//GEN-LAST:event_jButton2ActionPerformed
+    }                                        
 
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {                                         
         sideBarButtonAnimate(jButton3);
-    }//GEN-LAST:event_jButton3ActionPerformed
+    }                                        
 
-    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {                                         
         sideBarButtonAnimate(jButton4);
+        jPanel3.removeAll();
+        ReportNewSupply supplyRequests = new ReportNewSupply();
+        jPanel3.add(supplyRequests, BorderLayout.CENTER);
+        SwingUtilities.updateComponentTreeUI(jPanel3);
+        
 
-    }//GEN-LAST:event_jButton4ActionPerformed
+    }                                        
 
-    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {                                         
         sideBarButtonAnimate(jButton5);
 
-    }//GEN-LAST:event_jButton5ActionPerformed
+    }                                        
 
     /**
      * @param args the command line arguments
@@ -320,7 +332,7 @@ public class HouseKeepingManagerDashboard extends javax.swing.JFrame {
         });
     }
 
-    // Variables declaration - do not modify//GEN-BEGIN:variables
+    // Variables declaration - do not modify                     
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton11;
     private javax.swing.JButton jButton12;
@@ -334,5 +346,5 @@ public class HouseKeepingManagerDashboard extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
-    // End of variables declaration//GEN-END:variables
+    // End of variables declaration                   
 }
