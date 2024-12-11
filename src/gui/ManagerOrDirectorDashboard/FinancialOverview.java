@@ -16,6 +16,7 @@ import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.plot.CategoryPlot;
 import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.chart.renderer.category.AreaRenderer;
 import org.jfree.chart.renderer.category.BarRenderer;
 import org.jfree.data.category.DefaultCategoryDataset;
 
@@ -41,10 +42,10 @@ public class FinancialOverview extends javax.swing.JPanel {
         jPanel17.putClientProperty(FlatClientProperties.STYLE, "arc:100");
 
         loadRevenueExpensesChart();
+        loadKitchenFinanceChart();
     }
 
     private void loadKitchenFinanceChart() {
-//        jPanel2.
         DefaultCategoryDataset xxDataSet = new DefaultCategoryDataset();
 
 // Revenue data
@@ -56,7 +57,8 @@ public class FinancialOverview extends javax.swing.JPanel {
         xxDataSet.addValue(76000, "Revenue", "Saturday");
         xxDataSet.addValue(76000, "Revenue", "Sunday");
 
-        JFreeChart lineChart = ChartFactory.createLineChart(
+// Create the Area Chart
+        JFreeChart areaChart = ChartFactory.createAreaChart(
                 "Revenue vs Expenses", // Chart title
                 "Department", // X-Axis Label
                 "Amount (in LKR)", // Y-Axis Label
@@ -65,18 +67,63 @@ public class FinancialOverview extends javax.swing.JPanel {
                 true, true, false);
 
 // Customize the chart
-        lineChart.setBackgroundPaint(Color.white);
-        ChartPanel chartPanel = new ChartPanel(lineChart);
+        areaChart.setBackgroundPaint(Color.white);
+
+// Get the plot object
+        CategoryPlot plot = (CategoryPlot) areaChart.getPlot();
+
+// Set the colors for the series (Revenue and Expenses)
+        plot.getRenderer().setSeriesPaint(0, Color.GREEN); // Revenue
+        plot.getRenderer().setSeriesPaint(1, Color.RED);   // Expenses
+
+// Set an area renderer to fill the area under the lines
+        plot.setRenderer(new AreaRenderer());
+
+        plot.setBackgroundPaint(new java.awt.Color(252, 252, 252));
+        areaChart.setBackgroundPaint(new java.awt.Color(252, 252, 252));
+
+// Create and customize the chart panel
+        ChartPanel chartPanel = new ChartPanel(areaChart);
         chartPanel.setPreferredSize(new Dimension(400, 300));
 
 // Add the chart panel to jPanel2
         jPanel2.setLayout(new BorderLayout());
         jPanel2.add(chartPanel, BorderLayout.CENTER);
         jPanel2.validate();
+////        jPanel2.
+//        DefaultCategoryDataset xxDataSet = new DefaultCategoryDataset();
+//
+//// Revenue data
+//        xxDataSet.addValue(40000, "Revenue", "Monday");
+//        xxDataSet.addValue(88000, "Revenue", "Tuesday");
+//        xxDataSet.addValue(60000, "Revenue", "Wednesday");
+//        xxDataSet.addValue(77000, "Revenue", "Thursday");
+//        xxDataSet.addValue(98000, "Revenue", "Friday");
+//        xxDataSet.addValue(76000, "Revenue", "Saturday");
+//        xxDataSet.addValue(76000, "Revenue", "Sunday");
+//
+//        JFreeChart lineChart = ChartFactory.createLineChart(
+//                "Revenue vs Expenses", // Chart title
+//                "Department", // X-Axis Label
+//                "Amount (in LKR)", // Y-Axis Label
+//                xxDataSet,
+//                PlotOrientation.VERTICAL,
+//                true, true, false);
+//
+//// Customize the chart
+//        lineChart.setBackgroundPaint(Color.white);
+//        ChartPanel chartPanel = new ChartPanel(lineChart);
+//        chartPanel.setPreferredSize(new Dimension(400, 300));
+//
+//// Add the chart panel to jPanel2
+//        jPanel2.setLayout(new BorderLayout());
+//        jPanel2.add(chartPanel, BorderLayout.CENTER);
+//        jPanel2.validate();
 
     }
+
     private void loadRevenueExpensesChart() {
-//        jPanel2.
+
         DefaultCategoryDataset xxDataSet = new DefaultCategoryDataset();
 
 // Revenue data
@@ -94,7 +141,8 @@ public class FinancialOverview extends javax.swing.JPanel {
         xxDataSet.addValue(67000, "Expenses", "April");
         xxDataSet.addValue(85000, "Expenses", "May");
         xxDataSet.addValue(55000, "Expenses", "June");
-        JFreeChart lineChart = ChartFactory.createLineChart(
+// Create the Area Chart
+        JFreeChart areaChart = ChartFactory.createAreaChart(
                 "Revenue vs Expenses", // Chart title
                 "Department", // X-Axis Label
                 "Amount (in LKR)", // Y-Axis Label
@@ -103,8 +151,23 @@ public class FinancialOverview extends javax.swing.JPanel {
                 true, true, false);
 
 // Customize the chart
-        lineChart.setBackgroundPaint(Color.white);
-        ChartPanel chartPanel = new ChartPanel(lineChart);
+        areaChart.setBackgroundPaint(Color.white);
+
+// Get the plot object
+        CategoryPlot plot = (CategoryPlot) areaChart.getPlot();
+
+// Set the colors for the series (Revenue and Expenses)
+        plot.getRenderer().setSeriesPaint(0, Color.GREEN); // Revenue
+        plot.getRenderer().setSeriesPaint(1, Color.RED);   // Expenses
+
+// Set an area renderer to fill the area under the lines
+        plot.setRenderer(new AreaRenderer());
+
+                plot.setBackgroundPaint(new java.awt.Color(252, 252, 252));
+        areaChart.setBackgroundPaint(new java.awt.Color(252, 252, 252));
+
+// Create and customize the chart panel
+        ChartPanel chartPanel = new ChartPanel(areaChart);
         chartPanel.setPreferredSize(new Dimension(400, 300));
 
 // Add the chart panel to jPanel2
@@ -112,6 +175,41 @@ public class FinancialOverview extends javax.swing.JPanel {
         jPanel4.add(chartPanel, BorderLayout.CENTER);
         jPanel4.validate();
 
+////        jPanel2.
+//        DefaultCategoryDataset xxDataSet = new DefaultCategoryDataset();
+//
+//// Revenue data
+//        xxDataSet.addValue(40000, "Revenue", "January");
+//        xxDataSet.addValue(88000, "Revenue", "February");
+//        xxDataSet.addValue(60000, "Revenue", "March");
+//        xxDataSet.addValue(77000, "Revenue", "April");
+//        xxDataSet.addValue(98000, "Revenue", "May");
+//        xxDataSet.addValue(76000, "Revenue", "June");
+//
+//// Expenses data
+//        xxDataSet.addValue(30000, "Expenses", "January");
+//        xxDataSet.addValue(50000, "Expenses", "February");
+//        xxDataSet.addValue(45000, "Expenses", "March");
+//        xxDataSet.addValue(67000, "Expenses", "April");
+//        xxDataSet.addValue(85000, "Expenses", "May");
+//        xxDataSet.addValue(55000, "Expenses", "June");
+//        JFreeChart lineChart = ChartFactory.createLineChart(
+//                "Revenue vs Expenses", // Chart title
+//                "Department", // X-Axis Label
+//                "Amount (in LKR)", // Y-Axis Label
+//                xxDataSet,
+//                PlotOrientation.VERTICAL,
+//                true, true, false);
+//
+//// Customize the chart
+//        lineChart.setBackgroundPaint(Color.white);
+//        ChartPanel chartPanel = new ChartPanel(lineChart);
+//        chartPanel.setPreferredSize(new Dimension(400, 300));
+//
+//// Add the chart panel to jPanel2
+//        jPanel4.setLayout(new BorderLayout());
+//        jPanel4.add(chartPanel, BorderLayout.CENTER);
+//        jPanel4.validate();
     }
 
     @SuppressWarnings("unchecked")
