@@ -22,7 +22,6 @@ public class SignIn extends javax.swing.JDialog {
     public static final Logger logger = Loggers.getLogger();
 
     public static HashMap<String, employeeDetails> employeeMap = new HashMap();
-    
 
     public SignIn(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
@@ -42,13 +41,12 @@ public class SignIn extends javax.swing.JDialog {
         logo.setIcon(vclogo);
 
     }
-    
-    
+
     //Direct Employee to His Window
     private void openEmployeeWindow() {
-        
+
         this.dispose();
-        
+
         if (employeeMap.get("employee").getEmployeeDepartment() == 1) { //Front Desk Department
 
             if (employeeMap.get("employee").getEmployeeType() == 1) { // employee
@@ -56,8 +54,6 @@ public class SignIn extends javax.swing.JDialog {
 //                FrontDeskDashBoard frontDesk = new FrontDeskDashBoard();
 //                frontDesk.setVisible(true);
             } else if (employeeMap.get("employee").getEmployeeType() == 2) {
-
-                
 
                 FrontDeskDashBoard frontDesk = new FrontDeskDashBoard();
                 frontDesk.setVisible(true);
@@ -77,7 +73,7 @@ public class SignIn extends javax.swing.JDialog {
 
             } else if (employeeMap.get("employee").getEmployeeType() == 2) {  //Kitchen Staff
 
-                DashboardKitchenStaff kishenStaffDashbord = new DashboardKitchenStaff();
+                KitchenManagerDashboard kishenStaffDashbord = new KitchenManagerDashboard();
                 kishenStaffDashbord.setVisible(true);
 
                 Loggers.logInfo("Ktchen Staff Member " + employeeMap.get("employee").getEmployeeName() + " Log In To System");
@@ -102,7 +98,7 @@ public class SignIn extends javax.swing.JDialog {
 
             }
 
-        } else if (employeeMap.get("employee").getEmployeeDepartment() == 4) {
+        } else if (employeeMap.get("employee").getEmployeeDepartment() == 4) {   //Human resotse
 
             if (employeeMap.get("employee").getEmployeeType() == 1) {
 
@@ -115,7 +111,7 @@ public class SignIn extends javax.swing.JDialog {
 
             }
 
-        } else if (employeeMap.get("employee").getEmployeeDepartment() == 5) {
+        } else if (employeeMap.get("employee").getEmployeeDepartment() == 5) { //Directors
 
             if (employeeMap.get("employee").getEmployeeType() == 1) {
 
@@ -132,7 +128,6 @@ public class SignIn extends javax.swing.JDialog {
 
     }
     //Direct Employee to His Window
-    
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -278,18 +273,24 @@ public class SignIn extends javax.swing.JDialog {
                 ResultSet result = MYsql.execute(quary);
 
                 if (result.next()) {
-                    
-                    employeeDetails employeeDetails = new employeeDetails();
-                    
-                    employeeDetails.setEmployeeName(result.getString("fname") + " "+ result.getString("lname"));
-                    employeeDetails.setEmployeeId(result.getInt("id"));
-                    employeeDetails.setEmployeeEmail(result.getString("email"));
-                    employeeDetails.setEmployeeDepartment(result.getInt("department_id"));
-                    employeeDetails.setEmployeeType(result.getInt("Employee_type_id"));
-                    
-                    employeeMap.put("employee", employeeDetails);
-                    
-                    openEmployeeWindow();
+
+                    if (result.getString("employee_status_id").equals("1")) {
+
+                        employeeDetails employeeDetails = new employeeDetails();
+
+                        employeeDetails.setEmployeeName(result.getString("fname") + " " + result.getString("lname"));
+                        employeeDetails.setEmployeeId(result.getInt("id"));
+                        employeeDetails.setEmployeeEmail(result.getString("email"));
+                        employeeDetails.setEmployeeDepartment(result.getInt("department_id"));
+                        employeeDetails.setEmployeeType(result.getInt("Employee_type_id"));
+
+                        employeeMap.put("employee", employeeDetails);
+
+                        openEmployeeWindow();
+
+                    } else {
+                        JOptionPane.showMessageDialog(this, "This User Is Bocked,", "Warrning", JOptionPane.WARNING_MESSAGE);
+                    }
 
                 } else {
                     JOptionPane.showMessageDialog(this, "Invalid Email or Password", "Warning", JOptionPane.WARNING_MESSAGE);
