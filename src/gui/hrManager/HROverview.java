@@ -459,7 +459,7 @@ public class HROverview extends javax.swing.JPanel {
 
         jLabel16.setFont(new java.awt.Font("Poppins", 0, 36)); // NOI18N
         jLabel16.setForeground(new java.awt.Color(60, 179, 113));
-        jLabel16.setText("85%");
+        jLabel16.setText("85");
 
         jLabel34.setFont(new java.awt.Font("Poppins", 0, 18)); // NOI18N
         jLabel34.setText("Employees");
