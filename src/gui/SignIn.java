@@ -275,7 +275,7 @@ System.out.println("Fontdesk Employee");
 
                 if (result.next()) {
 
-                    if (result.getString("employee_status_id").equals("1")) {
+                    if (result.getString("employee_status_id").equals("1")) {   /// Check the employee is actieve Employee
 
                         employeeDetails employeeDetails = new employeeDetails();
 
