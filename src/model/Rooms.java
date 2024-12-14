@@ -8,6 +8,8 @@ public class Rooms {
     private int roomPersonCount;
     private Double price;
     private int type;
+    private int occupideStatus;
+   
 
     /**
      * @return the roomId
@@ -79,6 +81,20 @@ public class Rooms {
      */
     public void setType(int type) {
         this.type = type;
+    }
+
+    /**
+     * @return the occupideStatus
+     */
+    public int getOccupideStatus() {
+        return occupideStatus;
+    }
+
+    /**
+     * @param occupideStatus the occupideStatus to set
+     */
+    public void setOccupideStatus(int occupideStatus) {
+        this.occupideStatus = occupideStatus;
     }
     
     
