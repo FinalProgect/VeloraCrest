@@ -19,6 +19,7 @@ import javax.swing.SwingConstants;
 import model.Rooms;
 import javax.swing.JToggleButton;
 import javax.swing.SwingUtilities;
+import model.RoomStatusChecker;
 
 public class FaontDeskOverview extends javax.swing.JPanel {
 
@@ -26,29 +27,31 @@ public class FaontDeskOverview extends javax.swing.JPanel {
 
     public static HashMap<String, Rooms> roomsMap = new HashMap<>();
 
-    public static HashMap<String, Integer> roomStatusMap = new HashMap<>();
+
 
     public FaontDeskOverview(FrontDeskDashBoard parentFrame) {
         initComponents();
         this.parentFrame = parentFrame;
         roungEdges();
         loadRooms();
-        loadRoomsToPanal();
-        loadRoomsToPanal();
-        loadRoomsToPanal();
-        loadRoomsToPanal();
-        loadRoomsToPanal();
-        loadRoomsToPanal();
-        loadRoomsToPanal();
-        loadRoomsToPanal();
-        loadRoomsToPanal();
-        loadRoomsToPanal();
-        loadRoomsToPanal();
-        loadRoomsToPanal();
-        loadRoomsToPanal();
-        loadRoomsToPanal();
-       
 
+        RoomStatusChecker roomReservationChecker = new RoomStatusChecker(this);
+        roomReservationChecker.start();
+
+        loadRoomsToPanal();
+        loadRoomsToPanal();
+        loadRoomsToPanal();
+        loadRoomsToPanal();
+        loadRoomsToPanal();
+        loadRoomsToPanal();
+        loadRoomsToPanal();
+        loadRoomsToPanal();
+        loadRoomsToPanal();
+        loadRoomsToPanal();
+        loadRoomsToPanal();
+        loadRoomsToPanal();
+        loadRoomsToPanal();
+        loadRoomsToPanal();
         loadFloorButtons();
 
     }
@@ -89,10 +92,8 @@ public class FaontDeskOverview extends javax.swing.JPanel {
 
     private void floorButton(java.awt.event.ActionEvent evt, String id) {
 
-        System.out.println(id);
-        
         jPanel19.removeAll();
-        
+
         for (Map.Entry<String, Rooms> room : roomsMap.entrySet()) {
 
 //            String key = room.getKey();
@@ -101,14 +102,13 @@ public class FaontDeskOverview extends javax.swing.JPanel {
 
                 JPanel roomPanel = new JPanel();
                 roomPanel.setPreferredSize(new Dimension(200, 100)); // Set panel size
-                roomPanel.setBackground(new Color(60, 179, 113)); // Set background color
+
                 roomPanel.setLayout(new BorderLayout()); // Set layout for alignment
 
                 // Create the "Room No" label
                 JLabel titleLabel = new JLabel("Room No", SwingConstants.CENTER);
                 titleLabel.setFont(new Font("Poppins", Font.PLAIN, 16)); // Set font
                 titleLabel.setForeground(Color.WHITE); // Set text color
-
                 // Create the "101" label
                 JLabel roomNoLabel = new JLabel(room.getValue().getRoomNo(), SwingConstants.CENTER);
                 roomNoLabel.setFont(new Font("Poppins", Font.BOLD, 24)); // Set font
@@ -118,22 +118,20 @@ public class FaontDeskOverview extends javax.swing.JPanel {
                 roomPanel.add(titleLabel, BorderLayout.NORTH);
                 roomPanel.add(roomNoLabel, BorderLayout.CENTER);
 
-                
-                
                 jPanel19.add(roomPanel);
-                
+
                 System.out.println(String.valueOf(room.getValue().getType()));
 
             }
 
         }
-        
+
         SwingUtilities.updateComponentTreeUI(jPanel18);
 
     }
 
     //Load Rooms To Panel
-    private void loadRoomsToPanal() {
+    public synchronized void loadRoomsToPanal() {
 
         for (Map.Entry<String, Rooms> room : roomsMap.entrySet()) {
 
@@ -141,7 +139,15 @@ public class FaontDeskOverview extends javax.swing.JPanel {
             // Create the panel
             JPanel roomPanel = new JPanel();
             roomPanel.setPreferredSize(new Dimension(200, 100)); // Set panel size
-            roomPanel.setBackground(new Color(60, 179, 113)); // Set background color
+
+            System.out.println("**********************  - " + room.getValue().getOccupideStatus());
+
+            if (room.getValue().getOccupideStatus() == 1) {
+                roomPanel.setBackground(new Color(255, 0, 0)); // Set background color
+            } else {
+                roomPanel.setBackground(new Color(60, 179, 113)); // Set background color
+            }
+            
             roomPanel.setLayout(new BorderLayout()); // Set layout for alignment
 
             // Create the "Room No" label
@@ -170,7 +176,7 @@ public class FaontDeskOverview extends javax.swing.JPanel {
 
             int lableNumber = 0;
 
-            String quary = "SELECT * FROM `rooms`";
+            String quary = "SELECT * FROM `rooms` WHERE `roomStatus_id` = '1' ";
 
             ResultSet result = MYsql.execute(quary);
 
@@ -808,10 +814,10 @@ public class FaontDeskOverview extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-       jPanel19.removeAll();
+        jPanel19.removeAll();
         loadRoomsToPanal();
-         SwingUtilities.updateComponentTreeUI(jPanel19);
-        
+        SwingUtilities.updateComponentTreeUI(jPanel19);
+
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed

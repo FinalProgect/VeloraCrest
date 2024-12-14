@@ -10,23 +10,49 @@ import java.sql.SQLException;
  */
 public class RoomStatusChecker extends Thread {
 
+    public RoomStatusChecker(FaontDeskOverview petent) {
+        this.perent = petent;
+    }
+    
+    
+    
+    
+    
+    
+    public boolean roomReservationChecker = true;
+    
+    private FaontDeskOverview perent;
+    
     @Override
     public void run() {
-
-        try {
-
-            String quary = "SELECT `no`, `roomStatus_id` FROM `rooms` ";
-
-            ResultSet result = MYsql.execute(quary);
-
-            while (result.next()) {
-
-                FaontDeskOverview.roomStatusMap.put(result.getString("no"), result.getInt("roomStatus_id"));
+        
+        while (roomReservationChecker) {
+            
+            System.out.println("Room Reservation Status Check Thread is Working");
+            
+            try {
                 
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
+                String quary = "SELECT `rooms`.`no`, `reservation_has_room`.`roomReservationStatus_id`  FROM  `rooms` "
+                        + "INNER JOIN  `reservation_has_room` ON `rooms`.`id` = `reservation_has_room`.`rooms_id` "
+                        + "WHERE `roomReservationStatus_id` = '1'";
+                
+                ResultSet result = MYsql.execute(quary);
+                
+                while (result.next()) {
+                    
+                    System.out.println(result.getString("no"));
 
+//                    FaontDeskOverview.roomResiveStatusMap.put(result.getString("no"), result.getInt("roomReservationStatus_id"));
+                    FaontDeskOverview.roomsMap.get(result.getString("no")).setOccupideStatus(result.getInt("roomReservationStatus_id"));
+
+                    
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            
+        }
+        
+    }
+    
 }
