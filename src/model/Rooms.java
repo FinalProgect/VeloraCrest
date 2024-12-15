@@ -9,6 +9,7 @@ public class Rooms {
     private Double price;
     private int type;
     private int occupideStatus;
+    private int roomCleanStatus;
    
 
     /**
@@ -95,6 +96,20 @@ public class Rooms {
      */
     public void setOccupideStatus(int occupideStatus) {
         this.occupideStatus = occupideStatus;
+    }
+
+    /**
+     * @return the roomCleanStatus
+     */
+    public int getRoomCleanStatus() {
+        return roomCleanStatus;
+    }
+
+    /**
+     * @param roomCleanStatus the roomCleanStatus to set
+     */
+    public void setRoomCleanStatus(int roomCleanStatus) {
+        this.roomCleanStatus = roomCleanStatus;
     }
     
     
