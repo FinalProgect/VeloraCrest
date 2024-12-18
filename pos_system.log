@@ -134,3 +134,11 @@ Dec 11, 2024 12:24:40 PM model.Loggers logInfo
 INFO: Genaral Manager Dinuga Siyasara Log In To System
 Dec 11, 2024 12:28:23 PM model.Loggers logInfo
 INFO: Housekeeping Manager Ama Perera Log In To System
+Dec 11, 2024 1:12:20 PM gui.SignIn loginButtonActionPerformed
+WARNING: User Enterd Invalid email or password.
+Dec 11, 2024 1:12:30 PM model.Loggers logInfo
+INFO: Human resorses Manager Kalhara Weragoda Log In To System
+Dec 11, 2024 1:13:38 PM model.Loggers logInfo
+INFO: Ktchen Staff Member Vihanga Induwari Log In To System
+Dec 11, 2024 1:18:34 PM model.Loggers logInfo
+INFO: Kitchen Manager Kasunee Anuradha Log In To System
