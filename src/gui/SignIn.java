@@ -51,7 +51,7 @@ public class SignIn extends javax.swing.JDialog {
         if (employeeMap.get("employee").getEmployeeDepartment() == 1) { //Front Desk Department
 
             if (employeeMap.get("employee").getEmployeeType() == 1) { // employee
-
+System.out.println("Fontdesk Employee");
 //                FrontDeskDashBoard frontDesk = new FrontDeskDashBoard();
 //                frontDesk.setVisible(true);
             } else if (employeeMap.get("employee").getEmployeeType() == 2) {

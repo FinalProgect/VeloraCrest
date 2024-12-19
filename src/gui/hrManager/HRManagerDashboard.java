@@ -308,7 +308,7 @@ public class HRManagerDashboard extends javax.swing.JFrame {
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         sideBarButtonAnimate(jButton2);
-
+        loadEmployeeList();
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
@@ -370,6 +370,12 @@ private void loadOverview() {
         HROverview hrOverview = new HROverview();
         jPanel3.removeAll();
         jPanel3.add(hrOverview);
+        SwingUtilities.updateComponentTreeUI(jPanel3);
+    }
+private void loadEmployeeList() {
+        EmployeeList empList = new EmployeeList();
+        jPanel3.removeAll();
+        jPanel3.add(empList);
         SwingUtilities.updateComponentTreeUI(jPanel3);
     }
 private void loadPayroll() {
