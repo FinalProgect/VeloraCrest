@@ -1,39 +1,22 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JPanel.java to edit this template
- */
 package gui.managerOrDirectorDashboard;
 
 import com.formdev.flatlaf.FlatClientProperties;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.LayoutManager;
-import java.net.URLConnection;
 import javax.swing.BorderFactory;
 import javax.swing.SwingUtilities;
-import javax.swing.UIManager;
 import model.ModifyTables;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.plot.CategoryPlot;
-import org.jfree.chart.plot.Plot;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.renderer.category.AreaRenderer;
-import org.jfree.chart.renderer.category.BarRenderer;
 import org.jfree.data.category.DefaultCategoryDataset;
 
-/**
- *
- * @author kovid
- */
 public class ManagerOverview extends javax.swing.JPanel {
 
-    /**
-     * Creates new form ManagerOverview
-     */
     public ManagerOverview() {
         initComponents();
         init();

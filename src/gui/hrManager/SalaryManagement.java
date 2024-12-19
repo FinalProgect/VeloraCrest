@@ -4,6 +4,8 @@
  */
 package gui.hrManager;
 
+import model.ComponentStorage;
+
 /**
  *
  * @author ASUS
@@ -76,6 +78,11 @@ public class SalaryManagement extends javax.swing.JPanel {
 
         jButton1.setBackground(new java.awt.Color(51, 204, 0));
         jButton1.setText("Fixed Salary Employees");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         jButton2.setBackground(new java.awt.Color(51, 204, 0));
         jButton2.setText("Hourly Wage Employees");
@@ -123,6 +130,17 @@ public class SalaryManagement extends javax.swing.JPanel {
 
         add(jPanel1, java.awt.BorderLayout.CENTER);
     }// </editor-fold>//GEN-END:initComponents
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        if (ComponentStorage.fixedSalaryEmployee == null) {
+            ComponentStorage.fixedSalaryEmployee = new FixedSalaryEmployeeFrame();
+            ComponentStorage.fixedSalaryEmployee.setVisible(true);
+        } else if (ComponentStorage.fixedSalaryEmployee.isVisible()) {
+            ComponentStorage.fixedSalaryEmployee.toFront();
+        } else {
+            ComponentStorage.fixedSalaryEmployee.setVisible(true);
+        }
+    }//GEN-LAST:event_jButton1ActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
