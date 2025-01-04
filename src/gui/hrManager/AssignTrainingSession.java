@@ -70,6 +70,16 @@ public class AssignTrainingSession extends javax.swing.JPanel {
             .addGap(0, 52, Short.MAX_VALUE)
         );
 
+        jPanel3.addAncestorListener(new javax.swing.event.AncestorListener() {
+            public void ancestorAdded(javax.swing.event.AncestorEvent evt) {
+            }
+            public void ancestorMoved(javax.swing.event.AncestorEvent evt) {
+                jPanel3AncestorMoved(evt);
+            }
+            public void ancestorRemoved(javax.swing.event.AncestorEvent evt) {
+            }
+        });
+
         jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
         jLabel1.setText("Assign Training Course");
 
@@ -316,6 +326,10 @@ public class AssignTrainingSession extends javax.swing.JPanel {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jPanel3AncestorMoved(javax.swing.event.AncestorEvent evt) {//GEN-FIRST:event_jPanel3AncestorMoved
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jPanel3AncestorMoved
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
