@@ -3,6 +3,8 @@ package model;
 import gui.frontDesk.FaontDeskOverview;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -80,6 +82,12 @@ public class RoomStatusChecker extends Thread {
             
             checkRoomReservations();
             checkRoomCleaningStatus();
+            
+            try {
+                Thread.sleep(5000);  // 5 seconds
+            } catch (InterruptedException ex) {
+                Logger.getLogger(RoomStatusChecker.class.getName()).log(Level.SEVERE, null, ex);
+            }
 
         }
 
