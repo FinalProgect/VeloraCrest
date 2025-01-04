@@ -118,7 +118,7 @@ public class HROverview extends javax.swing.JPanel {
         plot.setSectionPaint("Training", new Color(244, 81, 30));   // Orange color for Training
 
         // Set the plot to be a donut (create a hole in the middle)
-        plot.setInteriorGap(0.40);  // Adjust this value to make the hole bigger or smaller
+        plot.setInteriorGap(0.02);  // Adjust this value to make the hole bigger or smaller
         plot.setOutlineVisible(false);
 
         // Remove default label generation and legend formatting
@@ -132,9 +132,13 @@ public class HROverview extends javax.swing.JPanel {
         // Customize chart appearance
         chart.setBackgroundPaint(Color.white);
 
+        
+        plot.setBackgroundPaint(new java.awt.Color(252, 252, 252));
+        chart.setBackgroundPaint(new java.awt.Color(252, 252, 252));
+
         // Create ChartPanel
         ChartPanel chartPanel = new ChartPanel(chart);
-        chartPanel.setPreferredSize(new Dimension(500, 500));
+        chartPanel.setPreferredSize(new Dimension(500, 300));
 
         jPanel5.setLayout(new BorderLayout());
         jPanel5.add(chartPanel, BorderLayout.CENTER);
@@ -455,7 +459,7 @@ public class HROverview extends javax.swing.JPanel {
 
         jLabel16.setFont(new java.awt.Font("Poppins", 0, 36)); // NOI18N
         jLabel16.setForeground(new java.awt.Color(60, 179, 113));
-        jLabel16.setText("85%");
+        jLabel16.setText("85");
 
         jLabel34.setFont(new java.awt.Font("Poppins", 0, 18)); // NOI18N
         jLabel34.setText("Employees");
@@ -745,7 +749,7 @@ public class HROverview extends javax.swing.JPanel {
         jPanel6Layout.setVerticalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel6Layout.createSequentialGroup()
-                .addContainerGap(12, Short.MAX_VALUE)
+                .addGap(12, 12, 12)
                 .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 329, javax.swing.GroupLayout.PREFERRED_SIZE)

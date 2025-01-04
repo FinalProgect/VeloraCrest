@@ -51,7 +51,7 @@ public class FaontDeskOverview extends javax.swing.JPanel {
         loadRoomsToPanal();
         loadRoomsToPanal();
         loadFloorButtons();
-        occupancyGraphic();
+//        occupancyGraphic();
 
     }
 
@@ -89,27 +89,35 @@ public class FaontDeskOverview extends javax.swing.JPanel {
     private void loadFloorButtons() {
 
         try {
+                JToggleButton jButton2;
+                jButton2 = new JToggleButton();
+
+                jButton2.setName("All");
+
+                jButton2.setFont(new java.awt.Font("Poppins", 0, 12)); // NOI18N
+                jButton2.setText("All");
 
             String quary = "SELECT * FROM `roomtype`";
 
             ResultSet result = MYsql.execute(quary);
-
             while (result.next()) {
 
                 int id = result.getInt("id");
 
-                JButton jButton3;
-                jButton3 = new JButton();
+                JToggleButton jButton3;
+                jButton3 = new JToggleButton();
 
                 jButton3.setName(String.valueOf(id));
 
                 jButton3.setFont(new java.awt.Font("Poppins", 0, 12)); // NOI18N
                 jButton3.setText(result.getString("type"));
+
                 jButton3.addActionListener(new java.awt.event.ActionListener() {
                     public void actionPerformed(java.awt.event.ActionEvent evt) {
                         floorButton(evt, jButton3.getName());
                     }
                 });
+                buttonGroup1.add(jButton3);
                 jPanel17.add(jButton3);
 
             }
@@ -282,6 +290,7 @@ public class FaontDeskOverview extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        buttonGroup1 = new javax.swing.ButtonGroup();
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
@@ -315,7 +324,6 @@ public class FaontDeskOverview extends javax.swing.JPanel {
         jLabel50 = new javax.swing.JLabel();
         jPanel16 = new javax.swing.JPanel();
         jPanel17 = new javax.swing.JPanel();
-        jButton2 = new javax.swing.JButton();
         jPanel18 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jPanel19 = new javax.swing.JPanel();
@@ -741,15 +749,6 @@ public class FaontDeskOverview extends javax.swing.JPanel {
         jPanel17.setPreferredSize(new java.awt.Dimension(500, 305));
         jPanel17.setLayout(new java.awt.GridLayout(5, 1, 10, 5));
 
-        jButton2.setFont(new java.awt.Font("Poppins", 0, 12)); // NOI18N
-        jButton2.setText("All ");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
-            }
-        });
-        jPanel17.add(jButton2);
-
         jPanel18.setBackground(new java.awt.Color(255, 255, 255));
         jPanel18.setPreferredSize(new java.awt.Dimension(864, 200));
         jPanel18.setLayout(new java.awt.BorderLayout());
@@ -898,21 +897,14 @@ public class FaontDeskOverview extends javax.swing.JPanel {
         add(jPanel16, java.awt.BorderLayout.PAGE_END);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        jPanel19.removeAll();
-        loadRoomsToPanal();
-        SwingUtilities.updateComponentTreeUI(jPanel19);
-
-    }//GEN-LAST:event_jButton2ActionPerformed
-
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         parentFrame.pressBookNowButton().doClick();
     }//GEN-LAST:event_jButton1ActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
