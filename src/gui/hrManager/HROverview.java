@@ -1,14 +1,28 @@
 package gui.hrManager;
 
 import com.formdev.flatlaf.FlatClientProperties;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Font;
 import javax.swing.BorderFactory;
+import javax.swing.UIManager;
 import model.ModifyTables;
+import org.jfree.chart.ChartFactory;
+import org.jfree.chart.ChartPanel;
+import org.jfree.chart.JFreeChart;
+import org.jfree.chart.plot.CategoryPlot;
+import org.jfree.chart.plot.PiePlot;
+import org.jfree.chart.renderer.category.BarRenderer;
+import org.jfree.data.category.DefaultCategoryDataset;
+import org.jfree.data.general.DefaultPieDataset;
 
 public class HROverview extends javax.swing.JPanel {
 
     public HROverview() {
         initComponents();
         init();
+
     }
 
     private void init() {
@@ -35,6 +49,100 @@ public class HROverview extends javax.swing.JPanel {
 
         ModifyTables modifyTables = new ModifyTables();
         modifyTables.modifyTables(jPanel6, jTable1, jScrollPane2);
+
+        loadEmployeesChart();
+        loadScheduleChart();
+
+    }
+
+    private void loadEmployeesChart() {
+        DefaultCategoryDataset xxDataSet = new DefaultCategoryDataset();
+        xxDataSet.addValue(40, "Front Desk", "Front Desk");
+        xxDataSet.addValue(88, "HouseKeeping", "HouseKeeping");
+        xxDataSet.addValue(60, "Kitchen", "Kitchen");
+        xxDataSet.addValue(77, "Finance", "Finance");
+        xxDataSet.addValue(98, "Management", "Management");
+
+        JFreeChart chart = ChartFactory.createBarChart("Employees by Department", "Department", "Employees",
+                xxDataSet);
+        CategoryPlot plot = chart.getCategoryPlot();
+        BarRenderer renderer = (BarRenderer) plot.getRenderer();
+
+        plot.setBackgroundPaint(new java.awt.Color(252, 252, 252));
+        chart.setBackgroundPaint(new java.awt.Color(252, 252, 252));
+
+        renderer.setSeriesPaint(0, new Color(60, 179, 113));  // Front Desk - greenish
+        renderer.setSeriesPaint(1, new Color(255, 165, 0));   // HouseKeeping - orange
+        renderer.setSeriesPaint(2, new Color(147, 112, 219)); // Kitchen - purple
+        renderer.setSeriesPaint(3, new Color(139, 69, 19));   // Finance - brown
+        renderer.setSeriesPaint(4, new Color(152, 251, 152)); // Management - light green
+        renderer.setSeriesPaint(5, new Color(65, 105, 225));  // Maintenance - blue
+//        renderer.set
+
+        chart.getTitle().setFont(new java.awt.Font("Poppins", 0, 14));
+        plot.getDomainAxis().setLabelFont(new Font("Poppins", 0, 14));
+        plot.getDomainAxis().setTickLabelFont(new Font("Poppins", 0, 12));
+        plot.getRangeAxis().setLabelFont(new Font("Poppins", 0, 14));
+        plot.getRangeAxis().setTickLabelFont(new Font("Poppins", 0, 12));
+
+        ChartPanel empByDip = new ChartPanel(chart);
+        empByDip.setBorder(BorderFactory.createLineBorder(UIManager.getColor("Component.borderColor")));
+        empByDip.setPreferredSize(new java.awt.Dimension(400, 300));  // Adjust size as needed
+
+        renderer.setMaximumBarWidth(5);  // Set bar width to 40% of available space
+        plot.getDomainAxis().setCategoryMargin(0.0002);  // Reduce space between bars
+
+        jPanel3.setLayout(new BorderLayout());
+        jPanel3.add(empByDip, BorderLayout.CENTER);
+        jPanel3.validate();
+    }
+
+    private void loadScheduleChart() {
+        DefaultPieDataset dataset = new DefaultPieDataset();
+        dataset.setValue("Scheduled", 300);
+        dataset.setValue("On Leave", 100);
+        dataset.setValue("Training", 57);
+
+        // Create chart
+        JFreeChart chart = ChartFactory.createPieChart(
+                "", // Chart title
+                dataset, // Dataset
+                true, // Include legend
+                true,
+                false);
+
+        // Customize the plot
+        PiePlot plot = (PiePlot) chart.getPlot();
+        plot.setSectionPaint("Scheduled", new Color(60, 186, 84));  // Green color for Scheduled
+        plot.setSectionPaint("On Leave", new Color(72, 133, 237));  // Blue color for On Leave
+        plot.setSectionPaint("Training", new Color(244, 81, 30));   // Orange color for Training
+
+        // Set the plot to be a donut (create a hole in the middle)
+        plot.setInteriorGap(0.02);  // Adjust this value to make the hole bigger or smaller
+        plot.setOutlineVisible(false);
+
+        // Remove default label generation and legend formatting
+        plot.setLabelGenerator(null);
+
+        // Center text (the total value)
+        String centralValue = "457";
+        plot.setSimpleLabels(true);
+        plot.setCircular(true);
+
+        // Customize chart appearance
+        chart.setBackgroundPaint(Color.white);
+
+        
+        plot.setBackgroundPaint(new java.awt.Color(252, 252, 252));
+        chart.setBackgroundPaint(new java.awt.Color(252, 252, 252));
+
+        // Create ChartPanel
+        ChartPanel chartPanel = new ChartPanel(chart);
+        chartPanel.setPreferredSize(new Dimension(500, 300));
+
+        jPanel5.setLayout(new BorderLayout());
+        jPanel5.add(chartPanel, BorderLayout.CENTER);
+        jPanel5.validate();
     }
 
     @SuppressWarnings("unchecked")
@@ -351,7 +459,7 @@ public class HROverview extends javax.swing.JPanel {
 
         jLabel16.setFont(new java.awt.Font("Poppins", 0, 36)); // NOI18N
         jLabel16.setForeground(new java.awt.Color(60, 179, 113));
-        jLabel16.setText("85%");
+        jLabel16.setText("85");
 
         jLabel34.setFont(new java.awt.Font("Poppins", 0, 18)); // NOI18N
         jLabel34.setText("Employees");
@@ -641,7 +749,7 @@ public class HROverview extends javax.swing.JPanel {
         jPanel6Layout.setVerticalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel6Layout.createSequentialGroup()
-                .addContainerGap(12, Short.MAX_VALUE)
+                .addGap(12, 12, 12)
                 .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 329, javax.swing.GroupLayout.PREFERRED_SIZE)

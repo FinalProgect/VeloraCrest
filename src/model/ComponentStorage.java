@@ -1,5 +1,6 @@
 package model;
 
+import gui.hrManager.FixedSalaryEmployeeFrame;
 import gui.kitchenManagerDashboard.MealDashBoard;
 import gui.kitchenManagerDashboard.ViewMenuItemsFrame;
 import gui.kitchenStaffDashboard.KitchenStock;
@@ -11,5 +12,6 @@ public class ComponentStorage {
     public static ViewMenuItemsFrame viewMenuItems;
     public static SelectIngridients selectIngredients;
     public static KitchenStock kitchenStock;
+    public static FixedSalaryEmployeeFrame fixedSalaryEmployee;
 
 }

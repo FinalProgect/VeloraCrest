@@ -19,6 +19,7 @@ import javax.swing.SwingConstants;
 import model.Rooms;
 import javax.swing.JToggleButton;
 import javax.swing.SwingUtilities;
+import model.RoomStatusChecker;
 
 public class FaontDeskOverview extends javax.swing.JPanel {
 
@@ -26,57 +27,97 @@ public class FaontDeskOverview extends javax.swing.JPanel {
 
     public static HashMap<String, Rooms> roomsMap = new HashMap<>();
 
-    public static HashMap<String, Integer> roomStatusMap = new HashMap<>();
-
     public FaontDeskOverview(FrontDeskDashBoard parentFrame) {
         initComponents();
         this.parentFrame = parentFrame;
         roungEdges();
         loadRooms();
-        loadRoomsToPanal();
-        loadRoomsToPanal();
-        loadRoomsToPanal();
-        loadRoomsToPanal();
-        loadRoomsToPanal();
-        loadRoomsToPanal();
-        loadRoomsToPanal();
-        loadRoomsToPanal();
-        loadRoomsToPanal();
-        loadRoomsToPanal();
-        loadRoomsToPanal();
-        loadRoomsToPanal();
-        loadRoomsToPanal();
-        loadRoomsToPanal();
-       
 
+        RoomStatusChecker roomReservationChecker = new RoomStatusChecker(this);
+        roomReservationChecker.start();
+
+        loadRoomsToPanal();
+        loadRoomsToPanal();
+        loadRoomsToPanal();
+        loadRoomsToPanal();
+        loadRoomsToPanal();
+        loadRoomsToPanal();
+        loadRoomsToPanal();
+        loadRoomsToPanal();
+        loadRoomsToPanal();
+        loadRoomsToPanal();
+        loadRoomsToPanal();
+        loadRoomsToPanal();
+        loadRoomsToPanal();
+        loadRoomsToPanal();
         loadFloorButtons();
+//        occupancyGraphic();
 
     }
+
+    ///Room Status Meter
+    private void occupancyGraphic() {
+        double length = 444;
+
+        for (Map.Entry<String, Rooms> rooms : roomsMap.entrySet()) {
+            String key = rooms.getKey();
+            Rooms value = rooms.getValue();
+
+        }
+//        double totalRooms = roomsMap.size(); //////Map Eke Size eka
+
+        double totalRooms = 200;
+        double vacant_rooms = 66;
+        double occupied = 43;
+        double notCleaned = 91;
+        double vacantProgress = (double) vacant_rooms / totalRooms * length; // This will give you 330.0
+        double occupiedProgress = (double) occupied / totalRooms * length; // This will give you 330.0
+        double notCleanedProgress = (double) notCleaned / totalRooms * length; // This will give you 330.0
+
+        System.out.println(vacantProgress);
+        System.out.println(occupiedProgress);
+        System.out.println(notCleanedProgress);
+        jPanel12.setPreferredSize(new Dimension((int) vacantProgress, 50));
+        jPanel13.setPreferredSize(new Dimension((int) occupiedProgress, 50));
+        jPanel14.setPreferredSize(new Dimension((int) notCleanedProgress, 50));
+
+        SwingUtilities.updateComponentTreeUI(jPanel3);
+
+    }
+    ///Room Status Meter
 
     private void loadFloorButtons() {
 
         try {
+                JToggleButton jButton2;
+                jButton2 = new JToggleButton();
+
+                jButton2.setName("All");
+
+                jButton2.setFont(new java.awt.Font("Poppins", 0, 12)); // NOI18N
+                jButton2.setText("All");
 
             String quary = "SELECT * FROM `roomtype`";
 
             ResultSet result = MYsql.execute(quary);
-
             while (result.next()) {
 
                 int id = result.getInt("id");
 
-                JButton jButton3;
-                jButton3 = new JButton();
+                JToggleButton jButton3;
+                jButton3 = new JToggleButton();
 
                 jButton3.setName(String.valueOf(id));
 
                 jButton3.setFont(new java.awt.Font("Poppins", 0, 12)); // NOI18N
                 jButton3.setText(result.getString("type"));
+
                 jButton3.addActionListener(new java.awt.event.ActionListener() {
                     public void actionPerformed(java.awt.event.ActionEvent evt) {
                         floorButton(evt, jButton3.getName());
                     }
                 });
+                buttonGroup1.add(jButton3);
                 jPanel17.add(jButton3);
 
             }
@@ -89,10 +130,8 @@ public class FaontDeskOverview extends javax.swing.JPanel {
 
     private void floorButton(java.awt.event.ActionEvent evt, String id) {
 
-        System.out.println(id);
-        
         jPanel19.removeAll();
-        
+
         for (Map.Entry<String, Rooms> room : roomsMap.entrySet()) {
 
 //            String key = room.getKey();
@@ -101,14 +140,30 @@ public class FaontDeskOverview extends javax.swing.JPanel {
 
                 JPanel roomPanel = new JPanel();
                 roomPanel.setPreferredSize(new Dimension(200, 100)); // Set panel size
-                roomPanel.setBackground(new Color(60, 179, 113)); // Set background color
+
+                if (room.getValue().getOccupideStatus() == 1) {
+                    roomPanel.setBackground(new Color(255, 0, 0)); // Set background color
+                } else {
+
+                    switch (room.getValue().getRoomCleanStatus()) {
+                        case 1:
+                            roomPanel.setBackground(new Color(60, 179, 113)); // Set background color
+                            break;
+                        case 3:
+                            roomPanel.setBackground(new Color(62, 161, 217)); // Set background color
+                            break;
+                        default:
+                            roomPanel.setBackground(new Color(116, 1, 113)); // Set background color
+                            break;
+                    }
+                }
+
                 roomPanel.setLayout(new BorderLayout()); // Set layout for alignment
 
                 // Create the "Room No" label
                 JLabel titleLabel = new JLabel("Room No", SwingConstants.CENTER);
                 titleLabel.setFont(new Font("Poppins", Font.PLAIN, 16)); // Set font
                 titleLabel.setForeground(Color.WHITE); // Set text color
-
                 // Create the "101" label
                 JLabel roomNoLabel = new JLabel(room.getValue().getRoomNo(), SwingConstants.CENTER);
                 roomNoLabel.setFont(new Font("Poppins", Font.BOLD, 24)); // Set font
@@ -118,22 +173,20 @@ public class FaontDeskOverview extends javax.swing.JPanel {
                 roomPanel.add(titleLabel, BorderLayout.NORTH);
                 roomPanel.add(roomNoLabel, BorderLayout.CENTER);
 
-                
-                
                 jPanel19.add(roomPanel);
-                
+
                 System.out.println(String.valueOf(room.getValue().getType()));
 
             }
 
         }
-        
+
         SwingUtilities.updateComponentTreeUI(jPanel18);
 
     }
 
     //Load Rooms To Panel
-    private void loadRoomsToPanal() {
+    public synchronized void loadRoomsToPanal() {
 
         for (Map.Entry<String, Rooms> room : roomsMap.entrySet()) {
 
@@ -141,7 +194,26 @@ public class FaontDeskOverview extends javax.swing.JPanel {
             // Create the panel
             JPanel roomPanel = new JPanel();
             roomPanel.setPreferredSize(new Dimension(200, 100)); // Set panel size
-            roomPanel.setBackground(new Color(60, 179, 113)); // Set background color
+
+            System.out.println("**********************  - " + room.getValue().getOccupideStatus());
+
+            if (room.getValue().getOccupideStatus() == 1) {
+                roomPanel.setBackground(new Color(255, 0, 0)); // Set background color
+            } else {
+
+                switch (room.getValue().getRoomCleanStatus()) {
+                    case 1:
+                        roomPanel.setBackground(new Color(60, 179, 113)); // Set background color ROOM IS CLEANED
+                        break;
+                    case 3:
+                        roomPanel.setBackground(new Color(62, 161, 217)); // Set background color  ROOM IS NOT CLEANED
+                        break;
+                    default:
+                        roomPanel.setBackground(new Color(116, 1, 113)); // Set background color  ROOM IS CLEANNING
+                        break;
+                }
+            }
+
             roomPanel.setLayout(new BorderLayout()); // Set layout for alignment
 
             // Create the "Room No" label
@@ -170,7 +242,7 @@ public class FaontDeskOverview extends javax.swing.JPanel {
 
             int lableNumber = 0;
 
-            String quary = "SELECT * FROM `rooms`";
+            String quary = "SELECT * FROM `rooms` WHERE `roomStatus_id` = '1' ";
 
             ResultSet result = MYsql.execute(quary);
 
@@ -210,6 +282,7 @@ public class FaontDeskOverview extends javax.swing.JPanel {
         jPanel36.putClientProperty(FlatClientProperties.STYLE, "arc:100");
         jPanel37.putClientProperty(FlatClientProperties.STYLE, "arc:100");
         jPanel38.putClientProperty(FlatClientProperties.STYLE, "arc:100");
+        jPanel39.putClientProperty(FlatClientProperties.STYLE, "arc:100");
     }
     //Rond Eges
 
@@ -217,6 +290,7 @@ public class FaontDeskOverview extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        buttonGroup1 = new javax.swing.ButtonGroup();
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
@@ -250,7 +324,6 @@ public class FaontDeskOverview extends javax.swing.JPanel {
         jLabel50 = new javax.swing.JLabel();
         jPanel16 = new javax.swing.JPanel();
         jPanel17 = new javax.swing.JPanel();
-        jButton2 = new javax.swing.JButton();
         jPanel18 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jPanel19 = new javax.swing.JPanel();
@@ -261,6 +334,8 @@ public class FaontDeskOverview extends javax.swing.JPanel {
         jLabel47 = new javax.swing.JLabel();
         jPanel38 = new javax.swing.JPanel();
         jLabel48 = new javax.swing.JLabel();
+        jPanel39 = new javax.swing.JPanel();
+        jLabel51 = new javax.swing.JLabel();
 
         setLayout(new java.awt.BorderLayout());
 
@@ -674,15 +749,6 @@ public class FaontDeskOverview extends javax.swing.JPanel {
         jPanel17.setPreferredSize(new java.awt.Dimension(500, 305));
         jPanel17.setLayout(new java.awt.GridLayout(5, 1, 10, 5));
 
-        jButton2.setFont(new java.awt.Font("Poppins", 0, 12)); // NOI18N
-        jButton2.setText("All ");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
-            }
-        });
-        jPanel17.add(jButton2);
-
         jPanel18.setBackground(new java.awt.Color(255, 255, 255));
         jPanel18.setPreferredSize(new java.awt.Dimension(864, 200));
         jPanel18.setLayout(new java.awt.BorderLayout());
@@ -694,7 +760,7 @@ public class FaontDeskOverview extends javax.swing.JPanel {
 
         jPanel35.setBackground(new java.awt.Color(255, 255, 255));
 
-        jPanel36.setBackground(new java.awt.Color(240, 240, 240));
+        jPanel36.setBackground(new java.awt.Color(62, 161, 217));
 
         javax.swing.GroupLayout jPanel36Layout = new javax.swing.GroupLayout(jPanel36);
         jPanel36.setLayout(jPanel36Layout);
@@ -708,7 +774,7 @@ public class FaontDeskOverview extends javax.swing.JPanel {
         );
 
         jLabel46.setFont(new java.awt.Font("Poppins", 0, 12)); // NOI18N
-        jLabel46.setText("Confirmed Room");
+        jLabel46.setText("Need To Clean");
 
         jPanel37.setBackground(new java.awt.Color(60, 179, 113));
 
@@ -740,14 +806,34 @@ public class FaontDeskOverview extends javax.swing.JPanel {
         );
 
         jLabel48.setFont(new java.awt.Font("Poppins", 0, 12)); // NOI18N
-        jLabel48.setText("Cleaning  Room");
+        jLabel48.setText("Room Resived");
+
+        jPanel39.setBackground(new java.awt.Color(116, 1, 113));
+
+        javax.swing.GroupLayout jPanel39Layout = new javax.swing.GroupLayout(jPanel39);
+        jPanel39.setLayout(jPanel39Layout);
+        jPanel39Layout.setHorizontalGroup(
+            jPanel39Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 20, Short.MAX_VALUE)
+        );
+        jPanel39Layout.setVerticalGroup(
+            jPanel39Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 20, Short.MAX_VALUE)
+        );
+
+        jLabel51.setFont(new java.awt.Font("Poppins", 0, 12)); // NOI18N
+        jLabel51.setText("Cleaning");
 
         javax.swing.GroupLayout jPanel35Layout = new javax.swing.GroupLayout(jPanel35);
         jPanel35.setLayout(jPanel35Layout);
         jPanel35Layout.setHorizontalGroup(
             jPanel35Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel35Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(48, 48, 48)
+                .addComponent(jPanel39, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jLabel51)
+                .addGap(115, 115, 115)
                 .addComponent(jPanel36, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabel46)
@@ -767,16 +853,22 @@ public class FaontDeskOverview extends javax.swing.JPanel {
                 .addContainerGap()
                 .addGroup(jPanel35Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel35Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                        .addComponent(jPanel37, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jLabel47)
-                        .addComponent(jPanel36, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jLabel46))
+                        .addComponent(jPanel39, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jLabel51))
                     .addGroup(jPanel35Layout.createSequentialGroup()
-                        .addGap(3, 3, 3)
+                        .addGap(1, 1, 1)
                         .addGroup(jPanel35Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel48)
-                            .addComponent(jPanel38, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap(7, Short.MAX_VALUE))
+                            .addGroup(jPanel35Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                .addComponent(jPanel37, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jLabel47)
+                                .addComponent(jPanel36, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jLabel46))
+                            .addGroup(jPanel35Layout.createSequentialGroup()
+                                .addGap(3, 3, 3)
+                                .addGroup(jPanel35Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel48)
+                                    .addComponent(jPanel38, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))))
+                .addContainerGap(12, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout jPanel16Layout = new javax.swing.GroupLayout(jPanel16);
@@ -794,9 +886,7 @@ public class FaontDeskOverview extends javax.swing.JPanel {
         );
         jPanel16Layout.setVerticalGroup(
             jPanel16Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel16Layout.createSequentialGroup()
-                .addComponent(jPanel17, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGap(0, 0, Short.MAX_VALUE))
+            .addComponent(jPanel17, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(jPanel16Layout.createSequentialGroup()
                 .addComponent(jPanel35, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -807,21 +897,14 @@ public class FaontDeskOverview extends javax.swing.JPanel {
         add(jPanel16, java.awt.BorderLayout.PAGE_END);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-       jPanel19.removeAll();
-        loadRoomsToPanal();
-         SwingUtilities.updateComponentTreeUI(jPanel19);
-        
-    }//GEN-LAST:event_jButton2ActionPerformed
-
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         parentFrame.pressBookNowButton().doClick();
     }//GEN-LAST:event_jButton1ActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -836,6 +919,7 @@ public class FaontDeskOverview extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel49;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel50;
+    private javax.swing.JLabel jLabel51;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
@@ -857,6 +941,7 @@ public class FaontDeskOverview extends javax.swing.JPanel {
     private javax.swing.JPanel jPanel36;
     private javax.swing.JPanel jPanel37;
     private javax.swing.JPanel jPanel38;
+    private javax.swing.JPanel jPanel39;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
