@@ -16,13 +16,13 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
 import javax.swing.JOptionPane;
-import model.EmployeeDetails;
+import model.employeeDetails;
 
 public class SignIn extends javax.swing.JDialog {
 
     public static final Logger logger = Loggers.getLogger();
 
-    public static HashMap<String, EmployeeDetails> employeeMap = new HashMap();
+    public static HashMap<String, employeeDetails> employeeMap = new HashMap();
 
     public SignIn(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
@@ -277,7 +277,7 @@ System.out.println("Fontdesk Employee");
 
                     if (result.getString("employee_status_id").equals("1")) {
 
-                        EmployeeDetails employeeDetails = new EmployeeDetails();
+                        employeeDetails employeeDetails = new employeeDetails();
 
                         employeeDetails.setEmployeeName(result.getString("fname") + " " + result.getString("lname"));
                         employeeDetails.setEmployeeId(result.getInt("id"));
