@@ -34,7 +34,6 @@ public class InventoryManagement extends javax.swing.JPanel {
         jScrollPane1.setBorder(BorderFactory.createEmptyBorder());
         
         loadInventoryChart();
-        loadEquipmentChart();
     }
     
     private void loadInventoryChart() {
@@ -79,49 +78,6 @@ public class InventoryManagement extends javax.swing.JPanel {
         jPanel4.add(empByDip, BorderLayout.CENTER);
         jPanel4.validate();
     }
-    
-    private void loadEquipmentChart() {
-//        jPanel2.
-        DefaultCategoryDataset xxDataSet = new DefaultCategoryDataset();
-        xxDataSet.addValue(60, "Cutting Board", "Cutting Board");
-        xxDataSet.addValue(40, "Beaters", "Beaters");
-        xxDataSet.addValue(77, "Spoons", "Spoons");
-        xxDataSet.addValue(98, "Heater", "Heater");
-        xxDataSet.addValue(88, "Knives", "Knives");
-
-        JFreeChart chart = ChartFactory.createBarChart("Equipment by amount", "Equipment", "Amount",
-                xxDataSet);
-        CategoryPlot plot = chart.getCategoryPlot();
-        BarRenderer renderer = (BarRenderer) plot.getRenderer();
-
-        plot.setBackgroundPaint(new java.awt.Color(252, 252, 252));
-        chart.setBackgroundPaint(new java.awt.Color(252, 252, 252));
-
-        renderer.setSeriesPaint(0, new Color(60, 179, 113));  // Front Desk - greenish
-        renderer.setSeriesPaint(1, new Color(255, 165, 0));   // HouseKeeping - orange
-        renderer.setSeriesPaint(2, new Color(147, 112, 219)); // Kitchen - purple
-        renderer.setSeriesPaint(3, new Color(139, 69, 19));   // Finance - brown
-        renderer.setSeriesPaint(4, new Color(152, 251, 152)); // Management - light green
-        renderer.setSeriesPaint(5, new Color(65, 105, 225));  // Maintenance - blue
-//        renderer.set
-
-        plot.getRangeAxis().setLabelFont(new Font("Poppins", 0, 14));
-        chart.getTitle().setFont(new java.awt.Font("Poppins", 0, 14));
-        plot.getDomainAxis().setTickLabelFont(new Font("Poppins", 0, 12));
-        plot.getRangeAxis().setTickLabelFont(new Font("Poppins", 0, 12));
-        plot.getDomainAxis().setLabelFont(new Font("Poppins", 0, 14));
-
-        ChartPanel empByDip = new ChartPanel(chart);
-        empByDip.setBorder(BorderFactory.createLineBorder(UIManager.getColor("Component.borderColor")));
-        empByDip.setPreferredSize(new java.awt.Dimension(400, 300));  // Adjust size as needed
-
-        renderer.setMaximumBarWidth(5);  // Set bar width to 40% of available space
-        plot.getDomainAxis().setCategoryMargin(0.0002);  // Reduce space between bars
-
-        jPanel5.setLayout(new BorderLayout());
-        jPanel5.add(empByDip, BorderLayout.CENTER);
-        jPanel5.validate();
-    }
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -137,7 +93,6 @@ public class InventoryManagement extends javax.swing.JPanel {
         jPanel3 = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
         jButton2 = new javax.swing.JButton();
-        jPanel5 = new javax.swing.JPanel();
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
 
@@ -199,7 +154,7 @@ public class InventoryManagement extends javax.swing.JPanel {
         jPanel3.setBackground(new java.awt.Color(252, 252, 252));
 
         jLabel3.setFont(new java.awt.Font("Poppins SemiBold", 0, 18)); // NOI18N
-        jLabel3.setText("Equipment");
+        jLabel3.setText("Cooling Equipment");
 
         jButton2.setBackground(new java.awt.Color(157, 144, 215));
         jButton2.setFont(new java.awt.Font("Poppins", 1, 12)); // NOI18N
@@ -211,29 +166,15 @@ public class InventoryManagement extends javax.swing.JPanel {
             }
         });
 
-        javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
-        jPanel5.setLayout(jPanel5Layout);
-        jPanel5Layout.setHorizontalGroup(
-            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
-        jPanel5Layout.setVerticalGroup(
-            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 218, Short.MAX_VALUE)
-        );
-
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+            .addGroup(jPanel3Layout.createSequentialGroup()
                 .addGap(40, 40, 40)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addComponent(jLabel3)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 881, Short.MAX_VALUE)
-                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addComponent(jLabel3)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(40, 40, 40))
         );
         jPanel3Layout.setVerticalGroup(
@@ -243,9 +184,7 @@ public class InventoryManagement extends javax.swing.JPanel {
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 18, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButton2))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(25, 25, 25))
+                .addContainerGap(255, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
@@ -316,7 +255,6 @@ public class InventoryManagement extends javax.swing.JPanel {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
-    private javax.swing.JPanel jPanel5;
     private javax.swing.JScrollPane jScrollPane1;
     // End of variables declaration//GEN-END:variables
 }
