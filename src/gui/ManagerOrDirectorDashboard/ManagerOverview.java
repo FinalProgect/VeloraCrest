@@ -4,10 +4,8 @@ import com.formdev.flatlaf.FlatClientProperties;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.Font;
 import javax.swing.BorderFactory;
 import javax.swing.SwingUtilities;
-import javax.swing.UIManager;
 import model.ModifyTables;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
@@ -15,7 +13,6 @@ import org.jfree.chart.JFreeChart;
 import org.jfree.chart.plot.CategoryPlot;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.renderer.category.AreaRenderer;
-import org.jfree.chart.renderer.category.BarRenderer;
 import org.jfree.data.category.DefaultCategoryDataset;
 
 public class ManagerOverview extends javax.swing.JPanel {
@@ -64,46 +61,96 @@ public class ManagerOverview extends javax.swing.JPanel {
     }
 
     private void loadExpensesChart() {
-//        jPanel2.
-        DefaultCategoryDataset xxDataSet = new DefaultCategoryDataset();
-        xxDataSet.addValue(40, "Front Desk", "Front Desk");
-        xxDataSet.addValue(88, "HouseKeeping", "HouseKeeping");
-        xxDataSet.addValue(60, "Kitchen", "Kitchen");
-        xxDataSet.addValue(77, "Finance", "Finance");
-        xxDataSet.addValue(98, "Management", "Management");
+             DefaultCategoryDataset xxDataSet = new DefaultCategoryDataset();
 
-        JFreeChart chart = ChartFactory.createBarChart("Employees by Department", "Department", "Employees",
-                xxDataSet);
-        CategoryPlot plot = chart.getCategoryPlot();
-        BarRenderer renderer = (BarRenderer) plot.getRenderer();
+// Revenue data
+        xxDataSet.addValue(40000, "Revenue", "January");
+        xxDataSet.addValue(88000, "Revenue", "February");
+        xxDataSet.addValue(60000, "Revenue", "March");
+        xxDataSet.addValue(77000, "Revenue", "April");
+        xxDataSet.addValue(98000, "Revenue", "May");
+        xxDataSet.addValue(76000, "Revenue", "June");
 
-        plot.setBackgroundPaint(new java.awt.Color(252, 252, 252));
-        chart.setBackgroundPaint(new java.awt.Color(252, 252, 252));
+// Expenses data
+        xxDataSet.addValue(30000, "Expenses", "January");
+        xxDataSet.addValue(50000, "Expenses", "February");
+        xxDataSet.addValue(45000, "Expenses", "March");
+        xxDataSet.addValue(67000, "Expenses", "April");
+        xxDataSet.addValue(85000, "Expenses", "May");
+        xxDataSet.addValue(55000, "Expenses", "June");
+// Create the Area Chart
+        JFreeChart areaChart = ChartFactory.createAreaChart(
+                "Revenue vs Expenses", // Chart title
+                "Department", // X-Axis Label
+                "Amount (in LKR)", // Y-Axis Label
+                xxDataSet,
+                PlotOrientation.VERTICAL,
+                true, true, false);
 
-        renderer.setSeriesPaint(0, new Color(60, 179, 113));  // Front Desk - greenish
-        renderer.setSeriesPaint(1, new Color(255, 165, 0));   // HouseKeeping - orange
-        renderer.setSeriesPaint(2, new Color(147, 112, 219)); // Kitchen - purple
-        renderer.setSeriesPaint(3, new Color(139, 69, 19));   // Finance - brown
-        renderer.setSeriesPaint(4, new Color(152, 251, 152)); // Management - light green
-        renderer.setSeriesPaint(5, new Color(65, 105, 225));  // Maintenance - blue
-//        renderer.set
+// Customize the chart
+        areaChart.setBackgroundPaint(Color.white);
 
-        chart.getTitle().setFont(new java.awt.Font("Poppins", 0, 14));
-        plot.getDomainAxis().setLabelFont(new Font("Poppins", 0, 14));
-        plot.getDomainAxis().setTickLabelFont(new Font("Poppins", 0, 12));
-        plot.getRangeAxis().setLabelFont(new Font("Poppins", 0, 14));
-        plot.getRangeAxis().setTickLabelFont(new Font("Poppins", 0, 12));
+// Get the plot object
+        CategoryPlot plot = (CategoryPlot) areaChart.getPlot();
 
-        ChartPanel empByDip = new ChartPanel(chart);
-        empByDip.setBorder(BorderFactory.createLineBorder(UIManager.getColor("Component.borderColor")));
-        empByDip.setPreferredSize(new java.awt.Dimension(400, 300));  // Adjust size as needed
+// Set the colors for the series (Revenue and Expenses)
+        plot.getRenderer().setSeriesPaint(0, Color.GREEN); // Revenue
+        plot.getRenderer().setSeriesPaint(1, Color.RED);   // Expenses
 
-        renderer.setMaximumBarWidth(5);  // Set bar width to 40% of available space
-        plot.getDomainAxis().setCategoryMargin(0.0002);  // Reduce space between bars
+// Set an area renderer to fill the area under the lines
+        plot.setRenderer(new AreaRenderer());
 
+                plot.setBackgroundPaint(new java.awt.Color(252, 252, 252));
+        areaChart.setBackgroundPaint(new java.awt.Color(252, 252, 252));
+
+// Create and customize the chart panel
+        ChartPanel chartPanel = new ChartPanel(areaChart);
+        chartPanel.setPreferredSize(new Dimension(400, 300));
+
+// Add the chart panel to jPanel2
         jPanel2.setLayout(new BorderLayout());
-        jPanel2.add(empByDip, BorderLayout.CENTER);
+        jPanel2.add(chartPanel, BorderLayout.CENTER);
         jPanel2.validate();
+////        jPanel2.
+//        DefaultCategoryDataset xxDataSet = new DefaultCategoryDataset();
+//        xxDataSet.addValue(40, "Front Desk", "Front Desk");
+//        xxDataSet.addValue(88, "HouseKeeping", "HouseKeeping");
+//        xxDataSet.addValue(60, "Kitchen", "Kitchen");
+//        xxDataSet.addValue(77, "Finance", "Finance");
+//        xxDataSet.addValue(98, "Management", "Management");
+//  
+//        JFreeChart chart = ChartFactory.createBarChart("Employees by Department", "Department", "Employees",
+//                xxDataSet);
+//        CategoryPlot plot = chart.getCategoryPlot();
+//        BarRenderer renderer = (BarRenderer) plot.getRenderer();
+//
+//        plot.setBackgroundPaint(new java.awt.Color(252, 252, 252));
+//        chart.setBackgroundPaint(new java.awt.Color(252, 252, 252));
+//
+//        renderer.setSeriesPaint(0, new Color(60, 179, 113));  // Front Desk - greenish
+//        renderer.setSeriesPaint(1, new Color(255, 165, 0));   // HouseKeeping - orange
+//        renderer.setSeriesPaint(2, new Color(147, 112, 219)); // Kitchen - purple
+//        renderer.setSeriesPaint(3, new Color(139, 69, 19));   // Finance - brown
+//        renderer.setSeriesPaint(4, new Color(152, 251, 152)); // Management - light green
+//        renderer.setSeriesPaint(5, new Color(65, 105, 225));  // Maintenance - blue
+////        renderer.set
+//
+//        chart.getTitle().setFont(new java.awt.Font("Poppins", 0, 14));
+//        plot.getDomainAxis().setLabelFont(new Font("Poppins", 0, 14));
+//        plot.getDomainAxis().setTickLabelFont(new Font("Poppins", 0, 12));
+//        plot.getRangeAxis().setLabelFont(new Font("Poppins", 0, 14));
+//        plot.getRangeAxis().setTickLabelFont(new Font("Poppins", 0, 12));
+//
+//        ChartPanel empByDip = new ChartPanel(chart);
+//        empByDip.setBorder(BorderFactory.createLineBorder(UIManager.getColor("Component.borderColor")));
+//        empByDip.setPreferredSize(new java.awt.Dimension(400, 300));  // Adjust size as needed
+//
+//        renderer.setMaximumBarWidth(5);  // Set bar width to 40% of available space
+//        plot.getDomainAxis().setCategoryMargin(0.0002);  // Reduce space between bars
+//
+//        jPanel2.setLayout(new BorderLayout());
+//        jPanel2.add(empByDip, BorderLayout.CENTER);
+//        jPanel2.validate();
     }
 
     private void loadOccupancy(double vac, double occu, double notClean) {
