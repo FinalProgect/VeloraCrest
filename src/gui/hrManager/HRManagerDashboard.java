@@ -128,6 +128,7 @@ public class HRManagerDashboard extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Dashboard | HR Manager");
+        setUndecorated(true);
 
         jPanel1.setBackground(new java.awt.Color(0, 140, 130));
 

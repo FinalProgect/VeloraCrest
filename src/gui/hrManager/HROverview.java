@@ -67,8 +67,8 @@ public class HROverview extends javax.swing.JPanel {
                 xxDataSet);
         CategoryPlot plot = chart.getCategoryPlot();
         BarRenderer renderer = (BarRenderer) plot.getRenderer();
-
         plot.setBackgroundPaint(new java.awt.Color(252, 252, 252));
+        plot.setOutlineVisible(false);
         chart.setBackgroundPaint(new java.awt.Color(252, 252, 252));
 
         renderer.setSeriesPaint(0, new Color(60, 179, 113));  // Front Desk - greenish
@@ -78,7 +78,7 @@ public class HROverview extends javax.swing.JPanel {
         renderer.setSeriesPaint(4, new Color(152, 251, 152)); // Management - light green
         renderer.setSeriesPaint(5, new Color(65, 105, 225));  // Maintenance - blue
 //        renderer.set
-
+        renderer.setItemMargin(0.0);
         chart.getTitle().setFont(new java.awt.Font("Poppins", 0, 14));
         plot.getDomainAxis().setLabelFont(new Font("Poppins", 0, 14));
         plot.getDomainAxis().setTickLabelFont(new Font("Poppins", 0, 12));
@@ -86,11 +86,10 @@ public class HROverview extends javax.swing.JPanel {
         plot.getRangeAxis().setTickLabelFont(new Font("Poppins", 0, 12));
 
         ChartPanel empByDip = new ChartPanel(chart);
-        empByDip.setBorder(BorderFactory.createLineBorder(UIManager.getColor("Component.borderColor")));
+        empByDip.setBorder(BorderFactory.createEmptyBorder());
         empByDip.setPreferredSize(new java.awt.Dimension(400, 300));  // Adjust size as needed
-
-        renderer.setMaximumBarWidth(5);  // Set bar width to 40% of available space
-        plot.getDomainAxis().setCategoryMargin(0.0002);  // Reduce space between bars
+        renderer.setMaximumBarWidth(0.5);
+        plot.getDomainAxis().setCategoryMargin(0.0);
 
         jPanel3.setLayout(new BorderLayout());
         jPanel3.add(empByDip, BorderLayout.CENTER);
@@ -123,7 +122,7 @@ public class HROverview extends javax.swing.JPanel {
 
         // Remove default label generation and legend formatting
         plot.setLabelGenerator(null);
-
+        plot.setShadowPaint(null);
         // Center text (the total value)
         String centralValue = "457";
         plot.setSimpleLabels(true);
@@ -132,7 +131,6 @@ public class HROverview extends javax.swing.JPanel {
         // Customize chart appearance
         chart.setBackgroundPaint(Color.white);
 
-        
         plot.setBackgroundPaint(new java.awt.Color(252, 252, 252));
         chart.setBackgroundPaint(new java.awt.Color(252, 252, 252));
 
