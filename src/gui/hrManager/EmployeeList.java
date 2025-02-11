@@ -2,6 +2,7 @@ package gui.hrManager;
 
 import com.formdev.flatlaf.FlatClientProperties;
 import javax.swing.BorderFactory;
+import model.ComponentStorage;
 import model.ModifyTables;
 
 /**
@@ -23,6 +24,8 @@ public class EmployeeList extends javax.swing.JPanel {
         jPanel19.putClientProperty(FlatClientProperties.STYLE, "arc:50");
         jPanel20.putClientProperty(FlatClientProperties.STYLE, "arc:50");
         jPanel21.putClientProperty(FlatClientProperties.STYLE, "arc:50");
+        
+        jButton1.putClientProperty(FlatClientProperties.STYLE, "arc:50");
 
         jPanel15.putClientProperty(FlatClientProperties.STYLE, "arc:100");
         jPanel17.putClientProperty(FlatClientProperties.STYLE, "arc:100");
@@ -34,6 +37,10 @@ public class EmployeeList extends javax.swing.JPanel {
 
         ModifyTables modifyTables = new ModifyTables();
         modifyTables.modifyTables(jPanel2, jTable1, jScrollPane2);
+    }
+    
+    private void loadEmployees(){
+        
     }
 
     @SuppressWarnings("unchecked")
@@ -442,7 +449,7 @@ public class EmployeeList extends javax.swing.JPanel {
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGap(18, 18, 18)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 517, Short.MAX_VALUE)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 398, Short.MAX_VALUE)
                 .addGap(18, 18, 18))
         );
 
@@ -450,6 +457,11 @@ public class EmployeeList extends javax.swing.JPanel {
         jButton1.setFont(new java.awt.Font("Poppins SemiBold", 0, 14)); // NOI18N
         jButton1.setForeground(new java.awt.Color(252, 252, 252));
         jButton1.setText("Register Employee");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -478,7 +490,7 @@ public class EmployeeList extends javax.swing.JPanel {
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                                     .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 214, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, 214, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 42, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 66, Short.MAX_VALUE)
                         .addComponent(jPanel16, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addComponent(jPanel14, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -524,9 +536,9 @@ public class EmployeeList extends javax.swing.JPanel {
                             .addComponent(jComboBox3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addGap(18, 18, 18)
                 .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGap(18, 18, 18)
-                .addComponent(jButton1)
-                .addGap(20, 20, 20))
+                .addGap(21, 21, 21)
+                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(26, 26, 26))
         );
 
         jScrollPane1.setViewportView(jPanel1);
@@ -539,9 +551,22 @@ public class EmployeeList extends javax.swing.JPanel {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 885, Short.MAX_VALUE)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 942, Short.MAX_VALUE)
         );
     }// </editor-fold>//GEN-END:initComponents
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        RegisterNewEmployee registerNewEmployee;
+        if (ComponentStorage.registerNewEmployee == null) {
+            registerNewEmployee = new RegisterNewEmployee();
+            registerNewEmployee.setVisible(true);
+            ComponentStorage.registerNewEmployee = registerNewEmployee;
+        } else if (ComponentStorage.registerNewEmployee.isVisible()) {
+            ComponentStorage.registerNewEmployee.toFront();
+        } else {
+            ComponentStorage.registerNewEmployee.setVisible(true);
+        }
+    }//GEN-LAST:event_jButton1ActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
