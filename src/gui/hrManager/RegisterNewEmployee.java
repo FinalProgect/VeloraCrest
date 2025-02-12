@@ -3,6 +3,7 @@ package gui.hrManager;
 import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.themes.FlatMacLightLaf;
 import gui.SignIn;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import javax.swing.BorderFactory;
 import model.ComponentStorage;
@@ -21,37 +22,39 @@ import model.Validation;
 import raven.toast.Notifications;
 
 public class RegisterNewEmployee extends javax.swing.JFrame {
-    
+
     HashMap<String, String> genderMap = new HashMap<>();
     HashMap<String, String> departmentMap = new HashMap<>();
     HashMap<String, String> positionMap = new HashMap<>();
     HashMap<String, String> cityMap = new HashMap<>();
     HashMap<String, String> districtMap = new HashMap<>();
-    
+
     public RegisterNewEmployee() {
         initComponents();
         Notifications.getInstance().setJFrame(this);
         init();
     }
-    
+
     private void init() {
         setExtendedState(RegisterNewEmployee.MAXIMIZED_BOTH);
         jScrollPane1.setBorder(BorderFactory.createEmptyBorder());
         ModifyTables modifyTables = new ModifyTables();
         modifyTables.modifyTables(jPanel6, jTable2, jScrollPane3);
-        
+
         jPanel3.putClientProperty(FlatClientProperties.STYLE, "arc:90");
         jPanel4.putClientProperty(FlatClientProperties.STYLE, "arc:90");
         jPanel5.putClientProperty(FlatClientProperties.STYLE, "arc:90");
-        
+
         jButton1.putClientProperty(FlatClientProperties.STYLE, "arc:90");
         jButton2.putClientProperty(FlatClientProperties.STYLE, "arc:90");
         jButton3.putClientProperty(FlatClientProperties.STYLE, "arc:90");
-        
+
         loadGenderDepartmentPositionBoxes();
         loadEmployeeTable();
         loadDistricts();
         loadCity();
+
+        jTable2.grabFocus();
     }
 
 //    load cities
@@ -63,7 +66,7 @@ public class RegisterNewEmployee extends javax.swing.JFrame {
             while (citySet.next()) {
                 districtVector.add(citySet.getString("name"));
                 cityMap.put(citySet.getString("name"), citySet.getString("id"));
-                
+
             }
             DefaultComboBoxModel model = new DefaultComboBoxModel(districtVector);
             jComboBox8.setModel(model);
@@ -81,7 +84,7 @@ public class RegisterNewEmployee extends javax.swing.JFrame {
             while (districtSet.next()) {
                 districtVector.add(districtSet.getString("name"));
                 districtMap.put(districtSet.getString("name"), districtSet.getString("id"));
-                
+
             }
             DefaultComboBoxModel model = new DefaultComboBoxModel(districtVector);
             jComboBox7.setModel(model);
@@ -96,7 +99,7 @@ public class RegisterNewEmployee extends javax.swing.JFrame {
         try {
 //            load genders
             ResultSet genderSet = MYsql.execute("SELECT * FROM `gender` ");
-            
+
             Vector<String> genderVector = new Vector<>();
             while (genderSet.next()) {
                 genderVector.add(genderSet.getString("gender"));
@@ -107,7 +110,7 @@ public class RegisterNewEmployee extends javax.swing.JFrame {
 
 //            load Departments
             ResultSet departmentSet = MYsql.execute("SELECT * FROM `department` ");
-            
+
             Vector<String> DepartmentVector = new Vector<>();
             while (departmentSet.next()) {
                 DepartmentVector.add(departmentSet.getString("name"));
@@ -118,7 +121,7 @@ public class RegisterNewEmployee extends javax.swing.JFrame {
 
 //            load positions
             ResultSet positionSet = MYsql.execute("SELECT * FROM `employee_type` ");
-            
+
             Vector<String> positionVector = new Vector<>();
             while (positionSet.next()) {
                 positionVector.add(positionSet.getString("type"));
@@ -126,7 +129,7 @@ public class RegisterNewEmployee extends javax.swing.JFrame {
             }
             DefaultComboBoxModel positionModel = new DefaultComboBoxModel(positionVector);
             jComboBox5.setModel(positionModel);
-            
+
             System.out.println(genderMap + " " + " " + departmentMap + " " + positionMap);
         } catch (Exception e) {
             e.printStackTrace();
@@ -136,10 +139,29 @@ public class RegisterNewEmployee extends javax.swing.JFrame {
 //    load employee table
 
     private void loadEmployeeTable() {
+        String search = "";
+        if (jToggleButton1.isSelected()) {
+            String nic = jTextField7.getText();
+            String mobile = jTextField6.getText();
+
+            if (!nic.isBlank() || !mobile.isBlank()) {
+                search = " WHERE ";
+                if (!nic.isBlank() && mobile.isBlank()) {
+//                  nic is not blank
+                    search += " `nic` LIKE '%" + nic + "%' ";
+                } else if (nic.isBlank() && !mobile.isBlank()) {
+//                  mobile is not blank
+                    search += " `mobile` LIKE '%" + mobile + "%' ";
+                } else if (!nic.isBlank() && !mobile.isBlank()) {
+//                  nic and mobile not blank
+                    search += " `nic` LIKE '%" + nic + "%' AND `mobile` LIKE '%" + mobile + "%' ";
+                }
+            }
+        }
         try {
             ResultSet employee_set = MYsql.execute("SELECT `employee`.`id`,`fullName`,`name`,`type` FROM "
                     + "`employee` INNER JOIN `department` ON `department`.`id` = `employee`.`department_id` "
-                    + "INNER JOIN `employee_type` ON `employee_type`.`id` = `employee`.`Employee_type_id` ");
+                    + "INNER JOIN `employee_type` ON `employee_type`.`id` = `employee`.`Employee_type_id` " + search);
             DefaultTableModel employeeModel = (DefaultTableModel) jTable2.getModel();
             employeeModel.setRowCount(0);
             while (employee_set.next()) {
@@ -148,13 +170,13 @@ public class RegisterNewEmployee extends javax.swing.JFrame {
                 employeeVector.add(employee_set.getString("fullName"));
                 employeeVector.add(employee_set.getString("name"));
                 employeeVector.add(employee_set.getString("type"));
-                
+
                 employeeModel.addRow(employeeVector);
             }
             jTable2.setModel(employeeModel);
         } catch (Exception e) {
             e.printStackTrace();
-            Loggers.logWarning(e.getMessage());
+            SignIn.logger.severe(e.getMessage());
         }
     }
 
@@ -181,18 +203,18 @@ public class RegisterNewEmployee extends javax.swing.JFrame {
 //        today
         SimpleDateFormat todayf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String today = todayf.format(new Date());
-        
+
         String gender = genderMap.get(String.valueOf(jComboBox3.getSelectedItem()));
         String department = departmentMap.get(String.valueOf(jComboBox4.getSelectedItem()));
         String position = positionMap.get(String.valueOf(jComboBox5.getSelectedItem()));
-        
+
         String postalCode = jTextField11.getText();
-        
+
         boolean validateMail = validateEmail(email);
         boolean validateMobile = validateMobile(mobile);
         boolean validateNIC = validateNIC(nic);
         boolean validatePostal = validatePostal(postalCode);
-        
+
         if (fname.isBlank()) {
             Notifications.getInstance().show(Notifications.Type.WARNING, Notifications.Location.TOP_LEFT, 3000l, "Please enter the first name");
         } else if (lname.isBlank()) {
@@ -217,7 +239,7 @@ public class RegisterNewEmployee extends javax.swing.JFrame {
             Notifications.getInstance().show(Notifications.Type.WARNING, Notifications.Location.TOP_LEFT, 3000l, "Please enter address line 2");
         } else if (!validatePostal) {
             Notifications.getInstance().show(Notifications.Type.WARNING, Notifications.Location.TOP_LEFT, 3000l, "Please enter a valid postal code");
-            
+
         } else {
             try {
 //                check for existing employees with the same details
@@ -230,7 +252,7 @@ public class RegisterNewEmployee extends javax.swing.JFrame {
                                 + "`employee_status_id`,`department_id`,`Employee_type_id`,`gender_id`,`password`) VALUES "
                                 + "('" + fname + "','" + lname + "','" + fullname + "','" + email + "','" + mobile + "','" + nic + "','" + birthDate + "'"
                                 + ",'" + today + "','1','" + department + "','" + position + "','" + gender + "','" + password + "') ");
-                        
+
                         ResultSet lastId = MYsql.execute("SELECT LAST_INSERT_ID() AS employee_id");
                         if (lastId.next()) {
                             int employee_id = lastId.getInt("employee_id");
@@ -243,16 +265,16 @@ public class RegisterNewEmployee extends javax.swing.JFrame {
                                     MYsql.execute("INSERT INTO `address` VALUES ('" + employee_id + "','" + postalCode + "',"
                                             + "'" + line1 + "','" + line2 + "','" + cityMap.get(city) + "')");
                                 }
-                                
+
                                 MYsql.execute("INSERT INTO `salary` VALUES ('" + employee_id + "','" + basicSalary + "') ");
-                                
+
                             } catch (Exception e) {
                             }
                         }
                         clearAll();
                         Notifications.getInstance().show(Notifications.Type.SUCCESS, Notifications.Location.TOP_CENTER, 3000l, "Employee registered Successfully!.");
                     }
-                    
+
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -284,18 +306,18 @@ public class RegisterNewEmployee extends javax.swing.JFrame {
 //        today
         SimpleDateFormat todayf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String today = todayf.format(new Date());
-        
+
         String gender = genderMap.get(String.valueOf(jComboBox3.getSelectedItem()));
         String department = departmentMap.get(String.valueOf(jComboBox4.getSelectedItem()));
         String position = positionMap.get(String.valueOf(jComboBox5.getSelectedItem()));
-        
+
         String postalCode = jTextField11.getText();
-        
+
         boolean validateMail = validateEmail(email);
         boolean validateMobile = validateMobile(mobile);
         boolean validateNIC = validateNIC(nic);
         boolean validatePostal = validatePostal(postalCode);
-        
+
         if (fname.isBlank()) {
             Notifications.getInstance().show(Notifications.Type.WARNING, Notifications.Location.TOP_LEFT, 3000l, "Please enter the first name");
         } else if (lname.isBlank()) {
@@ -320,42 +342,60 @@ public class RegisterNewEmployee extends javax.swing.JFrame {
             Notifications.getInstance().show(Notifications.Type.WARNING, Notifications.Location.TOP_LEFT, 3000l, "Please enter address line 2");
         } else if (!validatePostal) {
             Notifications.getInstance().show(Notifications.Type.WARNING, Notifications.Location.TOP_LEFT, 3000l, "Please enter a valid postal code");
-            
+
         } else {
             try {
 //                check for existing employees with the same details
-                ResultSet existCheck = MYsql.execute("SELECT COUNT(id) FROM `employee` WHERE `mobile` = '" + mobile + "' OR `nic` = '" + nic + "' OR `email` = '" + email + "' ");
+                ResultSet existCheck = MYsql.execute("SELECT *, (SELECT COUNT(id) FROM `employee` WHERE"
+                        + " `nic` = '" + nic + "' AND `email` = '" + email + "')  AS `total_count` FROM `employee` INNER"
+                        + " JOIN `address` ON `address`.`employee_id` = `employee`.`id` INNER JOIN `salary` ON"
+                        + " `salary`.`employee_id` = `employee`.`id` WHERE `nic` = '" + nic + "' AND `email` = '" + email + "' ");
+
                 if (existCheck.next()) {
-                    if (existCheck.getInt("COUNT(id)") > 0) {
-                        Notifications.getInstance().show(Notifications.Type.ERROR, Notifications.Location.TOP_LEFT, 3000l, "Employee with the above details already exists.");
-                    } else {
-                        MYsql.execute("INSERT INTO `employee` (`fname`,`lname`,`fullName`,`email`,`mobile`,`nic`,`birthDay`,`registeredDate`,"
-                                + "`employee_status_id`,`department_id`,`Employee_type_id`,`gender_id`,`password`) VALUES "
-                                + "('" + fname + "','" + lname + "','" + fullname + "','" + email + "','" + mobile + "','" + nic + "','" + birthDate + "'"
-                                + ",'" + today + "','1','" + department + "','" + position + "','" + gender + "','" + password + "') ");
-                        
-                        ResultSet lastId = MYsql.execute("SELECT LAST_INSERT_ID() AS employee_id");
-                        if (lastId.next()) {
-                            int employee_id = lastId.getInt("employee_id");
-                            try {
-                                ResultSet address_rs = MYsql.execute("SELECT * FROM `address` WHERE `employee_id` = '" + employee_id + "' ");
-                                if (address_rs.next()) {
+                    if (existCheck.getInt("total_count") > 0) {
+
+                        if (existCheck.getString("fname").equals(fname)
+                                && existCheck.getString("fullName").equals(fullname)
+                                && existCheck.getString("lname").equals(lname)
+                                && existCheck.getString("mobile").equals(mobile)
+                                && existCheck.getString("birthDay").equals(birthDate)
+                                && existCheck.getString("department_id").equals(department)
+                                && existCheck.getString("Employee_type_id").equals(position)
+                                && existCheck.getString("gender_id").equals(gender)
+                                && existCheck.getString("password").equals(password)
+                                && existCheck.getString("line1").equals(line1)
+                                && existCheck.getString("line2").equals(line2)
+                                && existCheck.getString("no").equals(postalCode)
+                                && existCheck.getString("city_id").equals(cityMap.get(city))
+                                && existCheck.getString("basicSalary").equals(basicSalary)) {
+                            Notifications.getInstance().show(Notifications.Type.INFO, Notifications.Location.TOP_CENTER, 3000l, "Change something to update goddammit");
+                        } else {
+                            String employee_id = existCheck.getString("id");
+                            String query = "UPDATE `employee` SET `fname` = '" + fname + "' , `lname` = '" + lname + "', `fullName` = '" + fullname + "',"
+                                    + " `mobile` ='" + mobile + "', `birthDay` = '" + birthDate + "',`department_id` = '" + department + "',"
+                                    + " `Employee_type_id` = '" + position + "', `gender_id` = '" + gender + "', `password` = '" + password + "' WHERE `id` = '" + employee_id + "'";
+
+                            MYsql.execute(query);
+
+                            ResultSet address_rs = MYsql.execute("SELECT * FROM `address` WHERE `employee_id` = '" + employee_id + "' ");
+                            if (address_rs.next()) {
 //                                    update
-                                } else {
+                            } else {
 //                                    insert
-                                    MYsql.execute("INSERT INTO `address` VALUES ('" + employee_id + "','" + postalCode + "',"
-                                            + "'" + line1 + "','" + line2 + "','" + cityMap.get(city) + "')");
-                                }
-                                
-                                MYsql.execute("INSERT INTO `salary` VALUES ('" + employee_id + "','" + basicSalary + "') ");
-                                
-                            } catch (Exception e) {
+                                MYsql.execute("UPDATE `address` SET `line1` = '" + line1 + "', `line2` = '" + line2 + "', `no` = '" + postalCode + "', "
+                                        + " `city_id` = '" + cityMap.get(city) + "' WHERE `employee_id` = '" + employee_id + "' ");
                             }
+
+                            MYsql.execute("UPDATE `salary` SET  `basicSalary` = '" + basicSalary + "' WHERE `employee_id` = '" + employee_id + "' ");
+
+                            clearAll();
+                            Notifications.getInstance().show(Notifications.Type.SUCCESS, Notifications.Location.TOP_CENTER, 3000l, "Employee details updated Successfully!.");
                         }
-                        clearAll();
-                        Notifications.getInstance().show(Notifications.Type.SUCCESS, Notifications.Location.TOP_CENTER, 3000l, "Employee registered Successfully!.");
+
+                    } else {
+                        Notifications.getInstance().show(Notifications.Type.ERROR, Notifications.Location.TOP_LEFT, 3000l, "Employee with the above details does not exist.");
                     }
-                    
+
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -363,7 +403,7 @@ public class RegisterNewEmployee extends javax.swing.JFrame {
             }
         }
     }
-    
+
     private boolean validateEmail(String email) {
         if (email.isBlank()) {
             return false;
@@ -372,7 +412,7 @@ public class RegisterNewEmployee extends javax.swing.JFrame {
         }
         return false;
     }
-    
+
     private boolean validateMobile(String mobile) {
         if (mobile.isBlank()) {
             return false;
@@ -381,7 +421,7 @@ public class RegisterNewEmployee extends javax.swing.JFrame {
         }
         return false;
     }
-    
+
     private boolean validateNIC(String nic) {
         if (nic.isBlank()) {
             return false;
@@ -390,7 +430,7 @@ public class RegisterNewEmployee extends javax.swing.JFrame {
         }
         return false;
     }
-    
+
     public boolean validatePostal(String postal) {
         if (postal.isBlank()) {
             return false;
@@ -399,7 +439,7 @@ public class RegisterNewEmployee extends javax.swing.JFrame {
         }
         return false;
     }
-    
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -542,9 +582,19 @@ public class RegisterNewEmployee extends javax.swing.JFrame {
 
         jTextField6.setFont(new java.awt.Font("Poppins", 0, 14)); // NOI18N
         jTextField6.setHorizontalAlignment(javax.swing.JTextField.TRAILING);
+        jTextField6.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jTextField6KeyReleased(evt);
+            }
+        });
 
         jTextField7.setFont(new java.awt.Font("Poppins", 0, 14)); // NOI18N
         jTextField7.setHorizontalAlignment(javax.swing.JTextField.TRAILING);
+        jTextField7.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                jTextField7KeyPressed(evt);
+            }
+        });
 
         jDateChooser1.setFont(new java.awt.Font("Poppins", 0, 14)); // NOI18N
 
@@ -800,6 +850,11 @@ public class RegisterNewEmployee extends javax.swing.JFrame {
                 jTable2MouseClicked(evt);
             }
         });
+        jTable2.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                jTable2KeyPressed(evt);
+            }
+        });
         jScrollPane3.setViewportView(jTable2);
 
         javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
@@ -995,60 +1050,34 @@ public class RegisterNewEmployee extends javax.swing.JFrame {
     }//GEN-LAST:event_jComboBox7ItemStateChanged
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        // TODO add your handling code here:
+        updateEmployee();
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jTable2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable2MouseClicked
         if (evt.getButton() == MouseEvent.BUTTON1 && evt.getClickCount() == 2) {
-            if (jTable2.getSelectedRowCount() == 1) {
-                
-                jButton3.setEnabled(false);
-                jButton2.setEnabled(true);
-                jTextField5.setEditable(false);
-                jTextField7.setEditable(false);
-                
-                int row = jTable2.getSelectedRow();
-                String employeeId = String.valueOf(jTable2.getValueAt(row, 0));
-                try {
-                    ResultSet employeeRs = MYsql.execute("SELECT * FROM `employee` INNER JOIN `address` ON"
-                            + " `address`.`employee_id` = `employee`.`id` INNER JOIN `salary` ON"
-                            + " `salary`.`employee_id` = `employee`.`id` INNER JOIN city ON city.id = address.city_id "
-                            + "INNER JOIN gender ON gender.id = employee.gender_id INNER JOIN employee_type "
-                            + "ON employee_type.id = employee.Employee_type_id INNER JOIN department ON"
-                            + " department.id = employee.department_id "
-                            + "WHERE `employee`.`id` =  '" + employeeId + "' ");
-                    if (employeeRs.next()) {
-                        jTextField2.setText(employeeRs.getString("fname"));
-                        jTextField3.setText(employeeRs.getString("lname"));
-                        jTextField4.setText(employeeRs.getString("fullName"));
-                        jTextField5.setText(employeeRs.getString("email"));
-                        jTextField6.setText(employeeRs.getString("mobile"));
-                        jTextField7.setText(employeeRs.getString("nic"));
-                        jFormattedTextField1.setText(employeeRs.getString("basicSalary"));
-                        jTextField9.setText(employeeRs.getString("line1"));
-                        jTextField10.setText(employeeRs.getString("line2"));
-                        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-                        Date birthDate = sdf.parse(employeeRs.getString("birthDay"));
-                        jDateChooser1.setDate(birthDate);
-                        jComboBox8.setSelectedItem(employeeRs.getString("city.name"));
-                        jComboBox3.setSelectedItem(employeeRs.getString("gender.gender"));
-                        jComboBox4.setSelectedItem(employeeRs.getString("department.name"));
-                        jComboBox5.setSelectedItem(employeeRs.getString("employee_type.type"));
-                        jTextField11.setText(employeeRs.getString("no"));
-                        jPasswordField1.setText(employeeRs.getString("password"));
-                    }
-                    
-                } catch (Exception e) {
-                    SignIn.logger.severe(e.getMessage());
-                }
-            }
+            clickTableRow();
         }
     }//GEN-LAST:event_jTable2MouseClicked
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         clearAll();
     }//GEN-LAST:event_jButton1ActionPerformed
-    
+
+    private void jTable2KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTable2KeyPressed
+        if (evt.getKeyChar() == KeyEvent.VK_ENTER) {
+            clickTableRow();
+            evt.consume();
+        }
+    }//GEN-LAST:event_jTable2KeyPressed
+
+    private void jTextField6KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField6KeyReleased
+        loadEmployeeTable();
+    }//GEN-LAST:event_jTextField6KeyReleased
+
+    private void jTextField7KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField7KeyPressed
+        loadEmployeeTable();
+    }//GEN-LAST:event_jTextField7KeyPressed
+
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         FlatMacLightLaf.setup();
@@ -1131,12 +1160,58 @@ public class RegisterNewEmployee extends javax.swing.JFrame {
         jComboBox4.setSelectedIndex(0);
         jComboBox5.setSelectedIndex(0);
         jTextField11.setText("");
-        
+
         loadEmployeeTable();
-        
+
         jButton3.setEnabled(true);
         jButton2.setEnabled(false);
-          jTextField5.setEditable(true);
-                jTextField7.setEditable(true);
+        jTextField5.setEditable(true);
+        jTextField7.setEditable(true);
+        jPasswordField1.setText("");
+    }
+
+    private void clickTableRow() {
+        if (jTable2.getSelectedRowCount() == 1) {
+
+            jButton3.setEnabled(false);
+            jButton2.setEnabled(true);
+            jTextField5.setEditable(false);
+            jTextField7.setEditable(false);
+
+            int row = jTable2.getSelectedRow();
+            String employeeId = String.valueOf(jTable2.getValueAt(row, 0));
+            try {
+                ResultSet employeeRs = MYsql.execute("SELECT * FROM `employee` INNER JOIN `address` ON"
+                        + " `address`.`employee_id` = `employee`.`id` INNER JOIN `salary` ON"
+                        + " `salary`.`employee_id` = `employee`.`id` INNER JOIN city ON city.id = address.city_id "
+                        + "INNER JOIN gender ON gender.id = employee.gender_id INNER JOIN employee_type "
+                        + "ON employee_type.id = employee.Employee_type_id INNER JOIN department ON"
+                        + " department.id = employee.department_id "
+                        + "WHERE `employee`.`id` =  '" + employeeId + "' ");
+                if (employeeRs.next()) {
+                    jTextField2.setText(employeeRs.getString("fname"));
+                    jTextField3.setText(employeeRs.getString("lname"));
+                    jTextField4.setText(employeeRs.getString("fullName"));
+                    jTextField5.setText(employeeRs.getString("email"));
+                    jTextField6.setText(employeeRs.getString("mobile"));
+                    jTextField7.setText(employeeRs.getString("nic"));
+                    jFormattedTextField1.setText(employeeRs.getString("basicSalary"));
+                    jTextField9.setText(employeeRs.getString("line1"));
+                    jTextField10.setText(employeeRs.getString("line2"));
+                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                    Date birthDate = sdf.parse(employeeRs.getString("birthDay"));
+                    jDateChooser1.setDate(birthDate);
+                    jComboBox8.setSelectedItem(employeeRs.getString("city.name"));
+                    jComboBox3.setSelectedItem(employeeRs.getString("gender.gender"));
+                    jComboBox4.setSelectedItem(employeeRs.getString("department.name"));
+                    jComboBox5.setSelectedItem(employeeRs.getString("employee_type.type"));
+                    jTextField11.setText(employeeRs.getString("no"));
+                    jPasswordField1.setText(employeeRs.getString("password"));
+                }
+
+            } catch (Exception e) {
+                SignIn.logger.severe(e.getMessage());
+            }
+        }
     }
 }
