@@ -1,4 +1,4 @@
- package gui;
+package gui;
 
 import com.formdev.flatlaf.extras.FlatSVGIcon;
 import com.formdev.flatlaf.themes.FlatMacLightLaf;
@@ -8,6 +8,7 @@ import java.awt.SplashScreen;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import model.ConnecctionChecker;
+import static model.ConnecctionChecker.connectionCheckerStarted;
 
 public class SplshWindow extends javax.swing.JFrame {
 
@@ -38,9 +39,15 @@ public class SplshWindow extends javax.swing.JFrame {
                             break;
 
                         case 15:
-                            ConnecctionChecker connectionChecker = new ConnecctionChecker();
 
-                            connectionChecker.start();
+                            if (!ConnecctionChecker.connectionCheckerStarted) {
+
+                                ConnecctionChecker connectionChecker = new ConnecctionChecker();
+                                connectionChecker.start();
+                                
+                                System.out.println("##########################Connection checker Tread Started ##############################");
+                                
+                            }
                             lodingText.setText("Connected to the Inernet");
                             if (connectionIsDone) {
                                 break;

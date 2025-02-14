@@ -16,6 +16,8 @@ public class RoomStatusChecker extends Thread {
         this.perent = petent;
     }
 
+    public static boolean sroomStatusChekerStarted;
+
     private void checkRoomReservations() {
 
         System.out.println("Room Reservation Status Check Thread is Working");
@@ -42,36 +44,33 @@ public class RoomStatusChecker extends Thread {
         }
 
     }
-    
-    
-    private void checkRoomCleaningStatus(){
-    
-         System.out.println("Room Reservation Status Check Thread is Working");
-            
-            try {
-                
-                String quary = "SELECT `rooms`.`no`, `cleanroom`.`Cleanstatus_id` FROM `rooms` INNER JOIN `cleanroom` ON `rooms`.`id` = `cleanroom`.`rooms_id`";
-                
-                ResultSet result = MYsql.execute(quary);
-                
-                while (result.next()) {
-                    
-                    System.out.println(result.getString("no"));
+
+    private void checkRoomCleaningStatus() {
+
+        System.out.println("Room Reservation Status Check Thread is Working");
+
+        try {
+
+            String quary = "SELECT `rooms`.`no`, `cleanroom`.`Cleanstatus_id` FROM `rooms` INNER JOIN `cleanroom` ON `rooms`.`id` = `cleanroom`.`rooms_id`";
+
+            ResultSet result = MYsql.execute(quary);
+
+            while (result.next()) {
+
+                System.out.println(result.getString("no"));
 
 //                    FaontDeskOverview.roomResiveStatusMap.put(result.getString("no"), result.getInt("roomReservationStatus_id"));
-                    FaontDeskOverview.roomsMap.get(result.getString("no")).setRoomCleanStatus(result.getInt("Cleanstatus_id"));
+                FaontDeskOverview.roomsMap.get(result.getString("no")).setRoomCleanStatus(result.getInt("Cleanstatus_id"));
 
-                    
-                }
-                
-               
-            } catch (SQLException e) {
-                e.printStackTrace();
             }
-    
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
     }
 
-    public boolean roomReservationChecker = true;
+    public static boolean roomReservationChecker = true;
 
     private FaontDeskOverview perent;
 
@@ -79,10 +78,15 @@ public class RoomStatusChecker extends Thread {
     public void run() {
 
         while (roomReservationChecker) {
-            
+
+            if (!sroomStatusChekerStarted) {
+
+                sroomStatusChekerStarted = true;
+            }
+
             checkRoomReservations();
             checkRoomCleaningStatus();
-            
+
             try {
                 Thread.sleep(5000);  // 5 seconds
             } catch (InterruptedException ex) {

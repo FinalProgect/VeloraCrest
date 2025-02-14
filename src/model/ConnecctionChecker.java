@@ -17,9 +17,16 @@ public class ConnecctionChecker extends Thread{
     private static final String USER = "sql12760597";
     private static final String PASS = "f75Vm8XuHy";
     
+    public static boolean connectionCheckerStarted;
+    
      @Override
     public void run() {
         while (true) {
+            
+            if(!connectionCheckerStarted){
+                connectionCheckerStarted = true;
+            }
+            
             try {
                 // Attempt to establish a connection to the database
                 Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);

@@ -19,6 +19,7 @@ import javax.swing.SwingConstants;
 import model.Rooms;
 import javax.swing.JToggleButton;
 import javax.swing.SwingUtilities;
+import model.ConnecctionChecker;
 import model.RoomStatusChecker;
 
 public class FaontDeskOverview extends javax.swing.JPanel {
@@ -33,8 +34,7 @@ public class FaontDeskOverview extends javax.swing.JPanel {
         roungEdges();
         loadRooms();
 
-        RoomStatusChecker roomReservationChecker = new RoomStatusChecker(this);
-        roomReservationChecker.start();
+        startRoomStatusChecher();
 
         loadRoomsToPanal();
         loadRoomsToPanal();
@@ -54,6 +54,21 @@ public class FaontDeskOverview extends javax.swing.JPanel {
 //        occupancyGraphic();
 
     }
+
+    //room stats Checher start
+    private void startRoomStatusChecher() {
+
+        if (!RoomStatusChecker.sroomStatusChekerStarted) {
+
+            System.out.println("###################################Tread started#######################");
+
+            RoomStatusChecker roomReservationChecker = new RoomStatusChecker(this);
+            roomReservationChecker.start();
+
+        }
+
+    }
+    //room stats Checher start
 
     ///Room Status Meter
     private void occupancyGraphic() {
@@ -89,13 +104,13 @@ public class FaontDeskOverview extends javax.swing.JPanel {
     private void loadFloorButtons() {
 
         try {
-                JToggleButton jButton2;
-                jButton2 = new JToggleButton();
+            JToggleButton jButton2;
+            jButton2 = new JToggleButton();
 
-                jButton2.setName("All");
+            jButton2.setName("All");
 
-                jButton2.setFont(new java.awt.Font("Poppins", 0, 12)); // NOI18N
-                jButton2.setText("All");
+            jButton2.setFont(new java.awt.Font("Poppins", 0, 12)); // NOI18N
+            jButton2.setText("All");
 
             String quary = "SELECT * FROM `roomtype`";
 
