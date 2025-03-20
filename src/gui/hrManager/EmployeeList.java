@@ -1,9 +1,16 @@
 package gui.hrManager;
 
 import com.formdev.flatlaf.FlatClientProperties;
+import gui.SignIn;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import javax.swing.BorderFactory;
+import javax.swing.table.DefaultTableModel;
 import model.ComponentStorage;
 import model.ModifyTables;
+import java.sql.ResultSet;
+import java.util.Vector;
+import model.MYsql;
 
 /**
  *
@@ -24,7 +31,7 @@ public class EmployeeList extends javax.swing.JPanel {
         jPanel19.putClientProperty(FlatClientProperties.STYLE, "arc:50");
         jPanel20.putClientProperty(FlatClientProperties.STYLE, "arc:50");
         jPanel21.putClientProperty(FlatClientProperties.STYLE, "arc:50");
-        
+
         jButton1.putClientProperty(FlatClientProperties.STYLE, "arc:50");
 
         jPanel15.putClientProperty(FlatClientProperties.STYLE, "arc:100");
@@ -37,10 +44,46 @@ public class EmployeeList extends javax.swing.JPanel {
 
         ModifyTables modifyTables = new ModifyTables();
         modifyTables.modifyTables(jPanel2, jTable1, jScrollPane2);
+        loadEmployees();
+
     }
-    
-    private void loadEmployees(){
-        
+
+    private void loadEmployees() {
+        SimpleDateFormat monthFormat = new SimpleDateFormat("yyyy-MM-dd");
+        String today = String.valueOf(monthFormat.format(new Date()));
+        DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+        model.setRowCount(0);
+
+        try {
+            ResultSet employeeSet = MYsql.execute("SELECT * FROM employee INNER JOIN employee_type"
+                    + " ON employee_type.id = employee.Employee_type_id INNER JOIN department ON"
+                    + " department.id = employee.department_id INNER JOIN status ON status.id = employee.employee_status_id "
+                    + "INNER JOIN shedule ON shedule.employee_id = employee.id");
+            while (employeeSet.next()) {
+                double otHours = 5;
+                Vector<String> vector = new Vector<>();
+                vector.add(employeeSet.getString("employee.id"));
+                vector.add(employeeSet.getString("fullName"));
+                vector.add(employeeSet.getString("department.name"));
+                vector.add(employeeSet.getString("employee_type.type"));
+                vector.add(employeeSet.getString("status.status"));
+                vector.add(employeeSet.getString("sheduleName"));
+
+                ResultSet attendanceSet = MYsql.execute("SELECT * FROM attendance WHERE shedule_id = '" + employeeSet.getString("shedule.id") + "'  AND startTime > '" + today + "'");
+                String attendance = "Absent";
+                if (attendanceSet.next()) {
+                    attendance = "Present";
+                }
+                vector.add(attendance);
+                vector.add(employeeSet.getString("fullName"));
+                vector.add(employeeSet.getString("fullName"));
+                vector.add(employeeSet.getString("mobile"));
+                model.addRow(vector);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            SignIn.logger.severe(e.getMessage());
+        }
     }
 
     @SuppressWarnings("unchecked")
@@ -417,12 +460,13 @@ public class EmployeeList extends javax.swing.JPanel {
         jPanel2.setBackground(new java.awt.Color(252, 252, 252));
 
         jTable1.setBackground(new java.awt.Color(252, 252, 252));
+        jTable1.setFont(new java.awt.Font("Poppins", 0, 12)); // NOI18N
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
             new String [] {
-                "Employee ID", "Name", "Department", "Designation", "Status", "OT Hours", "Attendance", "Leaves", "OT Hours Left", "Mobile"
+                "Employee ID", "Name", "Department", "Designation", "Status", "Shift", "Attendance", "Leaves", "OT Hours Left", "Mobile"
             }
         ) {
             boolean[] canEdit = new boolean [] {
