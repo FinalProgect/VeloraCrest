@@ -1,9 +1,17 @@
 package gui.hrManager;
 
 import com.formdev.flatlaf.FlatClientProperties;
+import gui.SignIn;
+import java.text.SimpleDateFormat;
 import javax.swing.BorderFactory;
+import javax.swing.table.DefaultTableModel;
 import model.ComponentStorage;
 import model.ModifyTables;
+import java.sql.ResultSet;
+import java.util.Date;
+import java.util.Vector;
+import javax.swing.DefaultComboBoxModel;
+import model.MYsql;
 
 /**
  *
@@ -24,7 +32,7 @@ public class EmployeeList extends javax.swing.JPanel {
         jPanel19.putClientProperty(FlatClientProperties.STYLE, "arc:50");
         jPanel20.putClientProperty(FlatClientProperties.STYLE, "arc:50");
         jPanel21.putClientProperty(FlatClientProperties.STYLE, "arc:50");
-        
+
         jButton1.putClientProperty(FlatClientProperties.STYLE, "arc:50");
 
         jPanel15.putClientProperty(FlatClientProperties.STYLE, "arc:100");
@@ -37,10 +45,94 @@ public class EmployeeList extends javax.swing.JPanel {
 
         ModifyTables modifyTables = new ModifyTables();
         modifyTables.modifyTables(jPanel2, jTable1, jScrollPane2);
+        loadDepartments();
+        loadDesignation();
+        loadStatus();
+        loadEmployees();
+
     }
-    
-    private void loadEmployees(){
-        
+
+    private void loadDepartments() {
+        Vector<String> department = new Vector<>();
+        try {
+            ResultSet depSet = MYsql.execute("SELECT * FROM `department` ");
+            while (depSet.next()) {
+                department.add(depSet.getString("name"));
+            }
+            DefaultComboBoxModel model = new DefaultComboBoxModel(department);
+            jComboBox1.setModel(model);
+        } catch (Exception e) {
+            e.printStackTrace();
+            SignIn.logger.severe(e.getMessage());
+        }
+    }
+
+    private void loadStatus() {
+        Vector<String> status = new Vector<>();
+        try {
+            ResultSet statSet = MYsql.execute("SELECT * FROM `status` ");
+            while (statSet.next()) {
+                status.add(statSet.getString("status"));
+            }
+            DefaultComboBoxModel model = new DefaultComboBoxModel(status);
+            jComboBox3.setModel(model);
+        } catch (Exception e) {
+            e.printStackTrace();
+            SignIn.logger.severe(e.getMessage());
+        }
+    }
+
+    private void loadDesignation() {
+        Vector<String> designition = new Vector<>();
+        try {
+            ResultSet depSet = MYsql.execute("SELECT * FROM `employee_type` ");
+            while (depSet.next()) {
+                designition.add(depSet.getString("type"));
+            }
+            DefaultComboBoxModel model = new DefaultComboBoxModel(designition);
+            jComboBox2.setModel(model);
+        } catch (Exception e) {
+            e.printStackTrace();
+            SignIn.logger.severe(e.getMessage());
+        }
+    }
+
+    private void loadEmployees() {
+        SimpleDateFormat monthFormat = new SimpleDateFormat("yyyy-MM-dd");
+        String today = String.valueOf(monthFormat.format(new Date()));
+        DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+        model.setRowCount(0);
+
+        try {
+            ResultSet employeeSet = MYsql.execute("SELECT * FROM employee INNER JOIN employee_type"
+                    + " ON employee_type.id = employee.Employee_type_id INNER JOIN department ON"
+                    + " department.id = employee.department_id INNER JOIN status ON status.id = employee.employee_status_id "
+                    + "INNER JOIN shedule ON shedule.employee_id = employee.id");
+            while (employeeSet.next()) {
+                double otHours = 5;
+                Vector<String> vector = new Vector<>();
+                vector.add(employeeSet.getString("employee.id"));
+                vector.add(employeeSet.getString("fullName"));
+                vector.add(employeeSet.getString("department.name"));
+                vector.add(employeeSet.getString("employee_type.type"));
+                vector.add(employeeSet.getString("status.status"));
+                vector.add(employeeSet.getString("sheduleName"));
+
+                ResultSet attendanceSet = MYsql.execute("SELECT * FROM attendance WHERE shedule_id = '" + employeeSet.getString("shedule.id") + "'  AND startTime > '" + today + "'");
+                String attendance = "Absent";
+                if (attendanceSet.next()) {
+                    attendance = "Present";
+                }
+                vector.add(attendance);
+                vector.add(employeeSet.getString("fullName"));
+                vector.add(employeeSet.getString("fullName"));
+                vector.add(employeeSet.getString("mobile"));
+                model.addRow(vector);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            SignIn.logger.severe(e.getMessage());
+        }
     }
 
     @SuppressWarnings("unchecked")
