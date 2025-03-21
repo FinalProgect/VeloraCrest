@@ -10,6 +10,7 @@ import model.ComponentStorage;
 import model.ModifyTables;
 import java.sql.ResultSet;
 import java.util.Vector;
+import javax.swing.DefaultComboBoxModel;
 import model.MYsql;
 
 /**
@@ -44,8 +45,54 @@ public class EmployeeList extends javax.swing.JPanel {
 
         ModifyTables modifyTables = new ModifyTables();
         modifyTables.modifyTables(jPanel2, jTable1, jScrollPane2);
+        loadDepartments();
+        loadDesignation();
+        loadStatus();
         loadEmployees();
 
+    }
+
+    private void loadDepartments() {
+        Vector<String> department = new Vector<>();
+        try {
+            ResultSet depSet = MYsql.execute("SELECT * FROM `department` ");
+            while (depSet.next()) {
+                department.add(depSet.getString("name"));
+            }
+            DefaultComboBoxModel model = new DefaultComboBoxModel(department);
+            jComboBox1.setModel(model);
+        } catch (Exception e) {
+            e.printStackTrace();
+            SignIn.logger.severe(e.getMessage());
+        }
+    }
+    private void loadStatus() {
+        Vector<String> status = new Vector<>();
+        try {
+            ResultSet statSet = MYsql.execute("SELECT * FROM `status` ");
+            while (statSet.next()) {
+                status.add(statSet.getString("status"));
+            }
+            DefaultComboBoxModel model = new DefaultComboBoxModel(status);
+            jComboBox3.setModel(model);
+        } catch (Exception e) {
+            e.printStackTrace();
+            SignIn.logger.severe(e.getMessage());
+        }
+    }
+    private void loadDesignation() {
+        Vector<String> designition = new Vector<>();
+        try {
+            ResultSet depSet = MYsql.execute("SELECT * FROM `employee_type` ");
+            while (depSet.next()) {
+                designition.add(depSet.getString("type"));
+            }
+            DefaultComboBoxModel model = new DefaultComboBoxModel(designition);
+            jComboBox2.setModel(model);
+        } catch (Exception e) {
+            e.printStackTrace();
+            SignIn.logger.severe(e.getMessage());
+        }
     }
 
     private void loadEmployees() {
