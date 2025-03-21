@@ -18,7 +18,12 @@ public class CustomerRegistration extends javax.swing.JPanel {
         this.perent = perent;
     }
     
-    
+    public CustomerRegistration() {
+        initComponents();
+        loadSvg();
+        tableDesign();
+
+    }
     
     //Load Customers
     private void loadCustomers(){

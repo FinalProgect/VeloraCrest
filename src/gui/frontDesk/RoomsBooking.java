@@ -49,6 +49,23 @@ public class RoomsBooking extends javax.swing.JPanel {
         startGUIUpdator();
 
     }
+    
+    
+    
+    public RoomsBooking() {
+        initComponents();
+        init();
+        loadRoomToPanel();
+        loadRoomToPanel();
+        loadRoomToPanel();
+        loadRoomToPanel();
+        loadRoomToPanel();
+        jTextField3.setText("0");
+        setDate();
+        startGUIUpdator();
+
+    }
+    
 
     //Start GUI Updator
     private void startGUIUpdator() {
