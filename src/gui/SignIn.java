@@ -16,13 +16,13 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
 import javax.swing.JOptionPane;
-import model.EmployeeDetails;
+import model.employeeDetails;
 
 public class SignIn extends javax.swing.JDialog {
 
     public static final Logger logger = Loggers.getLogger();
 
-    public static HashMap<String, EmployeeDetails> employeeMap = new HashMap();
+    public static HashMap<String, employeeDetails> employeeMap = new HashMap();
 
     public SignIn(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
@@ -34,6 +34,8 @@ public class SignIn extends javax.swing.JDialog {
         setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
 
         setSvg();
+        
+        jToggleButton1.setName("show");
     }
 
     private void setSvg() {
@@ -134,18 +136,15 @@ System.out.println("Fontdesk Employee");
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jToggleButton1 = new javax.swing.JToggleButton();
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         emailFild = new javax.swing.JTextField();
         passwordFild = new javax.swing.JPasswordField();
-        jLabel3 = new javax.swing.JLabel();
         loginButton = new javax.swing.JButton();
+        jToggleButton1 = new javax.swing.JToggleButton();
         jPanel2 = new javax.swing.JPanel();
         logo = new javax.swing.JLabel();
-
-        jToggleButton1.setText("jToggleButton1");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -159,16 +158,19 @@ System.out.println("Fontdesk Employee");
         jLabel2.setForeground(new java.awt.Color(255, 255, 255));
         jLabel2.setText("Password");
 
-        jLabel3.setBackground(new java.awt.Color(255, 51, 51));
-        jLabel3.setText("jLabel3");
-        jLabel3.setOpaque(true);
-
         loginButton.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         loginButton.setForeground(new java.awt.Color(15, 140, 130));
         loginButton.setText("Login");
         loginButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 loginButtonActionPerformed(evt);
+            }
+        });
+
+        jToggleButton1.setText("Show");
+        jToggleButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jToggleButton1ActionPerformed(evt);
             }
         });
 
@@ -185,11 +187,11 @@ System.out.println("Fontdesk Employee");
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(passwordFild, javax.swing.GroupLayout.DEFAULT_SIZE, 276, Short.MAX_VALUE)
                     .addComponent(emailFild))
-                .addGap(35, 35, 35)
-                .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(36, Short.MAX_VALUE))
+                .addGap(36, 36, 36)
+                .addComponent(jToggleButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap(319, Short.MAX_VALUE)
                 .addComponent(loginButton, javax.swing.GroupLayout.PREFERRED_SIZE, 163, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(193, 193, 193))
         );
@@ -202,9 +204,10 @@ System.out.println("Fontdesk Employee");
                     .addComponent(emailFild, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(28, 28, 28)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, 37, Short.MAX_VALUE)
-                    .addComponent(passwordFild))
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(passwordFild, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jToggleButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(45, 45, 45)
                 .addComponent(loginButton, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(127, Short.MAX_VALUE))
@@ -217,7 +220,7 @@ System.out.println("Fontdesk Employee");
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(27, 27, 27)
+                .addGap(123, 123, 123)
                 .addComponent(logo, javax.swing.GroupLayout.PREFERRED_SIZE, 197, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(46, Short.MAX_VALUE))
         );
@@ -277,7 +280,7 @@ System.out.println("Fontdesk Employee");
 
                     if (result.getString("employee_status_id").equals("1")) {
 
-                        EmployeeDetails employeeDetails = new EmployeeDetails();
+                        employeeDetails employeeDetails = new employeeDetails();
 
                         employeeDetails.setEmployeeName(result.getString("fname") + " " + result.getString("lname"));
                         employeeDetails.setEmployeeId(result.getInt("id"));
@@ -306,12 +309,23 @@ System.out.println("Fontdesk Employee");
 
     }//GEN-LAST:event_loginButtonActionPerformed
 
+    private void jToggleButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jToggleButton1ActionPerformed
+       
+        if(jToggleButton1.getName().equals("show")){
+            jToggleButton1.setName("hide");
+            passwordFild.setEchoChar((char) 0); // Show characters
+        }else if(jToggleButton1.getName().equals("hide")){
+            jToggleButton1.setName("show");
+            passwordFild.setEchoChar('*');
+        }
+        
+    }//GEN-LAST:event_jToggleButton1ActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField emailFild;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JToggleButton jToggleButton1;
