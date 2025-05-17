@@ -2,10 +2,8 @@ package gui.frontDesk;
 
 import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.extras.FlatSVGIcon;
-import com.mysql.cj.x.protobuf.Mysqlx;
+import gui.SignIn;
 import static gui.frontDesk.FaontDeskOverview.roomsMap;
-import gui.managerOrDirectorDashboard.RoomAndFloorManagement;
-import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -20,38 +18,69 @@ import javax.swing.SwingConstants;
 import model.ComponentStorage;
 import model.ModifyTables;
 import model.Rooms;
+import java.sql.ResultSet;
+import java.util.HashMap;
+import model.MYsql;
+import java.sql.SQLException;
+import java.util.Calendar;
+import javax.swing.JOptionPane;
+import java.sql.Date;
+import java.time.LocalDate;
 
 public class RoomManagement extends javax.swing.JPanel {
 
-    public RoomManagement() {
+    FrontDeskDashBoard perent;
+
+    private HashMap<Integer, String> roomTypeMap;
+
+    public RoomManagement(FrontDeskDashBoard perent) {
+        this.perent = perent;
         initComponents();
         roundEges();
         jlistDisgn();
         disagnTable();
         loadRoomsTojList();
+        loadRoomTypes();
 
     }
-    
-   
-    
+
+    //Load Room Types 
+    private void loadRoomTypes() {
+
+        if (roomTypeMap == null) {
+            roomTypeMap = new HashMap();
+        }
+
+        String roomTypeQuary = "SELECT * FROM `roomtype`";
+
+        try {
+            ResultSet roomtypes = MYsql.execute(roomTypeQuary);
+
+            while (roomtypes.next()) {
+                roomTypeMap.put(roomtypes.getInt("id"), roomtypes.getString("type"));
+            }
+        } catch (SQLException e) {
+            SignIn.logger.severe("Load Rooms > " + e.getMessage());
+        }
+    }
+
     //Load Rooms to list
-    private void loadRoomsTojList(){
-        
+    private void loadRoomsTojList() {
+
         Vector<String> vector = new Vector();
         DefaultListModel listModel = new DefaultListModel();
-        
+
         for (Map.Entry<String, Rooms> room : roomsMap.entrySet()) {
 
-          vector.add(room.getValue().getRoomNo());   
-          
-          listModel.addElement(room.getValue().getRoomNo());
+            vector.add(room.getValue().getRoomNo());
+
+            listModel.addElement(room.getValue().getRoomNo());
 
         }
-        
+
         jList1.setModel(listModel);
 
-    
-    }  
+    }
     //Load rooms to list
 
     //Load SVG 
@@ -121,8 +150,6 @@ public class RoomManagement extends javax.swing.JPanel {
         gestCheckInDate = new javax.swing.JLabel();
         jLabel10 = new javax.swing.JLabel();
         gestCheckOutDate = new javax.swing.JLabel();
-        gestresrvationType = new javax.swing.JLabel();
-        jLabel11 = new javax.swing.JLabel();
         guestBookingSource = new javax.swing.JLabel();
         jLabel12 = new javax.swing.JLabel();
         jLabel13 = new javax.swing.JLabel();
@@ -146,7 +173,7 @@ public class RoomManagement extends javax.swing.JPanel {
         roomTypeLable3 = new javax.swing.JLabel();
         roomBalanceDueLable = new javax.swing.JLabel();
         jLabel20 = new javax.swing.JLabel();
-        jLabel21 = new javax.swing.JLabel();
+        paymentMethod = new javax.swing.JLabel();
         roomInvoiceBtn = new javax.swing.JButton();
         jLabel22 = new javax.swing.JLabel();
         jScrollPane3 = new javax.swing.JScrollPane();
@@ -193,7 +220,7 @@ public class RoomManagement extends javax.swing.JPanel {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
                     .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(22, Short.MAX_VALUE))
         );
 
         itemsPanel.setBackground(new java.awt.Color(240, 240, 240));
@@ -284,12 +311,6 @@ public class RoomManagement extends javax.swing.JPanel {
         gestCheckOutDate.setFont(new java.awt.Font("Poppins", 0, 14)); // NOI18N
         gestCheckOutDate.setText("checkOutDateComsHear");
 
-        gestresrvationType.setFont(new java.awt.Font("Poppins", 0, 14)); // NOI18N
-        gestresrvationType.setText("ReservartionTypeComsHear");
-
-        jLabel11.setFont(new java.awt.Font("Poppins", 0, 14)); // NOI18N
-        jLabel11.setText("Reservation Type :");
-
         guestBookingSource.setFont(new java.awt.Font("Poppins", 0, 14)); // NOI18N
         guestBookingSource.setText("Online/");
 
@@ -377,8 +398,8 @@ public class RoomManagement extends javax.swing.JPanel {
         jLabel20.setFont(new java.awt.Font("Poppins", 0, 14)); // NOI18N
         jLabel20.setText("Payment Method :");
 
-        jLabel21.setFont(new java.awt.Font("Poppins", 0, 14)); // NOI18N
-        jLabel21.setText("Cash");
+        paymentMethod.setFont(new java.awt.Font("Poppins", 0, 14)); // NOI18N
+        paymentMethod.setText("Cash");
 
         roomInvoiceBtn.setBackground(new java.awt.Color(62, 161, 217));
         roomInvoiceBtn.setFont(new java.awt.Font("Poppins", 0, 14)); // NOI18N
@@ -459,7 +480,7 @@ public class RoomManagement extends javax.swing.JPanel {
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jLabel4)
                                 .addGap(66, 66, 66)
-                                .addComponent(roomStatusBox, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(roomStatusBox, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 149, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(38, 38, 38))
@@ -474,15 +495,13 @@ public class RoomManagement extends javax.swing.JPanel {
                                             .addComponent(jLabel3)
                                             .addComponent(jLabel9)
                                             .addComponent(jLabel10)
-                                            .addComponent(jLabel11)
                                             .addComponent(jLabel12))
-                                        .addGap(39, 39, 39)
+                                        .addGap(46, 46, 46)
                                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                             .addComponent(guestBookingSource, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                             .addComponent(gestReservationNo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                             .addComponent(gestCheckInDate, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                             .addComponent(gestCheckOutDate, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                            .addComponent(gestresrvationType, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                             .addComponent(guestEmailLable, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                             .addComponent(gestMobileLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                             .addComponent(gestNameLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -520,7 +539,7 @@ public class RoomManagement extends javax.swing.JPanel {
                                                 .addComponent(roomTypeLable1)
                                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                                 .addComponent(roomTotalCostLable, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                            .addComponent(jLabel21, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                            .addComponent(paymentMethod, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE))
                                         .addGap(48, 48, 48))
                                     .addGroup(layout.createSequentialGroup()
                                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -623,19 +642,15 @@ public class RoomManagement extends javax.swing.JPanel {
                             .addComponent(roomBalanceDueLable))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel11)
-                            .addComponent(gestresrvationType)
                             .addComponent(jLabel20)
-                            .addComponent(jLabel21))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(paymentMethod)
                             .addComponent(jLabel12)
                             .addComponent(guestBookingSource))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGap(10, 10, 10)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(93, 93, 93)
-                                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 296, Short.MAX_VALUE))
+                                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 314, Short.MAX_VALUE))
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                                 .addComponent(roomInvoiceBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(28, 28, 28)
@@ -664,22 +679,86 @@ public class RoomManagement extends javax.swing.JPanel {
     private void jList1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jList1MouseClicked
 
         String roomNo = jList1.getSelectedValue();
-        
-        if(evt.getClickCount() == 2){
-        
+        String roomType;
+
+        if (evt.getClickCount() == 2) {
+
             Rooms selectedRoom = roomsMap.get(roomNo);
-            
-            if(selectedRoom.getOccupideStatus() == 1){
-            
-            }else{
-            
-                
-                
+
+            if (selectedRoom.getOccupideStatus() == 1) {
+                roomStatusBox.setBackground(new Color(15, 140, 130));
+                roomStatusBox.setText("Occupied");
+
+                String reservationDetailsQuary = "SELECT * FROM `reservation` "
+                        + "INNER JOIN `reservation_has_room` ON `reservation`.`id` = `reservation_has_room`.`reservation_id` "
+                        + "INNER JOIN `rooms` ON `reservation_has_room`.`rooms_id`"
+                        + "INNER JOIN `customer` ON `reservation`.`customer_id` = `customer`.`id` WHERE `reservation_has_room`.`roomReservationStatus_id` = '1' AND `rooms`.`no` = '" + roomNo + "'  ";
+                try {
+
+                    ResultSet reservationDetails = MYsql.execute(reservationDetailsQuary);
+
+                    if (reservationDetails.next()) {
+
+                        gestIdLable.setText(reservationDetails.getString("customer.id"));
+                        gestNameLabel.setText(reservationDetails.getString("customer.fname") + " " + reservationDetails.getString("customer.lname"));
+                        gestMobileLabel.setText(reservationDetails.getString("customer.mobile"));
+                        guestEmailLable.setText(reservationDetails.getString("customer.email"));
+                        gestReservationNo.setText(reservationDetails.getString("reservation.id"));
+                        gestCheckInDate.setText(reservationDetails.getString("reservation.dateTime"));
+
+                        Date date = reservationDetails.getDate("reservation.dateTime");
+                        
+                        LocalDate localdate = date.toLocalDate();
+                        
+                        LocalDate checkOutDate = localdate.plusDays(reservationDetails.getInt("reservation.days"));
+                        
+
+                        gestCheckOutDate.setText(String.valueOf(checkOutDate));
+
+                        guestBookingSource.setText("Local");
+                        
+                        roomTypeLable.setText(roomTypeMap.get(reservationDetails.getInt("rooms.roomType_id")));
+                        roomRateLable.setText(selectedRoom.getPrice().toString());
+
+                        roomTotalCostLable.setText(String.valueOf(selectedRoom.getPrice() * reservationDetails.getInt("reservation.days")));
+                        roomAdvancePymentLable.setText("0.00");
+                        roomBalanceDueLable.setText(String.valueOf(selectedRoom.getPrice() * reservationDetails.getInt("reservation.days")));
+                        paymentMethod.setText("Cash");
+
+                    } else {
+                        JOptionPane.showMessageDialog(perent, "Cannot Find Room Details, Please Try again.", "Error", JOptionPane.ERROR_MESSAGE);
+                    }
+
+                } catch (SQLException e) {
+                    SignIn.logger.severe("Room Reservation details loading " + e.getMessage());
+                }
+
+            } else {
+                roomStatusBox.setBackground(Color.red);
+                roomStatusBox.setText("Not Occupied");
+
+                gestIdLable.setText("Not Recived");
+                gestNameLabel.setText("Not Recived");
+                gestMobileLabel.setText("Not Recived");
+                guestEmailLable.setText("Not Recived");
+                gestReservationNo.setText("Not Recived");
+                gestCheckInDate.setText("Not Recievd");
+                gestCheckOutDate.setText("Not Recived");
+
+                guestBookingSource.setText("Not Recived");
+                roomTypeLable.setText("Not Recived");
+                roomRateLable.setText(selectedRoom.getPrice().toString());
+
+                roomTotalCostLable.setText("0.00");
+                roomAdvancePymentLable.setText("0.00");
+                roomBalanceDueLable.setText("0.00");
+                paymentMethod.setText("Not Resived");
+
             }
-            
+
         }
-       
-        
+
+
     }//GEN-LAST:event_jList1MouseClicked
 
 
@@ -692,7 +771,6 @@ public class RoomManagement extends javax.swing.JPanel {
     private javax.swing.JLabel gestMobileLabel;
     private javax.swing.JLabel gestNameLabel;
     private javax.swing.JLabel gestReservationNo;
-    private javax.swing.JLabel gestresrvationType;
     private javax.swing.JLabel guestBookingSource;
     private javax.swing.JLabel guestEmailLable;
     private javax.swing.JPanel itemsPanel;
@@ -702,7 +780,6 @@ public class RoomManagement extends javax.swing.JPanel {
     private javax.swing.JButton jButton4;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
-    private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
@@ -713,7 +790,6 @@ public class RoomManagement extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel20;
-    private javax.swing.JLabel jLabel21;
     private javax.swing.JLabel jLabel22;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -730,6 +806,7 @@ public class RoomManagement extends javax.swing.JPanel {
     private javax.swing.JTable jTable1;
     private javax.swing.JTable jTable2;
     private javax.swing.JTextField jTextField1;
+    private javax.swing.JLabel paymentMethod;
     private javax.swing.JLabel roomAdvancePymentLable;
     private javax.swing.JLabel roomBalanceDueLable;
     private javax.swing.JLabel roomHouseKeeper;
