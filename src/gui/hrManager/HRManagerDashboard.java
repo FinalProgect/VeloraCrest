@@ -374,7 +374,7 @@ private void loadOverview() {
         SwingUtilities.updateComponentTreeUI(jPanel3);
     }
 private void loadEmployeeList() {
-        EmployeeList empList = new EmployeeList();
+        EmployeeSchedule empList = new EmployeeSchedule();
         jPanel3.removeAll();
         jPanel3.add(empList);
         SwingUtilities.updateComponentTreeUI(jPanel3);
