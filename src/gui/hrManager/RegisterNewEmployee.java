@@ -22,40 +22,40 @@ import model.Validation;
 import raven.toast.Notifications;
 
 public class RegisterNewEmployee extends javax.swing.JFrame {
-
+    
     HashMap<String, String> genderMap = new HashMap<>();
     HashMap<String, String> departmentMap = new HashMap<>();
     HashMap<String, String> positionMap = new HashMap<>();
     HashMap<String, String> cityMap = new HashMap<>();
     HashMap<String, String> districtMap = new HashMap<>();
-
+    
     public RegisterNewEmployee() {
         initComponents();
         Notifications.getInstance().setJFrame(this);
         init();
     }
-
+    
     private void init() {
         setExtendedState(RegisterNewEmployee.MAXIMIZED_BOTH);
         jScrollPane1.setBorder(BorderFactory.createEmptyBorder());
         ModifyTables modifyTables = new ModifyTables();
         modifyTables.modifyTables(jPanel6, jTable2, jScrollPane3);
-
+        
         jPanel3.putClientProperty(FlatClientProperties.STYLE, "arc:90");
         jPanel4.putClientProperty(FlatClientProperties.STYLE, "arc:90");
         jPanel5.putClientProperty(FlatClientProperties.STYLE, "arc:90");
-
+        
         jButton1.putClientProperty(FlatClientProperties.STYLE, "arc:90");
         jButton2.putClientProperty(FlatClientProperties.STYLE, "arc:90");
         jButton3.putClientProperty(FlatClientProperties.STYLE, "arc:90");
-
+        
         loadGenderDepartmentPositionBoxes();
         loadEmployeeTable();
         loadDistricts();
         loadCity();
         jLabel2.setVisible(false);
         jLabel1.setVisible(false);
-
+        
         jTable2.grabFocus();
     }
 
@@ -68,7 +68,7 @@ public class RegisterNewEmployee extends javax.swing.JFrame {
             while (citySet.next()) {
                 districtVector.add(citySet.getString("name"));
                 cityMap.put(citySet.getString("name"), citySet.getString("id"));
-
+                
             }
             DefaultComboBoxModel model = new DefaultComboBoxModel(districtVector);
             jComboBox8.setModel(model);
@@ -86,7 +86,7 @@ public class RegisterNewEmployee extends javax.swing.JFrame {
             while (districtSet.next()) {
                 districtVector.add(districtSet.getString("name"));
                 districtMap.put(districtSet.getString("name"), districtSet.getString("id"));
-
+                
             }
             DefaultComboBoxModel model = new DefaultComboBoxModel(districtVector);
             jComboBox7.setModel(model);
@@ -101,7 +101,7 @@ public class RegisterNewEmployee extends javax.swing.JFrame {
         try {
 //            load genders
             ResultSet genderSet = MYsql.execute("SELECT * FROM `gender` ");
-
+            
             Vector<String> genderVector = new Vector<>();
             while (genderSet.next()) {
                 genderVector.add(genderSet.getString("gender"));
@@ -112,7 +112,7 @@ public class RegisterNewEmployee extends javax.swing.JFrame {
 
 //            load Departments
             ResultSet departmentSet = MYsql.execute("SELECT * FROM `department` ");
-
+            
             Vector<String> DepartmentVector = new Vector<>();
             while (departmentSet.next()) {
                 DepartmentVector.add(departmentSet.getString("name"));
@@ -123,7 +123,7 @@ public class RegisterNewEmployee extends javax.swing.JFrame {
 
 //            load positions
             ResultSet positionSet = MYsql.execute("SELECT * FROM `employee_type` ");
-
+            
             Vector<String> positionVector = new Vector<>();
             while (positionSet.next()) {
                 positionVector.add(positionSet.getString("type"));
@@ -131,7 +131,7 @@ public class RegisterNewEmployee extends javax.swing.JFrame {
             }
             DefaultComboBoxModel positionModel = new DefaultComboBoxModel(positionVector);
             jComboBox5.setModel(positionModel);
-
+            
             System.out.println(genderMap + " " + " " + departmentMap + " " + positionMap);
         } catch (Exception e) {
             e.printStackTrace();
@@ -145,7 +145,7 @@ public class RegisterNewEmployee extends javax.swing.JFrame {
         if (jToggleButton1.isSelected()) {
             String nic = jTextField7.getText();
             String mobile = jTextField6.getText();
-
+            
             if (!nic.isBlank() || !mobile.isBlank()) {
                 search = " WHERE ";
                 if (!nic.isBlank() && mobile.isBlank()) {
@@ -172,7 +172,7 @@ public class RegisterNewEmployee extends javax.swing.JFrame {
                 employeeVector.add(employee_set.getString("fullName"));
                 employeeVector.add(employee_set.getString("name"));
                 employeeVector.add(employee_set.getString("type"));
-
+                
                 employeeModel.addRow(employeeVector);
             }
             jTable2.setModel(employeeModel);
@@ -192,8 +192,8 @@ public class RegisterNewEmployee extends javax.swing.JFrame {
         String nic = jTextField7.getText();
         String basicSalary = jFormattedTextField1.getText();
         double salary = Double.parseDouble(basicSalary);
-        String line1 = jTextField9.getText();
-        String line2 = jTextField10.getText();
+        String line1 = line1Field.getText();
+        String line2 = line2Field.getText();
         String password = String.valueOf(jPasswordField1.getPassword());
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         Date dateChooser = jDateChooser1.getDate();
@@ -205,18 +205,18 @@ public class RegisterNewEmployee extends javax.swing.JFrame {
 //        today
         SimpleDateFormat todayf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String today = todayf.format(new Date());
-
+        
         String gender = genderMap.get(String.valueOf(jComboBox3.getSelectedItem()));
         String department = departmentMap.get(String.valueOf(jComboBox4.getSelectedItem()));
         String position = positionMap.get(String.valueOf(jComboBox5.getSelectedItem()));
-
-        String postalCode = jTextField11.getText();
-
+        
+        String postalCode = postalCodeField.getText();
+        
         boolean validateMail = validateEmail(email);
         boolean validateMobile = validateMobile(mobile);
         boolean validateNIC = validateNIC(nic);
         boolean validatePostal = validatePostal(postalCode);
-
+        
         if (fname.isBlank()) {
             Notifications.getInstance().show(Notifications.Type.WARNING, Notifications.Location.TOP_LEFT, 3000l, "Please enter the first name");
         } else if (lname.isBlank()) {
@@ -241,7 +241,7 @@ public class RegisterNewEmployee extends javax.swing.JFrame {
             Notifications.getInstance().show(Notifications.Type.WARNING, Notifications.Location.TOP_LEFT, 3000l, "Please enter address line 2");
         } else if (!validatePostal) {
             Notifications.getInstance().show(Notifications.Type.WARNING, Notifications.Location.TOP_LEFT, 3000l, "Please enter a valid postal code");
-
+            
         } else {
             try {
 //                check for existing employees with the same details
@@ -254,29 +254,28 @@ public class RegisterNewEmployee extends javax.swing.JFrame {
                                 + "`employee_status_id`,`department_id`,`Employee_type_id`,`gender_id`,`password`) VALUES "
                                 + "('" + fname + "','" + lname + "','" + fullname + "','" + email + "','" + mobile + "','" + nic + "','" + birthDate + "'"
                                 + ",'" + today + "','1','" + department + "','" + position + "','" + gender + "','" + password + "') ");
-
+                        
                         ResultSet lastId = MYsql.execute("SELECT LAST_INSERT_ID() AS employee_id");
                         if (lastId.next()) {
                             int employee_id = lastId.getInt("employee_id");
                             try {
                                 ResultSet address_rs = MYsql.execute("SELECT * FROM `address` WHERE `employee_id` = '" + employee_id + "' ");
                                 if (address_rs.next()) {
-//                                    update
+                                    updateAddress(String.valueOf(lastId), line1, line2, cityMap.get(city), postalCode);
                                 } else {
 //                                    insert
                                     MYsql.execute("INSERT INTO `address` VALUES ('" + employee_id + "','" + postalCode + "',"
                                             + "'" + line1 + "','" + line2 + "','" + cityMap.get(city) + "')");
                                 }
-
                                 MYsql.execute("INSERT INTO `salary` VALUES ('" + employee_id + "','" + basicSalary + "') ");
-
                             } catch (Exception e) {
+                                e.printStackTrace();
                             }
                         }
                         clearAll();
                         Notifications.getInstance().show(Notifications.Type.SUCCESS, Notifications.Location.TOP_CENTER, 3000l, "Employee registered Successfully!.");
                     }
-
+                    
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -295,8 +294,8 @@ public class RegisterNewEmployee extends javax.swing.JFrame {
         String nic = jTextField7.getText();
         String basicSalary = jFormattedTextField1.getText();
         double salary = Double.parseDouble(basicSalary);
-        String line1 = jTextField9.getText();
-        String line2 = jTextField10.getText();
+        String line1 = line1Field.getText();
+        String line2 = line2Field.getText();
         String password = String.valueOf(jPasswordField1.getPassword());
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         Date dateChooser = jDateChooser1.getDate();
@@ -308,18 +307,18 @@ public class RegisterNewEmployee extends javax.swing.JFrame {
 //        today
         SimpleDateFormat todayf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String today = todayf.format(new Date());
-
+        
         String gender = genderMap.get(String.valueOf(jComboBox3.getSelectedItem()));
         String department = departmentMap.get(String.valueOf(jComboBox4.getSelectedItem()));
         String position = positionMap.get(String.valueOf(jComboBox5.getSelectedItem()));
-
-        String postalCode = jTextField11.getText();
-
+        
+        String postalCode = postalCodeField.getText();
+        
         boolean validateMail = validateEmail(email);
         boolean validateMobile = validateMobile(mobile);
         boolean validateNIC = validateNIC(nic);
         boolean validatePostal = validatePostal(postalCode);
-
+        
         if (fname.isBlank()) {
             Notifications.getInstance().show(Notifications.Type.WARNING, Notifications.Location.TOP_LEFT, 3000l, "Please enter the first name");
         } else if (lname.isBlank()) {
@@ -344,7 +343,7 @@ public class RegisterNewEmployee extends javax.swing.JFrame {
             Notifications.getInstance().show(Notifications.Type.WARNING, Notifications.Location.TOP_LEFT, 3000l, "Please enter address line 2");
         } else if (!validatePostal) {
             Notifications.getInstance().show(Notifications.Type.WARNING, Notifications.Location.TOP_LEFT, 3000l, "Please enter a valid postal code");
-
+            
         } else {
             try {
 //                check for existing employees with the same details
@@ -352,10 +351,10 @@ public class RegisterNewEmployee extends javax.swing.JFrame {
                         + " `nic` = '" + nic + "' AND `email` = '" + email + "')  AS `total_count` FROM `employee` INNER"
                         + " JOIN `address` ON `address`.`employee_id` = `employee`.`id` INNER JOIN `salary` ON"
                         + " `salary`.`employee_id` = `employee`.`id` WHERE `nic` = '" + nic + "' AND `email` = '" + email + "' ");
-
+                
                 if (existCheck.next()) {
                     if (existCheck.getInt("total_count") > 0) {
-
+                        
                         if (existCheck.getString("fname").equals(fname)
                                 && existCheck.getString("fullName").equals(fullname)
                                 && existCheck.getString("lname").equals(lname)
@@ -376,28 +375,28 @@ public class RegisterNewEmployee extends javax.swing.JFrame {
                             String query = "UPDATE `employee` SET `fname` = '" + fname + "' , `lname` = '" + lname + "', `fullName` = '" + fullname + "',"
                                     + " `mobile` ='" + mobile + "', `birthDay` = '" + birthDate + "',`department_id` = '" + department + "',"
                                     + " `Employee_type_id` = '" + position + "', `gender_id` = '" + gender + "', `password` = '" + password + "' WHERE `id` = '" + employee_id + "'";
-
+                            
                             MYsql.execute(query);
-
+                            
                             ResultSet address_rs = MYsql.execute("SELECT * FROM `address` WHERE `employee_id` = '" + employee_id + "' ");
                             if (address_rs.next()) {
-//                                    update
+                                updateAddress(employee_id, line1, line2, cityMap.get(city), postalCode);
                             } else {
 //                                    insert
                                 MYsql.execute("UPDATE `address` SET `line1` = '" + line1 + "', `line2` = '" + line2 + "', `no` = '" + postalCode + "', "
                                         + " `city_id` = '" + cityMap.get(city) + "' WHERE `employee_id` = '" + employee_id + "' ");
                             }
-
+                            
                             MYsql.execute("UPDATE `salary` SET  `basicSalary` = '" + basicSalary + "' WHERE `employee_id` = '" + employee_id + "' ");
-
+                            
                             clearAll();
                             Notifications.getInstance().show(Notifications.Type.SUCCESS, Notifications.Location.TOP_LEFT, 3000l, "Employee details updated Successfully!.");
                         }
-
+                        
                     } else {
                         Notifications.getInstance().show(Notifications.Type.ERROR, Notifications.Location.TOP_LEFT, 3000l, "Employee with the above details does not exist.");
                     }
-
+                    
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -405,7 +404,17 @@ public class RegisterNewEmployee extends javax.swing.JFrame {
             }
         }
     }
-
+    
+    private void updateAddress(String employeeID, String line1, String line2, String city, String postalCode) {
+        try {
+            String query = String.format("UPDATE `address` SET `no` = '%s', `line1` = '%s', `line2` = '%s',"
+                    + "city_id = '%s' WHERE `employee_id` = '%s' ", postalCode, line1, line2, city, employeeID);
+            MYsql.execute(query);
+        } catch (Exception e) {
+            SignIn.logger.severe(e.getMessage());
+        }
+    }
+    
     private boolean validateEmail(String email) {
         if (email.isBlank()) {
             return false;
@@ -414,7 +423,7 @@ public class RegisterNewEmployee extends javax.swing.JFrame {
         }
         return false;
     }
-
+    
     private boolean validateMobile(String mobile) {
         if (mobile.isBlank()) {
             return false;
@@ -423,7 +432,7 @@ public class RegisterNewEmployee extends javax.swing.JFrame {
         }
         return false;
     }
-
+    
     private boolean validateNIC(String nic) {
         if (nic.isBlank()) {
             return false;
@@ -432,7 +441,7 @@ public class RegisterNewEmployee extends javax.swing.JFrame {
         }
         return false;
     }
-
+    
     public boolean validatePostal(String postal) {
         if (postal.isBlank()) {
             return false;
@@ -441,7 +450,7 @@ public class RegisterNewEmployee extends javax.swing.JFrame {
         }
         return false;
     }
-
+    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -484,11 +493,11 @@ public class RegisterNewEmployee extends javax.swing.JFrame {
         jLabel37 = new javax.swing.JLabel();
         jLabel38 = new javax.swing.JLabel();
         jLabel39 = new javax.swing.JLabel();
-        jTextField9 = new javax.swing.JTextField();
-        jTextField10 = new javax.swing.JTextField();
+        line1Field = new javax.swing.JTextField();
+        line2Field = new javax.swing.JTextField();
         jComboBox7 = new javax.swing.JComboBox<>();
         jLabel41 = new javax.swing.JLabel();
-        jTextField11 = new javax.swing.JTextField();
+        postalCodeField = new javax.swing.JTextField();
         jLabel42 = new javax.swing.JLabel();
         jComboBox8 = new javax.swing.JComboBox<>();
         jPanel5 = new javax.swing.JPanel();
@@ -771,9 +780,9 @@ public class RegisterNewEmployee extends javax.swing.JFrame {
         jLabel39.setFont(new java.awt.Font("Poppins", 0, 14)); // NOI18N
         jLabel39.setText("Line 2 :");
 
-        jTextField9.setFont(new java.awt.Font("Poppins", 0, 14)); // NOI18N
+        line1Field.setFont(new java.awt.Font("Poppins", 0, 14)); // NOI18N
 
-        jTextField10.setFont(new java.awt.Font("Poppins", 0, 14)); // NOI18N
+        line2Field.setFont(new java.awt.Font("Poppins", 0, 14)); // NOI18N
 
         jComboBox7.setFont(new java.awt.Font("Poppins", 0, 14)); // NOI18N
         jComboBox7.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
@@ -786,7 +795,7 @@ public class RegisterNewEmployee extends javax.swing.JFrame {
         jLabel41.setFont(new java.awt.Font("Poppins", 0, 14)); // NOI18N
         jLabel41.setText("Postal Code: ");
 
-        jTextField11.setFont(new java.awt.Font("Poppins", 0, 14)); // NOI18N
+        postalCodeField.setFont(new java.awt.Font("Poppins", 0, 14)); // NOI18N
 
         jLabel42.setFont(new java.awt.Font("Poppins", 0, 14)); // NOI18N
         jLabel42.setText("City : ");
@@ -814,10 +823,10 @@ public class RegisterNewEmployee extends javax.swing.JFrame {
                 .addGap(21, 21, 21)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jComboBox8, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jTextField11)
+                    .addComponent(postalCodeField)
                     .addComponent(jComboBox7, javax.swing.GroupLayout.Alignment.LEADING, 0, 407, Short.MAX_VALUE)
-                    .addComponent(jTextField9, javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jTextField10, javax.swing.GroupLayout.Alignment.LEADING))
+                    .addComponent(line1Field, javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(line2Field, javax.swing.GroupLayout.Alignment.LEADING))
                 .addGap(35, 35, 35))
         );
         jPanel4Layout.setVerticalGroup(
@@ -834,15 +843,15 @@ public class RegisterNewEmployee extends javax.swing.JFrame {
                 .addGap(4, 4, 4)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel38)
-                    .addComponent(jTextField9, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(line1Field, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel39)
-                    .addComponent(jTextField10, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(line2Field, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel41)
-                    .addComponent(jTextField11, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(postalCodeField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(7, Short.MAX_VALUE))
         );
 
@@ -1033,7 +1042,7 @@ public class RegisterNewEmployee extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 778, Short.MAX_VALUE)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 864, Short.MAX_VALUE)
         );
 
         pack();
@@ -1115,7 +1124,7 @@ public class RegisterNewEmployee extends javax.swing.JFrame {
             jLabel1.setVisible(false);
         }
     }//GEN-LAST:event_jToggleButton1ItemStateChanged
-
+    
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         FlatMacLightLaf.setup();
@@ -1171,17 +1180,17 @@ public class RegisterNewEmployee extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JTable jTable2;
-    private javax.swing.JTextField jTextField10;
-    private javax.swing.JTextField jTextField11;
     private javax.swing.JTextField jTextField2;
     private javax.swing.JTextField jTextField3;
     private javax.swing.JTextField jTextField4;
     private javax.swing.JTextField jTextField5;
     private javax.swing.JTextField jTextField6;
     private javax.swing.JTextField jTextField7;
-    private javax.swing.JTextField jTextField9;
     private javax.swing.JToggleButton jToggleButton1;
     private javax.swing.JToggleButton jToggleButton2;
+    private javax.swing.JTextField line1Field;
+    private javax.swing.JTextField line2Field;
+    private javax.swing.JTextField postalCodeField;
     // End of variables declaration//GEN-END:variables
 
     private void clearAll() {
@@ -1192,32 +1201,32 @@ public class RegisterNewEmployee extends javax.swing.JFrame {
         jTextField6.setText("");
         jTextField7.setText("");
         jFormattedTextField1.setText("0.00");
-        jTextField9.setText("");
-        jTextField10.setText("");
+        line1Field.setText("");
+        line2Field.setText("");
         jDateChooser1.setDate(null);
         jComboBox8.setSelectedIndex(0);
         jComboBox3.setSelectedIndex(0);
         jComboBox4.setSelectedIndex(0);
         jComboBox5.setSelectedIndex(0);
-        jTextField11.setText("");
-
+        postalCodeField.setText("");
+//        jPasswordField1.setText("");
         loadEmployeeTable();
-
+        
         jButton3.setEnabled(true);
         jButton2.setEnabled(false);
         jTextField5.setEditable(true);
         jTextField7.setEditable(true);
         jPasswordField1.setText("");
     }
-
+    
     private void clickTableRow() {
         if (jTable2.getSelectedRowCount() == 1) {
-
+            
             jButton3.setEnabled(false);
             jButton2.setEnabled(true);
             jTextField5.setEditable(false);
             jTextField7.setEditable(false);
-
+            
             int row = jTable2.getSelectedRow();
             String employeeId = String.valueOf(jTable2.getValueAt(row, 0));
             try {
@@ -1236,8 +1245,8 @@ public class RegisterNewEmployee extends javax.swing.JFrame {
                     jTextField6.setText(employeeRs.getString("mobile"));
                     jTextField7.setText(employeeRs.getString("nic"));
                     jFormattedTextField1.setText(employeeRs.getString("basicSalary"));
-                    jTextField9.setText(employeeRs.getString("line1"));
-                    jTextField10.setText(employeeRs.getString("line2"));
+                    line1Field.setText(employeeRs.getString("line1"));
+                    line2Field.setText(employeeRs.getString("line2"));
                     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
                     Date birthDate = sdf.parse(employeeRs.getString("birthDay"));
                     jDateChooser1.setDate(birthDate);
@@ -1245,10 +1254,10 @@ public class RegisterNewEmployee extends javax.swing.JFrame {
                     jComboBox3.setSelectedItem(employeeRs.getString("gender.gender"));
                     jComboBox4.setSelectedItem(employeeRs.getString("department.name"));
                     jComboBox5.setSelectedItem(employeeRs.getString("employee_type.type"));
-                    jTextField11.setText(employeeRs.getString("no"));
+                    postalCodeField.setText(employeeRs.getString("no"));
                     jPasswordField1.setText(employeeRs.getString("password"));
                 }
-
+                
             } catch (Exception e) {
                 SignIn.logger.severe(e.getMessage());
             }
