@@ -405,9 +405,9 @@ public class ManagerDashboard extends javax.swing.JFrame {
 
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
         sideBarButtonAnimate(jButton6);
-        RoomManagement rmflr = new RoomManagement();
+//        RoomManagement rmflr = new RoomManagement();
         jPanel3.removeAll();
-        jPanel3.add(rmflr);
+//        jPanel3.add(rmflr);
         SwingUtilities.updateComponentTreeUI(jPanel3);
     }//GEN-LAST:event_jButton6ActionPerformed
 

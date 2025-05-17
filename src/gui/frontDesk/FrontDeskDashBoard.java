@@ -68,7 +68,7 @@ public class FrontDeskDashBoard extends javax.swing.JFrame {
 
     //Load room room management
     private void loadRoomManagement() {
-        RoomManagement roomManagement = new RoomManagement();
+        RoomManagement roomManagement = new RoomManagement(this);
         landPanel.add(roomManagement, BorderLayout.CENTER);
         SwingUtilities.updateComponentTreeUI(landPanel);
     }
