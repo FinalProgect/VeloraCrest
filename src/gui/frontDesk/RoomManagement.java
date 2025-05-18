@@ -4,6 +4,7 @@ import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.extras.FlatSVGIcon;
 import gui.SignIn;
 import static gui.frontDesk.FaontDeskOverview.roomsMap;
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -26,6 +27,7 @@ import java.util.Calendar;
 import javax.swing.JOptionPane;
 import java.sql.Date;
 import java.time.LocalDate;
+import javax.swing.SwingUtilities;
 
 public class RoomManagement extends javax.swing.JPanel {
 
@@ -444,6 +446,11 @@ public class RoomManagement extends javax.swing.JPanel {
         jButton1.setFont(new java.awt.Font("Poppins", 0, 14)); // NOI18N
         jButton1.setForeground(new java.awt.Color(255, 255, 255));
         jButton1.setText("Maintenance Request");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         jButton2.setBackground(new java.awt.Color(62, 161, 217));
         jButton2.setFont(new java.awt.Font("Poppins", 0, 14)); // NOI18N
@@ -707,16 +714,15 @@ public class RoomManagement extends javax.swing.JPanel {
                         gestCheckInDate.setText(reservationDetails.getString("reservation.dateTime"));
 
                         Date date = reservationDetails.getDate("reservation.dateTime");
-                        
+
                         LocalDate localdate = date.toLocalDate();
-                        
+
                         LocalDate checkOutDate = localdate.plusDays(reservationDetails.getInt("reservation.days"));
-                        
 
                         gestCheckOutDate.setText(String.valueOf(checkOutDate));
 
                         guestBookingSource.setText("Local");
-                        
+
                         roomTypeLable.setText(roomTypeMap.get(reservationDetails.getInt("rooms.roomType_id")));
                         roomRateLable.setText(selectedRoom.getPrice().toString());
 
@@ -760,6 +766,18 @@ public class RoomManagement extends javax.swing.JPanel {
 
 
     }//GEN-LAST:event_jList1MouseClicked
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        if (jList1.getSelectedIndex() < 0) {
+            JOptionPane.showMessageDialog(perent, "Please Select the Room to Add Maintenance Request.", "Warning", JOptionPane.WARNING_MESSAGE);
+            SignIn.logger.severe("User " + SignIn.employeeMap.get("employee").getEmployeeName() + " try to go to Maintennce Requst. withoutselectiong room.");
+        } else {
+            perent.landPanel.removeAll();
+            MaintenanceRequest maintenanceRequest = new MaintenanceRequest(jList1.getSelectedValue());
+            perent.landPanel.add(maintenanceRequest, BorderLayout.CENTER);
+            SwingUtilities.updateComponentTreeUI(perent.landPanel);
+        }
+    }//GEN-LAST:event_jButton1ActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
