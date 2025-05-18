@@ -1,7 +1,10 @@
 package gui.hrManager;
 
+import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.themes.FlatMacLightLaf;
 import gui.SignIn;
+import java.awt.event.KeyEvent;
+import java.awt.event.MouseEvent;
 import java.sql.ResultSet;
 import java.util.HashMap;
 import java.util.Vector;
@@ -32,7 +35,8 @@ public class EmployeeList extends javax.swing.JFrame {
 
     private void init() {
         setExtendedState(EmployeeList.MAXIMIZED_BOTH);
-
+        jButton2.putClientProperty(FlatClientProperties.STYLE, "arc:50");
+        jButton3.putClientProperty(FlatClientProperties.STYLE, "arc:50");
         departmentMap = new HashMap<>();
         statusMap = new HashMap<>();
         employeeTypeMap = new HashMap<>();
@@ -67,6 +71,7 @@ public class EmployeeList extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         jTable2 = new javax.swing.JTable();
+        jButton3 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setUndecorated(true);
@@ -227,7 +232,13 @@ public class EmployeeList extends javax.swing.JFrame {
         jButton2.setBackground(new java.awt.Color(15, 140, 130));
         jButton2.setFont(new java.awt.Font("Poppins SemiBold", 0, 14)); // NOI18N
         jButton2.setForeground(new java.awt.Color(252, 252, 252));
-        jButton2.setText("Print Report");
+        jButton2.setText("Terminate Employee");
+        jButton2.setEnabled(false);
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
 
@@ -249,6 +260,16 @@ public class EmployeeList extends javax.swing.JFrame {
             }
         });
         jTable2.getTableHeader().setReorderingAllowed(false);
+        jTable2.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jTable2MouseClicked(evt);
+            }
+        });
+        jTable2.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                jTable2KeyPressed(evt);
+            }
+        });
         jScrollPane2.setViewportView(jTable2);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
@@ -268,6 +289,11 @@ public class EmployeeList extends javax.swing.JFrame {
                 .addGap(18, 18, 18))
         );
 
+        jButton3.setBackground(new java.awt.Color(15, 140, 130));
+        jButton3.setFont(new java.awt.Font("Poppins SemiBold", 0, 14)); // NOI18N
+        jButton3.setForeground(new java.awt.Color(252, 252, 252));
+        jButton3.setText("Print Report");
+
         javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
         jPanel7.setLayout(jPanel7Layout);
         jPanel7Layout.setHorizontalGroup(
@@ -278,7 +304,9 @@ public class EmployeeList extends javax.swing.JFrame {
                     .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(jPanel7Layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 178, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 178, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 209, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
         jPanel7Layout.setVerticalGroup(
@@ -287,7 +315,9 @@ public class EmployeeList extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGap(31, 31, 31)
-                .addComponent(jButton2)
+                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButton2)
+                    .addComponent(jButton3))
                 .addGap(26, 26, 26))
         );
 
@@ -345,6 +375,38 @@ public class EmployeeList extends javax.swing.JFrame {
         loadEmployeeTable();
     }//GEN-LAST:event_jTextField2KeyReleased
 
+    private void jTable2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable2MouseClicked
+        if (evt.getButton() == MouseEvent.BUTTON1) {
+            if (evt.getClickCount() == 1) {
+                terminationButtonActivity();
+            }
+            if (evt.getClickCount() == 2) {
+                terminationButtonActivity();
+            }
+        }
+    }//GEN-LAST:event_jTable2MouseClicked
+
+    private void jTable2KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTable2KeyPressed
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
+            openTerminationDialog();
+        }
+    }//GEN-LAST:event_jTable2KeyPressed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        openTerminationDialog();
+    }//GEN-LAST:event_jButton2ActionPerformed
+    private void openTerminationDialog() {
+        HashMap<String, String> employeeMap = new HashMap<>();
+        TerminateEmployee.getInstance(this, employeeMap).setVisible(true);
+    }
+
+    private void terminationButtonActivity() {
+        if (jTable2.getSelectedRowCount() == 1) {
+            jButton2.setEnabled(true);
+        } else {
+            jButton2.setEnabled(false);
+        }
+    }
 
     private void loadComboBoxes() {
         //department box
@@ -450,6 +512,8 @@ public class EmployeeList extends javax.swing.JFrame {
                 row.add(employeeRs.getString("status"));
                 tableModel.addRow(row);
             }
+            terminationButtonActivity();
+
         } catch (Exception e) {
             e.printStackTrace();
             SignIn.logger.severe(e.getMessage());
@@ -458,6 +522,7 @@ public class EmployeeList extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton5;
     private javax.swing.JComboBox<String> jComboBox4;
     private javax.swing.JComboBox<String> jComboBox5;

@@ -2,6 +2,7 @@ package gui.hrManager;
 
 import com.formdev.flatlaf.FlatClientProperties;
 import gui.SignIn;
+import java.awt.Dimension;
 import java.text.SimpleDateFormat;
 import javax.swing.BorderFactory;
 import javax.swing.table.DefaultTableModel;
@@ -12,7 +13,9 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Vector;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.SwingUtilities;
 import model.MYsql;
+import java.sql.ResultSet;
 
 public class EmployeeSchedule extends javax.swing.JPanel {
 
@@ -26,7 +29,6 @@ public class EmployeeSchedule extends javax.swing.JPanel {
     }
 
     private void init() {
-        jPanel14.putClientProperty(FlatClientProperties.STYLE, "arc:80");
         jPanel16.putClientProperty(FlatClientProperties.STYLE, "arc:80");
         jPanel13.putClientProperty(FlatClientProperties.STYLE, "arc:80");
 
@@ -37,7 +39,6 @@ public class EmployeeSchedule extends javax.swing.JPanel {
         jButton1.putClientProperty(FlatClientProperties.STYLE, "arc:50");
         jButton2.putClientProperty(FlatClientProperties.STYLE, "arc:50");
 
-        jPanel15.putClientProperty(FlatClientProperties.STYLE, "arc:100");
         jPanel17.putClientProperty(FlatClientProperties.STYLE, "arc:100");
         jPanel22.putClientProperty(FlatClientProperties.STYLE, "arc:100");
         jPanel23.putClientProperty(FlatClientProperties.STYLE, "arc:100");
@@ -55,7 +56,7 @@ public class EmployeeSchedule extends javax.swing.JPanel {
         loadDesignation();
         loadStatus();
         loadEmployees();
-
+        loadStaffAttendanceWidget();
     }
 
     private void loadDepartments() {
@@ -109,6 +110,97 @@ public class EmployeeSchedule extends javax.swing.JPanel {
         }
     }
 
+    private void loadOccupancy(double total, double present, double late, double absent) {
+        double length = (double) jPanel18.getPreferredSize().width - 12;
+        double totalEmps = total;
+        double present_emp = present;
+        double absent_emp = absent;
+        double late_emp = late;
+
+        double presentCount = (double) present_emp / totalEmps * length;
+        double absentCount = (double) absent_emp / totalEmps * length;
+        double lateCount = (double) late_emp / totalEmps * length;
+        if (present_emp == 0) {
+            presentCount = 1;
+        }
+        if (absent_emp == 0) {
+            absentCount = 1;
+        }
+        if (late_emp == 0) {
+            lateCount = 1;
+        }
+        System.out.println("absent " + absent_emp);
+        System.out.println("late " + late_emp);
+        System.out.println("present " + present_emp);
+        jPanel19.setPreferredSize(new Dimension((int) presentCount, 50));
+        jPanel20.setPreferredSize(new Dimension((int) absentCount, 50));
+        jPanel21.setPreferredSize(new Dimension((int) lateCount, 50));
+        SwingUtilities.updateComponentTreeUI(jPanel18);
+
+    }
+
+    private void updateAbsenteesWidget(int total, int absenteeCount) {
+        double absentCount = ((double) absenteeCount / (double) total) * 100;
+        long percentage = Math.round(absentCount);
+        System.out.println(percentage);
+        jLabel18.setText(percentage + "%");
+    }
+
+    private void loadStaffAttendanceWidget() {
+        Date today = new Date();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        String date = dateFormat.format(today);
+        String time = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(today);
+        String query = "SELECT\n"
+                + "    -- Total employees scheduled today\n"
+                + "    (SELECT COUNT(DISTINCT employee_id)\n"
+                + "     FROM shedule\n"
+                + "     WHERE DATE(dateTime) = CURDATE()\n"
+                + "    ) AS totalScheduled,\n"
+                + "\n"
+                + "    -- Present: attended on or before their scheduled time\n"
+                + "    (SELECT COUNT(DISTINCT s.employee_id)\n"
+                + "     FROM shedule s\n"
+                + "     JOIN attendance a ON a.shedule_id = s.id\n"
+                + "     WHERE DATE(s.dateTime) = CURDATE()\n"
+                + "       AND a.startTime <= s.dateTime\n"
+                + "    ) AS presentCount,\n"
+                + "\n"
+                + "    -- Late: attended after their scheduled time\n"
+                + "    (SELECT COUNT(DISTINCT s.employee_id)\n"
+                + "     FROM shedule s\n"
+                + "     JOIN attendance a ON a.shedule_id = s.id\n"
+                + "     WHERE DATE(s.dateTime) = CURDATE()\n"
+                + "       AND a.startTime > s.dateTime\n"
+                + "    ) AS lateCount,\n"
+                + "\n"
+                + "    -- Absent: scheduled today but no attendance at all\n"
+                + "    (SELECT COUNT(DISTINCT s.employee_id)\n"
+                + "     FROM shedule s\n"
+                + "     WHERE DATE(s.dateTime) = CURDATE()\n"
+                + "       AND s.id NOT IN (\n"
+                + "           SELECT shedule_id FROM attendance\n"
+                + "       )\n"
+                + "    ) AS absentCount;";
+
+        try {
+            ResultSet widgetRs = MYsql.execute(query);
+            if (widgetRs.next()) {
+                int total = widgetRs.getInt("totalScheduled");
+                int present = widgetRs.getInt("presentCount");
+                int absent = widgetRs.getInt("absentCount");
+                int late = widgetRs.getInt("lateCount");
+
+                loadOccupancy(total, present, absent, late);
+                updateAbsenteesWidget(total, absent);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            SignIn.logger.severe(e.getMessage());
+        }
+
+    }
+
     private void loadEmployees() {
         SimpleDateFormat monthFormat = new SimpleDateFormat("yyyy-MM-dd");
         String today = String.valueOf(monthFormat.format(new Date()));
@@ -141,7 +233,6 @@ public class EmployeeSchedule extends javax.swing.JPanel {
                 + " ON employee_type.id = employee.Employee_type_id INNER JOIN department ON"
                 + " department.id = employee.department_id INNER JOIN status ON status.id = employee.employee_status_id "
                 + "INNER JOIN shedule ON shedule.employee_id = employee.id " + search;
-        System.out.println(query);
         try {
             ResultSet employeeSet = MYsql.execute(query);
             while (employeeSet.next()) {
@@ -195,11 +286,6 @@ public class EmployeeSchedule extends javax.swing.JPanel {
         jButton3 = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        jPanel14 = new javax.swing.JPanel();
-        jPanel15 = new javax.swing.JPanel();
-        jLabel12 = new javax.swing.JLabel();
-        jLabel13 = new javax.swing.JLabel();
-        jLabel16 = new javax.swing.JLabel();
         jPanel16 = new javax.swing.JPanel();
         jPanel17 = new javax.swing.JPanel();
         jLabel14 = new javax.swing.JLabel();
@@ -240,7 +326,7 @@ public class EmployeeSchedule extends javax.swing.JPanel {
         jPanel19.setLayout(jPanel19Layout);
         jPanel19Layout.setHorizontalGroup(
             jPanel19Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jLabel19, javax.swing.GroupLayout.DEFAULT_SIZE, 198, Short.MAX_VALUE)
+            .addComponent(jLabel19, javax.swing.GroupLayout.DEFAULT_SIZE, 406, Short.MAX_VALUE)
         );
         jPanel19Layout.setVerticalGroup(
             jPanel19Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -333,7 +419,12 @@ public class EmployeeSchedule extends javax.swing.JPanel {
         jLabel24.setText("Late");
 
         jButton3.setFont(new java.awt.Font("Poppins", 0, 12)); // NOI18N
-        jButton3.setText("View Attendance");
+        jButton3.setText("Refresh");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel18Layout = new javax.swing.GroupLayout(jPanel18);
         jPanel18.setLayout(jPanel18Layout);
@@ -391,10 +482,12 @@ public class EmployeeSchedule extends javax.swing.JPanel {
             jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel13Layout.createSequentialGroup()
                 .addGap(24, 24, 24)
-                .addGroup(jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel15)
-                    .addComponent(jPanel18, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(24, 24, 24))
+                .addComponent(jLabel15)
+                .addGap(513, 513, 513))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel13Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jPanel18, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
         jPanel13Layout.setVerticalGroup(
             jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -411,60 +504,6 @@ public class EmployeeSchedule extends javax.swing.JPanel {
 
         jLabel2.setFont(new java.awt.Font("Poppins", 0, 18)); // NOI18N
         jLabel2.setText("2024-10-18");
-
-        jPanel14.setBackground(new java.awt.Color(252, 252, 252));
-
-        jPanel15.setBackground(new java.awt.Color(62, 161, 217));
-
-        jLabel12.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resource/calendar.png"))); // NOI18N
-
-        javax.swing.GroupLayout jPanel15Layout = new javax.swing.GroupLayout(jPanel15);
-        jPanel15.setLayout(jPanel15Layout);
-        jPanel15Layout.setHorizontalGroup(
-            jPanel15Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel15Layout.createSequentialGroup()
-                .addGap(14, 14, 14)
-                .addComponent(jLabel12)
-                .addContainerGap(14, Short.MAX_VALUE))
-        );
-        jPanel15Layout.setVerticalGroup(
-            jPanel15Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel15Layout.createSequentialGroup()
-                .addGap(9, 9, 9)
-                .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(12, Short.MAX_VALUE))
-        );
-
-        jLabel13.setFont(new java.awt.Font("Poppins", 0, 18)); // NOI18N
-        jLabel13.setText("Leave Requests");
-
-        jLabel16.setFont(new java.awt.Font("Poppins", 0, 36)); // NOI18N
-        jLabel16.setForeground(new java.awt.Color(62, 161, 217));
-        jLabel16.setText("85%");
-
-        javax.swing.GroupLayout jPanel14Layout = new javax.swing.GroupLayout(jPanel14);
-        jPanel14.setLayout(jPanel14Layout);
-        jPanel14Layout.setHorizontalGroup(
-            jPanel14Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel14Layout.createSequentialGroup()
-                .addGap(27, 27, 27)
-                .addGroup(jPanel14Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel16)
-                    .addComponent(jLabel13)
-                    .addComponent(jPanel15, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(26, Short.MAX_VALUE))
-        );
-        jPanel14Layout.setVerticalGroup(
-            jPanel14Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel14Layout.createSequentialGroup()
-                .addGap(29, 29, 29)
-                .addComponent(jPanel15, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jLabel13)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel16, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
 
         jPanel16.setBackground(new java.awt.Color(252, 252, 252));
 
@@ -594,7 +633,7 @@ public class EmployeeSchedule extends javax.swing.JPanel {
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGap(18, 18, 18)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 489, Short.MAX_VALUE)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 501, Short.MAX_VALUE)
                 .addGap(18, 18, 18))
         );
 
@@ -645,12 +684,10 @@ public class EmployeeSchedule extends javax.swing.JPanel {
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                                     .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 214, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, 214, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 66, Short.MAX_VALUE)
+                        .addGap(66, 66, 66)
                         .addComponent(jPanel16, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(jPanel14, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(jPanel13, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jPanel13, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGap(41, 41, 41))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
@@ -667,8 +704,7 @@ public class EmployeeSchedule extends javax.swing.JPanel {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(26, 26, 26)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                        .addComponent(jPanel14, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                         .addComponent(jPanel13, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(jPanel16, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
@@ -706,11 +742,11 @@ public class EmployeeSchedule extends javax.swing.JPanel {
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 1514, Short.MAX_VALUE)
+            .addComponent(jScrollPane1)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 942, Short.MAX_VALUE)
+            .addComponent(jScrollPane1)
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -743,6 +779,10 @@ public class EmployeeSchedule extends javax.swing.JPanel {
         loadEmployees();
     }//GEN-LAST:event_jComboBox3ItemStateChanged
 
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        loadStaffAttendanceWidget();
+    }//GEN-LAST:event_jButton3ActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
@@ -752,11 +792,8 @@ public class EmployeeSchedule extends javax.swing.JPanel {
     private javax.swing.JComboBox<String> jComboBox2;
     private javax.swing.JComboBox<String> jComboBox3;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel12;
-    private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel15;
-    private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel17;
     private javax.swing.JLabel jLabel18;
     private javax.swing.JLabel jLabel19;
@@ -772,8 +809,6 @@ public class EmployeeSchedule extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel6;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel13;
-    private javax.swing.JPanel jPanel14;
-    private javax.swing.JPanel jPanel15;
     private javax.swing.JPanel jPanel16;
     private javax.swing.JPanel jPanel17;
     private javax.swing.JPanel jPanel18;

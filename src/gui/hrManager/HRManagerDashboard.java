@@ -14,14 +14,14 @@ import javax.swing.SwingUtilities;
  * @author kovid
  */
 public class HRManagerDashboard extends javax.swing.JFrame {
-
+    
     private static List<JButton> sideBarButtons = new ArrayList<>();
-
+    
     public HRManagerDashboard() {
         initComponents();
         init();
     }
-
+    
     private void init() {
         this.setExtendedState(JFrame.MAXIMIZED_BOTH);
         FlatSVGIcon icon = new FlatSVGIcon("resource//veloraCrestSVG.svg", jLabel1.getWidth(), jLabel1.getHeight());
@@ -36,18 +36,23 @@ public class HRManagerDashboard extends javax.swing.JFrame {
         sideBarButtons.add(jButton1);
         sideBarButtons.add(jButton2);
         sideBarButtons.add(jButton3);
-        sideBarButtons.add(jButton4);
-        sideBarButtons.add(jButton5);
-        sideBarButtons.add(jButton6);
-        sideBarButtons.add(jButton7);
-        sideBarButtonAnimate(jButton1);
+//        sideBarButtons.add(jButton4);
+//        sideBarButtons.add(jButton5);
+//        sideBarButtons.add(jButton6);
+//        sideBarButtons.add(jButton7);
 
+        jButton7.setVisible(false);
+        jButton4.setVisible(false);
+        jButton5.setVisible(false);
+        jButton6.setVisible(false);
+        sideBarButtonAnimate(jButton1);
+        
         for (JButton sideBarButton : sideBarButtons) {
             sideBarButton.putClientProperty(FlatClientProperties.STYLE, "arc:50");
         }
         loadOverview();
     }
-
+    
     private void sideBarButtonAnimate(JButton button) {
         List<JButton> newButtons = new ArrayList<>();
         newButtons.addAll(sideBarButtons);
@@ -60,11 +65,11 @@ public class HRManagerDashboard extends javax.swing.JFrame {
                         int finall = i;
                         SwingUtilities.invokeLater(() -> {
                             button.setSize(finall, buttonHeight);
-
+                            
                         });
-
+                        
                         try {
-
+                            
                             Thread.sleep(2);
                         } catch (Exception e) {
                             e.printStackTrace();
@@ -72,9 +77,9 @@ public class HRManagerDashboard extends javax.swing.JFrame {
                     }
                 }
         );
-
+        
         int restHeight = newButtons.get(1).getHeight();
-
+        
         for (JButton newButton : newButtons) {
             int restWidth = newButton.getWidth();
             if (restWidth > 234) {
@@ -83,12 +88,12 @@ public class HRManagerDashboard extends javax.swing.JFrame {
                             for (int i = restWidth; i >= 234; i -= 1) {
                                 int finall = i;
                                 SwingUtilities.invokeLater(() -> {
-
+                                    
                                     newButton.setSize(finall, buttonHeight);
                                 });
-
+                                
                                 try {
-
+                                    
                                     Thread.sleep(2);
                                 } catch (Exception e) {
                                     e.printStackTrace();
@@ -101,11 +106,11 @@ public class HRManagerDashboard extends javax.swing.JFrame {
             newButton.setFont(new java.awt.Font("Poppins", 0, 12));
             button.setFont(new java.awt.Font("Poppins SemiBold", 0, 16));
         }
-
+        
         t.start();
-
+        
     }
-
+    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -373,25 +378,29 @@ private void loadOverview() {
         jPanel3.add(hrOverview);
         SwingUtilities.updateComponentTreeUI(jPanel3);
     }
-private void loadEmployeeList() {
+
+    private void loadEmployeeList() {
         EmployeeSchedule empList = new EmployeeSchedule();
         jPanel3.removeAll();
         jPanel3.add(empList);
         SwingUtilities.updateComponentTreeUI(jPanel3);
     }
-private void loadPayroll() {
+
+    private void loadPayroll() {
         SalaryManagement salaryManagement = new SalaryManagement();
         jPanel3.removeAll();
         jPanel3.add(salaryManagement);
         SwingUtilities.updateComponentTreeUI(jPanel3);
     }
-private void loadTraining() {
+
+    private void loadTraining() {
         TrainingAndDevelopment TandDevelopment = new TrainingAndDevelopment();
         jPanel3.removeAll();
         jPanel3.add(TandDevelopment);
         SwingUtilities.updateComponentTreeUI(jPanel3);
     }
-private void loadDiversityMetrics() {
+
+    private void loadDiversityMetrics() {
         DiversityInclusionMetrics Dmatrics = new DiversityInclusionMetrics();
         jPanel3.removeAll();
         jPanel3.add(Dmatrics);
