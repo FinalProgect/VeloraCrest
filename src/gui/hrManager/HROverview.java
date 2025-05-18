@@ -1,19 +1,28 @@
 package gui.hrManager;
 
 import com.formdev.flatlaf.FlatClientProperties;
+import gui.SignIn;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.sql.ResultSet;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import javax.swing.BorderFactory;
+import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
+import model.MYsql;
 import model.ModifyTables;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
+import org.jfree.chart.labels.StandardCategoryItemLabelGenerator;
 import org.jfree.chart.plot.CategoryPlot;
 import org.jfree.chart.plot.PiePlot;
 import org.jfree.chart.renderer.category.BarRenderer;
+import org.jfree.chart.renderer.category.StandardBarPainter;
+import org.jfree.chart.title.TextTitle;
 import org.jfree.data.category.DefaultCategoryDataset;
 import org.jfree.data.general.DefaultPieDataset;
 
@@ -49,7 +58,7 @@ public class HROverview extends javax.swing.JPanel {
 
         ModifyTables modifyTables = new ModifyTables();
         modifyTables.modifyTables(jPanel6, jTable1, jScrollPane2);
-
+        loadStaffAttendanceWidget();
         loadEmployeesChart();
         loadScheduleChart();
 
@@ -57,43 +66,160 @@ public class HROverview extends javax.swing.JPanel {
 
     private void loadEmployeesChart() {
         DefaultCategoryDataset xxDataSet = new DefaultCategoryDataset();
-        xxDataSet.addValue(40, "Front Desk", "Front Desk");
-        xxDataSet.addValue(88, "HouseKeeping", "HouseKeeping");
-        xxDataSet.addValue(60, "Kitchen", "Kitchen");
-        xxDataSet.addValue(77, "Finance", "Finance");
-        xxDataSet.addValue(98, "Management", "Management");
 
-        JFreeChart chart = ChartFactory.createBarChart("Employees by Department", "Department", "Employees",
-                xxDataSet);
+        try {
+            ResultSet rs = MYsql.execute("SELECT COUNT(employee.id) AS employees, "
+                    + "department.name AS dep FROM employee "
+                    + "INNER JOIN department ON department.id = employee.department_id "
+                    + "GROUP BY department.name");
+
+            while (rs.next()) {
+                xxDataSet.addValue(rs.getInt("employees"), "Employees", rs.getString("dep"));
+            }
+        } catch (Exception e) {
+            SignIn.logger.severe(e.getMessage());
+        }
+
+        JFreeChart chart = ChartFactory.createBarChart(
+                "Employees by Department",
+                "Department",
+                "Number of Employees",
+                xxDataSet
+        );
+        chart.removeLegend();
+
         CategoryPlot plot = chart.getCategoryPlot();
         BarRenderer renderer = (BarRenderer) plot.getRenderer();
-        plot.setBackgroundPaint(new java.awt.Color(252, 252, 252));
+
+        // Colors - consistent, modern tones
+        Color[] colors = {
+            new Color(52, 152, 219), // Blue
+            new Color(231, 76, 60), // Red
+            new Color(46, 204, 113), // Green
+            new Color(155, 89, 182), // Purple
+            new Color(241, 196, 15), // Yellow
+            new Color(230, 126, 34) // Orange
+        };
+
+        for (int i = 0; i < colors.length; i++) {
+            renderer.setSeriesPaint(i, colors[i % colors.length]);
+        }
+
+        // Basic aesthetics
+        plot.setBackgroundPaint(Color.WHITE);
         plot.setOutlineVisible(false);
-        chart.setBackgroundPaint(new java.awt.Color(252, 252, 252));
+        chart.setBackgroundPaint(Color.WHITE);
+        plot.setRangeGridlinePaint(Color.LIGHT_GRAY);
 
-        renderer.setSeriesPaint(0, new Color(60, 179, 113));  // Front Desk - greenish
-        renderer.setSeriesPaint(1, new Color(255, 165, 0));   // HouseKeeping - orange
-        renderer.setSeriesPaint(2, new Color(147, 112, 219)); // Kitchen - purple
-        renderer.setSeriesPaint(3, new Color(139, 69, 19));   // Finance - brown
-        renderer.setSeriesPaint(4, new Color(152, 251, 152)); // Management - light green
-        renderer.setSeriesPaint(5, new Color(65, 105, 225));  // Maintenance - blue
-//        renderer.set
-        renderer.setItemMargin(0.0);
-        chart.getTitle().setFont(new java.awt.Font("Poppins", 0, 14));
-        plot.getDomainAxis().setLabelFont(new Font("Poppins", 0, 14));
-        plot.getDomainAxis().setTickLabelFont(new Font("Poppins", 0, 12));
-        plot.getRangeAxis().setLabelFont(new Font("Poppins", 0, 14));
-        plot.getRangeAxis().setTickLabelFont(new Font("Poppins", 0, 12));
+        // Show value labels above bars
+        renderer.setDefaultItemLabelGenerator(new StandardCategoryItemLabelGenerator());
+        renderer.setDefaultItemLabelsVisible(true);
+        renderer.setDefaultItemLabelFont(new Font("Poppins", Font.PLAIN, 12));
+        renderer.setBarPainter(new StandardBarPainter());
+        renderer.setDrawBarOutline(false);
+        renderer.setMaximumBarWidth(0.1);
+        renderer.setItemMargin(0.02);
 
-        ChartPanel empByDip = new ChartPanel(chart);
-        empByDip.setBorder(BorderFactory.createEmptyBorder());
-        empByDip.setPreferredSize(new java.awt.Dimension(400, 300));  // Adjust size as needed
-        renderer.setMaximumBarWidth(0.5);
-        plot.getDomainAxis().setCategoryMargin(0.0);
+        // Font styling
+        chart.getTitle().setFont(new Font("Poppins", Font.BOLD, 16));
+        plot.getDomainAxis().setLabelFont(new Font("Poppins", Font.BOLD, 14));
+        plot.getDomainAxis().setTickLabelFont(new Font("Poppins", Font.PLAIN, 12));
+        plot.getRangeAxis().setLabelFont(new Font("Poppins", Font.BOLD, 14));
+        plot.getRangeAxis().setTickLabelFont(new Font("Poppins", Font.PLAIN, 12));
+
+        // Chart Panel
+        ChartPanel empByDep = new ChartPanel(chart);
+        empByDep.setBorder(BorderFactory.createEmptyBorder());
+        empByDep.setPreferredSize(new Dimension(500, 350));  // Adjust to your layout
 
         jPanel3.setLayout(new BorderLayout());
-        jPanel3.add(empByDip, BorderLayout.CENTER);
+        jPanel3.removeAll();  // Clear previous chart if any
+        jPanel3.add(empByDep, BorderLayout.CENTER);
         jPanel3.validate();
+    }
+
+//    widgets
+    private void loadStaffAttendanceWidget() {
+        Date today = new Date();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        String date = dateFormat.format(today);
+        String time = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(today);
+        String query = "SELECT\n"
+                + "    -- Total employees scheduled today\n"
+                + "    (SELECT COUNT(DISTINCT employee_id)\n"
+                + "     FROM shedule\n"
+                + "     WHERE DATE(dateTime) = CURDATE()\n"
+                + "    ) AS totalScheduled,\n"
+                + "\n"
+                + "    -- Present: attended on or before their scheduled time\n"
+                + "    (SELECT COUNT(DISTINCT s.employee_id)\n"
+                + "     FROM shedule s\n"
+                + "     JOIN attendance a ON a.shedule_id = s.id\n"
+                + "     WHERE DATE(s.dateTime) = CURDATE()\n"
+                + "       AND a.startTime <= s.dateTime\n"
+                + "    ) AS presentCount,\n"
+                + "\n"
+                + "    -- Late: attended after their scheduled time\n"
+                + "    (SELECT COUNT(DISTINCT s.employee_id)\n"
+                + "     FROM shedule s\n"
+                + "     JOIN attendance a ON a.shedule_id = s.id\n"
+                + "     WHERE DATE(s.dateTime) = CURDATE()\n"
+                + "       AND a.startTime > s.dateTime\n"
+                + "    ) AS lateCount,\n"
+                + "\n"
+                + "    -- Absent: scheduled today but no attendance at all\n"
+                + "    (SELECT COUNT(DISTINCT s.employee_id)\n"
+                + "     FROM shedule s\n"
+                + "     WHERE DATE(s.dateTime) = CURDATE()\n"
+                + "       AND s.id NOT IN (\n"
+                + "           SELECT shedule_id FROM attendance\n"
+                + "       )\n"
+                + "    ) AS absentCount;";
+
+        try {
+            ResultSet widgetRs = MYsql.execute(query);
+            if (widgetRs.next()) {
+                int total = widgetRs.getInt("totalScheduled");
+                int present = widgetRs.getInt("presentCount");
+                int absent = widgetRs.getInt("absentCount");
+                int late = widgetRs.getInt("lateCount");
+
+                loadAttendanceWidget(total, present, absent, late);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            SignIn.logger.severe(e.getMessage());
+        }
+
+    }
+
+    private void loadAttendanceWidget(double total, double present, double late, double absent) {
+        double length = (double) jPanel18.getPreferredSize().width - 12;
+        double totalEmps = total;
+        double present_emp = present;
+        double absent_emp = absent;
+        double late_emp = late;
+
+        double presentCount = (double) present_emp / totalEmps * length;
+        double absentCount = (double) absent_emp / totalEmps * length;
+        double lateCount = (double) late_emp / totalEmps * length;
+        if (present_emp == 0) {
+            presentCount = 1;
+        }
+        if (absent_emp == 0) {
+            absentCount = 1;
+        }
+        if (late_emp == 0) {
+            lateCount = 1;
+        }
+        System.out.println("absent " + absent_emp);
+        System.out.println("late " + late_emp);
+        System.out.println("present " + present_emp);
+        jPanel19.setPreferredSize(new Dimension((int) presentCount, 50));
+        jPanel20.setPreferredSize(new Dimension((int) absentCount, 50));
+        jPanel21.setPreferredSize(new Dimension((int) lateCount, 50));
+        SwingUtilities.updateComponentTreeUI(jPanel18);
+
     }
 
     private void loadScheduleChart() {
@@ -401,7 +527,7 @@ public class HROverview extends javax.swing.JPanel {
         );
 
         jButton3.setFont(new java.awt.Font("Poppins", 0, 12)); // NOI18N
-        jButton3.setText("View Attendance");
+        jButton3.setText("Refresh");
 
         javax.swing.GroupLayout jPanel13Layout = new javax.swing.GroupLayout(jPanel13);
         jPanel13.setLayout(jPanel13Layout);
