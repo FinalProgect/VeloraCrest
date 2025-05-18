@@ -20,14 +20,24 @@ import model.RoomStatusGUIUpdatorRoomsBooking;
 public class FrontDeskDashBoard extends javax.swing.JFrame {
 
     private static List<JButton> sideBarButtons = new ArrayList<>();
+    
+    private static FrontDeskDashBoard frontDeskDashBoard;
 
-    public FrontDeskDashBoard() {
+    private FrontDeskDashBoard() {
         setExtendedState(MAXIMIZED_BOTH);
         initComponents();
         init();
         loadSvg();
         loadOverview();
 //        roundPannels(); /////////////Round veka eka hadanna one//////////////
+    }
+    
+    //Singleton getInstanceMethod
+    public static FrontDeskDashBoard getInstance(){
+        if(frontDeskDashBoard == null){
+            frontDeskDashBoard = new FrontDeskDashBoard();
+        }
+        return FrontDeskDashBoard.frontDeskDashBoard;
     }
 
     // Load Maintenance Request
@@ -580,7 +590,7 @@ public class FrontDeskDashBoard extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JPanel landPanel;
+    javax.swing.JPanel landPanel;
     // End of variables declaration//GEN-END:variables
 
     public JButton pressBookNowButton() {

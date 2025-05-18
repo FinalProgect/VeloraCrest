@@ -34,7 +34,7 @@ public class SignIn extends javax.swing.JDialog {
         setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
 
         setSvg();
-        
+
         jToggleButton1.setName("show");
     }
 
@@ -53,12 +53,12 @@ public class SignIn extends javax.swing.JDialog {
         if (employeeMap.get("employee").getEmployeeDepartment() == 1) { //Front Desk Department
 
             if (employeeMap.get("employee").getEmployeeType() == 1) { // employee
-System.out.println("Fontdesk Employee");
+                System.out.println("Fontdesk Employee");
 //                FrontDeskDashBoard frontDesk = new FrontDeskDashBoard();
 //                frontDesk.setVisible(true);
             } else if (employeeMap.get("employee").getEmployeeType() == 2) {
 
-                FrontDeskDashBoard frontDesk = new FrontDeskDashBoard();
+                FrontDeskDashBoard frontDesk = FrontDeskDashBoard.getInstance();
                 frontDesk.setVisible(true);
 
                 Loggers.logInfo("Front Desk Employee " + employeeMap.get("employee").getEmployeeName() + " Log In To System");
@@ -310,15 +310,15 @@ System.out.println("Fontdesk Employee");
     }//GEN-LAST:event_loginButtonActionPerformed
 
     private void jToggleButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jToggleButton1ActionPerformed
-       
-        if(jToggleButton1.getName().equals("show")){
+
+        if (jToggleButton1.getName().equals("show")) {
             jToggleButton1.setName("hide");
             passwordFild.setEchoChar((char) 0); // Show characters
-        }else if(jToggleButton1.getName().equals("hide")){
+        } else if (jToggleButton1.getName().equals("hide")) {
             jToggleButton1.setName("show");
             passwordFild.setEchoChar('*');
         }
-        
+
     }//GEN-LAST:event_jToggleButton1ActionPerformed
 
 

@@ -2,27 +2,110 @@ package gui.frontDesk;
 
 import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.extras.FlatSVGIcon;
+import gui.SignIn;
 import model.ModifyTables;
+import java.sql.SQLException;
+import java.sql.ResultSet;
+import java.util.HashMap;
+import java.util.Vector;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.JOptionPane;
+import model.MYsql;
+import raven.toast.Notifications;
 
 public class MaintenanceRequest extends javax.swing.JPanel {
+
+    HashMap<String, Integer> servisesMap;
+    HashMap<String, Integer> maintenanceLevelMap;
+
+    public MaintenanceRequest(String roomNumber) {
+        initComponents();
+        loadSvg();
+        rountEdges();
+        loadRequstServices();
+        roomNumberLable.setText(roomNumber);
+        prayorityLevels();
+        if (SignIn.employeeMap != null) {
+            jLabel4.setText(SignIn.employeeMap.get("employee").getEmployeeName());
+        }
+    }
 
     public MaintenanceRequest() {
         initComponents();
         loadSvg();
         rountEdges();
+        loadRequstServices();
+        prayorityLevels();
+        OpenRoomSelector();
+        if (SignIn.employeeMap != null) {
+            jLabel4.setText(SignIn.employeeMap.get("employee").getEmployeeName());
+        }
     }
     
-    
+    //Open Room Selector JDialog
+    private void OpenRoomSelector(){
+        new SelectRoom(FrontDeskDashBoard.getInstance(), true, this).setVisible(true);
+    }
+
+    //Reset All Filds
+    private void resetFilds() {
+        issuFild.setText("");
+        destriptionMaintence.setText("");
+        servisesComboBox.setSelectedItem("Select");
+        RequestMaintenance.setText("");
+        levelComboBox.setSelectedItem("Select");
+    }
+
+    //Load Maintenence Lavels
+    private void prayorityLevels() {
+        String prayorityQuaty = "SELECT * FROM `maintenanceprioritylevel`";
+        maintenanceLevelMap = new HashMap();
+        Vector<String> vector = new Vector();
+        vector.add("Select");
+        try {
+            ResultSet proriryResult = MYsql.execute(prayorityQuaty);
+            while (proriryResult.next()) {
+                vector.add(proriryResult.getString("leval"));
+                maintenanceLevelMap.put(proriryResult.getString("leval"), proriryResult.getInt("id"));
+            }
+            levelComboBox.setModel(new DefaultComboBoxModel(vector));
+        } catch (SQLException e) {
+            SignIn.logger.severe("Meintenance Prority Loading Error " + e.getMessage());
+        }
+
+    }
+
+    //Load requested Services to ComboBox
+    private void loadRequstServices() {
+        String servisesQuary = "SELECT * FROM `maintenanceservises`";
+
+        servisesMap = new HashMap();
+
+        Vector<String> vector = new Vector();
+        vector.add("Select");
+        try {
+            ResultSet servisesRsult = MYsql.execute(servisesQuary);
+
+            while (servisesRsult.next()) {
+                vector.add(servisesRsult.getString("name"));
+                servisesMap.put(servisesRsult.getString("name"), servisesRsult.getInt("id"));
+            }
+
+            servisesComboBox.setModel(new DefaultComboBoxModel<>(vector));
+
+        } catch (SQLException e) {
+            SignIn.logger.severe("Maintenance Servises Loading Error. :" + e.getMessage());
+        }
+    }
+
     // Round Edges
-    private void rountEdges(){
+    private void rountEdges() {
         jScrollPane1.putClientProperty(FlatClientProperties.STYLE, "arc:30");
-        
+
         ModifyTables modifyTable = new ModifyTables();
         modifyTable.modifyTables(jTable1, jScrollPane3);
     }
     // Round Edges
-    
-    
 
     //Load SVG 
     private void loadSvg() {
@@ -52,25 +135,23 @@ public class MaintenanceRequest extends javax.swing.JPanel {
         jLabel6 = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
         jLabel7 = new javax.swing.JLabel();
-        jLabel8 = new javax.swing.JLabel();
+        roomNumberLable = new javax.swing.JLabel();
         jLabel10 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
+        issuFild = new javax.swing.JTextField();
         jLabel9 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTextArea1 = new javax.swing.JTextArea();
+        destriptionMaintence = new javax.swing.JTextArea();
         saveIcon = new javax.swing.JLabel();
         resetIcon = new javax.swing.JLabel();
         deleteIcon = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
         jLabel11 = new javax.swing.JLabel();
-        jComboBox1 = new javax.swing.JComboBox<>();
+        servisesComboBox = new javax.swing.JComboBox<>();
         jLabel12 = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jTextArea2 = new javax.swing.JTextArea();
+        RequestMaintenance = new javax.swing.JTextArea();
         jLabel13 = new javax.swing.JLabel();
-        jRadioButton1 = new javax.swing.JRadioButton();
-        jRadioButton2 = new javax.swing.JRadioButton();
-        jRadioButton3 = new javax.swing.JRadioButton();
+        levelComboBox = new javax.swing.JComboBox<>();
         jPanel4 = new javax.swing.JPanel();
         jLabel14 = new javax.swing.JLabel();
         jComboBox2 = new javax.swing.JComboBox<>();
@@ -145,21 +226,27 @@ public class MaintenanceRequest extends javax.swing.JPanel {
         jLabel7.setFont(new java.awt.Font("Poppins", 0, 12)); // NOI18N
         jLabel7.setText("Room No");
 
-        jLabel8.setFont(new java.awt.Font("Poppins", 0, 12)); // NOI18N
-        jLabel8.setText("101");
+        roomNumberLable.setFont(new java.awt.Font("Poppins", 0, 12)); // NOI18N
+        roomNumberLable.setText("No room Selected");
 
         jLabel10.setFont(new java.awt.Font("Poppins", 0, 12)); // NOI18N
         jLabel10.setText("Issue");
 
-        jTextField1.setFont(new java.awt.Font("Poppins", 0, 12)); // NOI18N
+        issuFild.setFont(new java.awt.Font("Poppins", 0, 12)); // NOI18N
 
         jLabel9.setFont(new java.awt.Font("Poppins", 0, 12)); // NOI18N
         jLabel9.setText("Description");
 
-        jTextArea1.setColumns(20);
-        jTextArea1.setFont(new java.awt.Font("Poppins", 0, 12)); // NOI18N
-        jTextArea1.setRows(5);
-        jScrollPane1.setViewportView(jTextArea1);
+        destriptionMaintence.setColumns(20);
+        destriptionMaintence.setFont(new java.awt.Font("Poppins", 0, 12)); // NOI18N
+        destriptionMaintence.setRows(5);
+        jScrollPane1.setViewportView(destriptionMaintence);
+
+        saveIcon.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                saveIconMouseClicked(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -177,8 +264,8 @@ public class MaintenanceRequest extends javax.swing.JPanel {
                                     .addComponent(jLabel10))
                                 .addGap(51, 51, 51)
                                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jTextField1)
-                                    .addComponent(jLabel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                                    .addComponent(issuFild)
+                                    .addComponent(roomNumberLable, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                             .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 558, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGap(232, 232, 232)
@@ -195,11 +282,11 @@ public class MaintenanceRequest extends javax.swing.JPanel {
                 .addGap(32, 32, 32)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel7)
-                    .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 19, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(roomNumberLable, javax.swing.GroupLayout.PREFERRED_SIZE, 19, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(20, 20, 20)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel10)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(issuFild, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(20, 20, 20)
                 .addComponent(jLabel9)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -217,31 +304,22 @@ public class MaintenanceRequest extends javax.swing.JPanel {
         jLabel11.setFont(new java.awt.Font("Poppins", 0, 12)); // NOI18N
         jLabel11.setText("Requested Service");
 
-        jComboBox1.setFont(new java.awt.Font("Poppins", 0, 12)); // NOI18N
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Electrical", "Plumber" }));
+        servisesComboBox.setFont(new java.awt.Font("Poppins", 0, 12)); // NOI18N
+        servisesComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Electrical", "Plumber" }));
 
         jLabel12.setFont(new java.awt.Font("Poppins", 0, 12)); // NOI18N
         jLabel12.setText("Maintenance Required");
 
-        jTextArea2.setColumns(20);
-        jTextArea2.setFont(new java.awt.Font("Poppins", 0, 12)); // NOI18N
-        jTextArea2.setRows(5);
-        jScrollPane2.setViewportView(jTextArea2);
+        RequestMaintenance.setColumns(20);
+        RequestMaintenance.setFont(new java.awt.Font("Poppins", 0, 12)); // NOI18N
+        RequestMaintenance.setRows(5);
+        jScrollPane2.setViewportView(RequestMaintenance);
 
         jLabel13.setFont(new java.awt.Font("Poppins", 0, 12)); // NOI18N
         jLabel13.setText("Severity Level");
 
-        buttonGroup1.add(jRadioButton1);
-        jRadioButton1.setFont(new java.awt.Font("Poppins", 0, 12)); // NOI18N
-        jRadioButton1.setText("Emergency");
-
-        buttonGroup1.add(jRadioButton2);
-        jRadioButton2.setFont(new java.awt.Font("Poppins", 0, 12)); // NOI18N
-        jRadioButton2.setText("standard");
-
-        buttonGroup1.add(jRadioButton3);
-        jRadioButton3.setFont(new java.awt.Font("Poppins", 0, 12)); // NOI18N
-        jRadioButton3.setText("Low-priority");
+        levelComboBox.setFont(new java.awt.Font("Poppins", 0, 12)); // NOI18N
+        levelComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Date" }));
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -250,21 +328,16 @@ public class MaintenanceRequest extends javax.swing.JPanel {
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addGap(34, 34, 34)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addComponent(jRadioButton1)
-                        .addGap(40, 40, 40)
-                        .addComponent(jRadioButton2)
-                        .addGap(40, 40, 40)
-                        .addComponent(jRadioButton3))
                     .addComponent(jLabel13)
                     .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                         .addComponent(jLabel12)
                         .addGroup(jPanel3Layout.createSequentialGroup()
                             .addComponent(jLabel11)
                             .addGap(77, 77, 77)
-                            .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 374, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addComponent(jScrollPane2)))
-                .addContainerGap(61, Short.MAX_VALUE))
+                            .addComponent(servisesComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 374, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(jScrollPane2))
+                    .addComponent(levelComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 216, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -272,7 +345,7 @@ public class MaintenanceRequest extends javax.swing.JPanel {
                 .addGap(33, 33, 33)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel11)
-                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(servisesComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabel12)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -280,10 +353,7 @@ public class MaintenanceRequest extends javax.swing.JPanel {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabel13)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jRadioButton1)
-                    .addComponent(jRadioButton2)
-                    .addComponent(jRadioButton3))
+                .addComponent(levelComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -329,7 +399,7 @@ public class MaintenanceRequest extends javax.swing.JPanel {
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addGap(42, 42, 42)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane3)
+                    .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 1226, Short.MAX_VALUE)
                     .addGroup(jPanel4Layout.createSequentialGroup()
                         .addComponent(jLabel14)
                         .addGap(18, 18, 18)
@@ -344,8 +414,8 @@ public class MaintenanceRequest extends javax.swing.JPanel {
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel14)
                     .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 253, Short.MAX_VALUE)
+                .addGap(20, 20, 20)
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 222, Short.MAX_VALUE)
                 .addGap(25, 25, 25))
         );
 
@@ -373,11 +443,53 @@ public class MaintenanceRequest extends javax.swing.JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
 
+    private void saveIconMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_saveIconMouseClicked
+
+        if (roomNumberLable.equals("No room Selected")) {
+            JOptionPane.showMessageDialog(this, "Can't Find Room Number. Please Try Agein.", "Error", JOptionPane.ERROR_MESSAGE);
+        } else if (jLabel4.getText().startsWith("__")) {
+            JOptionPane.showMessageDialog(this, "Can't Find Requester. Please Try Agen.", "Error", JOptionPane.ERROR_MESSAGE);
+        } else if (issuFild.getText().isBlank()) {
+            JOptionPane.showMessageDialog(this, "Plase Enter The Issu to contine", "Warning", JOptionPane.WARNING_MESSAGE);
+        } else if (destriptionMaintence.getText().isBlank()) {
+            JOptionPane.showMessageDialog(this, "Please Enter The Description.", "Warning", JOptionPane.WARNING_MESSAGE);
+        } else if (servisesComboBox.getSelectedItem().toString().equals("Select")) {
+            JOptionPane.showMessageDialog(this, "Plase Please Select The Service Do You Need.", "Warning", JOptionPane.WARNING_MESSAGE);
+        } else if (RequestMaintenance.getText().isBlank()) {
+            JOptionPane.showMessageDialog(this, "Plase Enter The Gust Request. To Cotinue", "Warning", JOptionPane.WARNING_MESSAGE);
+        } else if (levelComboBox.getSelectedItem().toString().equals("Select")) {
+            JOptionPane.showMessageDialog(this, "Plase Select What kind of service needed.", "Warning", JOptionPane.WARNING_MESSAGE);
+        } else {
+
+            String roomNumber = roomNumberLable.getText();
+            String issu = issuFild.getText();
+            String description = destriptionMaintence.getText();
+            String service = String.valueOf(servisesComboBox.getSelectedItem());
+            String meintenanceRequest = RequestMaintenance.getText();
+            String level = String.valueOf(levelComboBox.getSelectedItem());
+
+            try {
+                MYsql.execute("INSERT INTO `maintenance` (`rooms_id`,`maintenanceServises_id`,`maintenancePriorityLevel_id`,`issu`,`description`,`request`,`requestedEmployee`,`status`) "
+                        + "VALUES ('" + FaontDeskOverview.roomsMap.get(roomNumber).getRoomId() + "', '" + this.servisesMap.get(service) + "','" + this.maintenanceLevelMap.get(level) + "','" + issu + "','" + description + "','" + meintenanceRequest + "','" + SignIn.employeeMap.get("employee").getEmployeeId() + "','Not Approw')");
+
+                SignIn.logger.severe("Maintenance Requst Added. Employee :" + SignIn.employeeMap.get("employee").getEmployeeName());
+                resetFilds();
+                Notifications.getInstance().show(Notifications.Type.SUCCESS, Notifications.Location.BOTTOM_RIGHT, 10000, "Maintenance Request Added To The System Successfully.");
+            } catch (SQLException e) {
+                SignIn.logger.severe("Maintenance Request Adding Error : " + e.getMessage());
+            }
+
+        }
+
+    }//GEN-LAST:event_saveIconMouseClicked
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JTextArea RequestMaintenance;
     private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JLabel deleteIcon;
-    private javax.swing.JComboBox<String> jComboBox1;
+    private javax.swing.JTextArea destriptionMaintence;
+    private javax.swing.JTextField issuFild;
     private javax.swing.JComboBox<String> jComboBox2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
@@ -391,23 +503,19 @@ public class MaintenanceRequest extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
-    private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
-    private javax.swing.JRadioButton jRadioButton1;
-    private javax.swing.JRadioButton jRadioButton2;
-    private javax.swing.JRadioButton jRadioButton3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JTable jTable1;
-    private javax.swing.JTextArea jTextArea1;
-    private javax.swing.JTextArea jTextArea2;
-    private javax.swing.JTextField jTextField1;
+    private javax.swing.JComboBox<String> levelComboBox;
     private javax.swing.JLabel resetIcon;
+    javax.swing.JLabel roomNumberLable;
     private javax.swing.JLabel saveIcon;
+    private javax.swing.JComboBox<String> servisesComboBox;
     // End of variables declaration//GEN-END:variables
 }
