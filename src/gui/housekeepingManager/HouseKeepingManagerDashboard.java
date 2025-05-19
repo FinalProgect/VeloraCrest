@@ -1,5 +1,6 @@
 package gui.housekeepingManager;
 
+import gui.kitchenManagerDashboard.KitchenManagerOverview;
 import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.extras.FlatSVGIcon;
 import com.formdev.flatlaf.themes.FlatMacLightLaf;
@@ -38,10 +39,9 @@ public class HouseKeepingManagerDashboard extends javax.swing.JFrame {
         sideBarButtons.add(jButton3);
         sideBarButtons.add(jButton4);
         sideBarButtons.add(jButton5);
-        sideBarButtonAnimate(jButton1);
-        
+        loadOverview();
         for (JButton sideBarButton : sideBarButtons) {
-            sideBarButton.putClientProperty(FlatClientProperties.STYLE, "arc:40");
+            sideBarButton.putClientProperty(FlatClientProperties.STYLE, "arc:80");
 
         }
     }
@@ -124,6 +124,7 @@ public class HouseKeepingManagerDashboard extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Dashboard | Housekeeping Manager");
+        setUndecorated(true);
 
         jPanel1.setBackground(new java.awt.Color(0, 140, 130));
 
@@ -275,7 +276,7 @@ public class HouseKeepingManagerDashboard extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        sideBarButtonAnimate(jButton1);
+        loadOverview();
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
@@ -330,4 +331,14 @@ public class HouseKeepingManagerDashboard extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     // End of variables declaration//GEN-END:variables
+
+    private void loadOverview() {
+        HouseKeepingManagerOverview overview = HouseKeepingManagerOverview.getInstance();
+        jPanel3.removeAll();
+        jPanel3.add(overview);
+        SwingUtilities.updateComponentTreeUI(jPanel3);
+        sideBarButtonAnimate(jButton1);
+
+    }
+
 }

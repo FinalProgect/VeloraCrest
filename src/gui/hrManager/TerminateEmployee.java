@@ -1,25 +1,69 @@
 package gui.hrManager;
 
-import com.formdev.flatlaf.themes.FlatMacLightLaf;
+import gui.SignIn;
 import java.util.HashMap;
+import java.util.Vector;
 import javax.swing.JFrame;
+import java.sql.ResultSet;
+import model.MYsql;
+import raven.toast.Notifications;
 
 public class TerminateEmployee extends javax.swing.JDialog {
 
     private static TerminateEmployee terminateEmplyee;
-    private HashMap<String, String> employeeMap;
+    private Vector employeeVector;
+    private EmployeeList parent;
+    private int employeeStatus;
+    private String employeeId;
 
-    public static TerminateEmployee getInstance(JFrame parent, HashMap employeeMap) {
+    public static TerminateEmployee getInstance(JFrame parent, Vector employeeVector) {
         if (terminateEmplyee == null) {
-            terminateEmplyee = new TerminateEmployee(parent, true, employeeMap);
+            terminateEmplyee = new TerminateEmployee(parent, true, employeeVector);
         }
         return terminateEmplyee;
     }
 
-    private TerminateEmployee(java.awt.Frame parent, boolean modal, HashMap employeeMap) {
+    private TerminateEmployee(java.awt.Frame parent, boolean modal, Vector employeeVector) {
         super(parent, modal);
-        this.employeeMap = employeeMap;
+        this.employeeVector = employeeVector;
+        this.parent = (EmployeeList) parent;
         initComponents();
+        init();
+    }
+
+    private void init() {
+        setEmpDetails();
+    }
+
+    private void setEmpDetails() {
+        HashMap<String, String> employeeDetails = (HashMap<String, String>) employeeVector.get(0);
+        nameLabel.setText(employeeDetails.get("name"));
+        emailLabel.setText(employeeDetails.get("email"));
+        mobileLabel.setText(employeeDetails.get("mobile"));
+        nicLabel.setText(employeeDetails.get("nic"));
+        departmentLabel.setText(employeeDetails.get("department"));
+        typeLabel.setText(employeeDetails.get("type"));
+        genderLabel.setText(employeeDetails.get("gender"));
+        dateLabel.setText(employeeDetails.get("regDate"));
+        statusLabel.setText(employeeDetails.get("status"));
+
+        employeeId = employeeDetails.get("id");
+
+        HashMap<String, String> statusMap = (HashMap) employeeVector.get(1);
+        employeeStatus = Integer.parseInt(statusMap.get(employeeDetails.get("status")));
+
+        switch (employeeStatus) {
+            case 1 -> {
+                jButton1.setBackground(new java.awt.Color(255, 0, 51));
+                jButton1.setText("Terminate Employee");
+            }
+            case 2 -> {
+                jButton1.setBackground(new java.awt.Color(15, 140, 130));
+                jButton1.setText("Re-hire Employee");
+            }
+            default ->
+                throw new AssertionError();
+        }
     }
 
     @SuppressWarnings("unchecked")
@@ -36,22 +80,27 @@ public class TerminateEmployee extends javax.swing.JDialog {
         jLabel8 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
         jLabel10 = new javax.swing.JLabel();
-        jLabel5 = new javax.swing.JLabel();
-        jLabel11 = new javax.swing.JLabel();
-        jLabel12 = new javax.swing.JLabel();
-        jLabel13 = new javax.swing.JLabel();
-        jLabel14 = new javax.swing.JLabel();
-        jLabel15 = new javax.swing.JLabel();
-        jLabel16 = new javax.swing.JLabel();
-        jLabel17 = new javax.swing.JLabel();
+        nameLabel = new javax.swing.JLabel();
+        emailLabel = new javax.swing.JLabel();
+        mobileLabel = new javax.swing.JLabel();
+        nicLabel = new javax.swing.JLabel();
+        typeLabel = new javax.swing.JLabel();
+        departmentLabel = new javax.swing.JLabel();
+        genderLabel = new javax.swing.JLabel();
+        dateLabel = new javax.swing.JLabel();
         jLabel18 = new javax.swing.JLabel();
-        jLabel19 = new javax.swing.JLabel();
+        statusLabel = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Terminate Employee | Velora Crest");
         setResizable(false);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                formWindowClosing(evt);
+            }
+        });
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
 
@@ -82,40 +131,45 @@ public class TerminateEmployee extends javax.swing.JDialog {
         jLabel10.setFont(new java.awt.Font("Poppins", 0, 14)); // NOI18N
         jLabel10.setText("Registered Date : ");
 
-        jLabel5.setFont(new java.awt.Font("Poppins", 0, 14)); // NOI18N
-        jLabel5.setText("John Doe");
+        nameLabel.setFont(new java.awt.Font("Poppins", 0, 14)); // NOI18N
+        nameLabel.setText("John Doe");
 
-        jLabel11.setFont(new java.awt.Font("Poppins", 0, 14)); // NOI18N
-        jLabel11.setText("johndoe@gmail.com");
+        emailLabel.setFont(new java.awt.Font("Poppins", 0, 14)); // NOI18N
+        emailLabel.setText("johndoe@gmail.com");
 
-        jLabel12.setFont(new java.awt.Font("Poppins", 0, 14)); // NOI18N
-        jLabel12.setText("0712345679");
+        mobileLabel.setFont(new java.awt.Font("Poppins", 0, 14)); // NOI18N
+        mobileLabel.setText("0712345679");
 
-        jLabel13.setFont(new java.awt.Font("Poppins", 0, 14)); // NOI18N
-        jLabel13.setText("200015943859");
+        nicLabel.setFont(new java.awt.Font("Poppins", 0, 14)); // NOI18N
+        nicLabel.setText("200015943859");
 
-        jLabel14.setFont(new java.awt.Font("Poppins", 0, 14)); // NOI18N
-        jLabel14.setText("Staff");
+        typeLabel.setFont(new java.awt.Font("Poppins", 0, 14)); // NOI18N
+        typeLabel.setText("Staff");
 
-        jLabel15.setFont(new java.awt.Font("Poppins", 0, 14)); // NOI18N
-        jLabel15.setText("Housekeeping");
+        departmentLabel.setFont(new java.awt.Font("Poppins", 0, 14)); // NOI18N
+        departmentLabel.setText("Housekeeping");
 
-        jLabel16.setFont(new java.awt.Font("Poppins", 0, 14)); // NOI18N
-        jLabel16.setText("Pan");
+        genderLabel.setFont(new java.awt.Font("Poppins", 0, 14)); // NOI18N
+        genderLabel.setText("Pan");
 
-        jLabel17.setFont(new java.awt.Font("Poppins", 0, 14)); // NOI18N
-        jLabel17.setText("2025-05-07");
+        dateLabel.setFont(new java.awt.Font("Poppins", 0, 14)); // NOI18N
+        dateLabel.setText("2025-05-07");
 
         jLabel18.setFont(new java.awt.Font("Poppins", 0, 14)); // NOI18N
-        jLabel18.setText("Basic Salary : ");
+        jLabel18.setText("Status : ");
 
-        jLabel19.setFont(new java.awt.Font("Poppins", 0, 14)); // NOI18N
-        jLabel19.setText("Rs. 56000");
+        statusLabel.setFont(new java.awt.Font("Poppins", 0, 14)); // NOI18N
+        statusLabel.setText("Active");
 
         jButton1.setBackground(new java.awt.Color(15, 140, 130));
         jButton1.setFont(new java.awt.Font("Poppins SemiBold", 0, 14)); // NOI18N
         jButton1.setForeground(new java.awt.Color(255, 255, 255));
         jButton1.setText("Terminate Employee");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         jButton2.setFont(new java.awt.Font("Poppins SemiBold", 0, 14)); // NOI18N
         jButton2.setForeground(new java.awt.Color(15, 140, 130));
@@ -143,9 +197,9 @@ public class TerminateEmployee extends javax.swing.JDialog {
                             .addComponent(jLabel18))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel16, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jLabel17, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jLabel19, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                            .addComponent(genderLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(dateLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(statusLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel4)
@@ -154,10 +208,10 @@ public class TerminateEmployee extends javax.swing.JDialog {
                             .addComponent(jLabel1))
                         .addGap(73, 73, 73)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel11, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jLabel12, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jLabel13, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                            .addComponent(emailLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(nameLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(mobileLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(nicLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -168,8 +222,8 @@ public class TerminateEmployee extends javax.swing.JDialog {
                             .addComponent(jLabel9))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel15, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jLabel14, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                            .addComponent(departmentLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(typeLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                     .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(46, 46, 46))
         );
@@ -181,39 +235,39 @@ public class TerminateEmployee extends javax.swing.JDialog {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
-                    .addComponent(jLabel5))
+                    .addComponent(nameLabel))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
-                    .addComponent(jLabel11))
+                    .addComponent(emailLabel))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
-                    .addComponent(jLabel12))
+                    .addComponent(mobileLabel))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
-                    .addComponent(jLabel13))
+                    .addComponent(nicLabel))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel6)
-                    .addComponent(jLabel15))
+                    .addComponent(departmentLabel))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel8)
-                    .addComponent(jLabel14))
+                    .addComponent(typeLabel))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel9)
-                    .addComponent(jLabel16))
+                    .addComponent(genderLabel))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel10)
-                    .addComponent(jLabel17))
+                    .addComponent(dateLabel))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel18)
-                    .addComponent(jLabel19))
+                    .addComponent(statusLabel))
                 .addGap(45, 45, 45)
                 .addComponent(jButton1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -239,10 +293,76 @@ public class TerminateEmployee extends javax.swing.JDialog {
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         this.dispose();
         terminateEmplyee = null;
+        parent.getEmployeeMap().clear();
+
     }//GEN-LAST:event_jButton2ActionPerformed
 
-    private void employeeTerminationProcess() {
+    private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
+        terminateEmplyee = null;
+        parent.getEmployeeMap().clear();
+    }//GEN-LAST:event_formWindowClosing
 
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        employeeTerminationProcess();
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void employeeTerminationProcess() {
+        String id = employeeId;
+        int status = employeeStatus;
+
+        switch (status) {
+            case 1:
+                terminateEmployee(id);
+                break;
+            case 2:
+                rehireEmployee(id);
+                break;
+            default:
+                throw new AssertionError();
+        }
+
+        parent.loadEmployeeTable();
+        this.dispose();
+        terminateEmplyee = null;
+        parent.getEmployeeMap().clear();
+    }
+
+    private void terminateEmployee(String id) {
+        String query = String.format("SELECT `employee_status_id` FROM `employee` WHERE `id` = '%s' ", id);
+        try {
+            ResultSet statusCheckRS = MYsql.execute(query);
+            if (statusCheckRS.next()) {
+                if (statusCheckRS.getInt("employee_status_id") == 1) {
+                    String updateQuery = String.format("UPDATE `employee` SET `employee_status_id` = '2'"
+                            + " WHERE `id` = '%s' ", id);
+                    MYsql.execute(updateQuery);
+                    Notifications.getInstance().show(Notifications.Type.SUCCESS, Notifications.Location.TOP_CENTER, 3000, "Employee terminated");
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            Notifications.getInstance().show(Notifications.Type.ERROR, Notifications.Location.TOP_CENTER, 3000, "An error occured while terminating the employee");
+            SignIn.logger.severe(e.getMessage());
+        }
+    }
+
+    private void rehireEmployee(String id) {
+        String query = String.format("SELECT `employee_status_id` FROM `employee` WHERE `id` = '%s' ", id);
+        try {
+            ResultSet statusCheckRS = MYsql.execute(query);
+            if (statusCheckRS.next()) {
+                if (statusCheckRS.getInt("employee_status_id") == 2) {
+                    String updateQuery = String.format("UPDATE `employee` SET `employee_status_id` = '1'"
+                            + " WHERE `id` = '%s' ", id);
+                    MYsql.execute(updateQuery);
+                    Notifications.getInstance().show(Notifications.Type.SUCCESS, Notifications.Location.TOP_CENTER, 3000, "Employee Re-Hired");
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            Notifications.getInstance().show(Notifications.Type.ERROR, Notifications.Location.TOP_CENTER, 3000, "An error occured while re-hiring the employee");
+            SignIn.logger.severe(e.getMessage());
+        }
     }
 
 //    public static void main(String args[]) {
@@ -265,27 +385,27 @@ public class TerminateEmployee extends javax.swing.JDialog {
 //    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel dateLabel;
+    private javax.swing.JLabel departmentLabel;
+    private javax.swing.JLabel emailLabel;
+    private javax.swing.JLabel genderLabel;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
-    private javax.swing.JLabel jLabel11;
-    private javax.swing.JLabel jLabel12;
-    private javax.swing.JLabel jLabel13;
-    private javax.swing.JLabel jLabel14;
-    private javax.swing.JLabel jLabel15;
-    private javax.swing.JLabel jLabel16;
-    private javax.swing.JLabel jLabel17;
     private javax.swing.JLabel jLabel18;
-    private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JLabel mobileLabel;
+    private javax.swing.JLabel nameLabel;
+    private javax.swing.JLabel nicLabel;
+    private javax.swing.JLabel statusLabel;
+    private javax.swing.JLabel typeLabel;
     // End of variables declaration//GEN-END:variables
 }

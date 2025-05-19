@@ -129,9 +129,10 @@ public class EmployeeSchedule extends javax.swing.JPanel {
         if (late_emp == 0) {
             lateCount = 1;
         }
-        System.out.println("absent " + absent_emp);
-        System.out.println("late " + late_emp);
-        System.out.println("present " + present_emp);
+        if (present_emp == 0 && absent_emp == 0 && late_emp == 0) {
+            presentCount = length;
+        }
+  
         jPanel19.setPreferredSize(new Dimension((int) presentCount, 50));
         jPanel20.setPreferredSize(new Dimension((int) absentCount, 50));
         jPanel21.setPreferredSize(new Dimension((int) lateCount, 50));
@@ -142,7 +143,6 @@ public class EmployeeSchedule extends javax.swing.JPanel {
     private void updateAbsenteesWidget(int total, int absenteeCount) {
         double absentCount = ((double) absenteeCount / (double) total) * 100;
         long percentage = Math.round(absentCount);
-        System.out.println(percentage);
         jLabel18.setText(percentage + "%");
     }
 
@@ -151,18 +151,18 @@ public class EmployeeSchedule extends javax.swing.JPanel {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         String date = dateFormat.format(today);
         String time = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(today);
-        String query = "SELECT\n"
+        String query = String.format("SELECT\n"
                 + "    -- Total employees scheduled today\n"
                 + "    (SELECT COUNT(DISTINCT employee_id)\n"
                 + "     FROM shedule\n"
-                + "     WHERE DATE(dateTime) = CURDATE()\n"
+                + "     WHERE DATE(dateTime) = %s\n"
                 + "    ) AS totalScheduled,\n"
                 + "\n"
                 + "    -- Present: attended on or before their scheduled time\n"
                 + "    (SELECT COUNT(DISTINCT s.employee_id)\n"
                 + "     FROM shedule s\n"
                 + "     JOIN attendance a ON a.shedule_id = s.id\n"
-                + "     WHERE DATE(s.dateTime) = CURDATE()\n"
+                + "     WHERE DATE(s.dateTime) = %s\n"
                 + "       AND a.startTime <= s.dateTime\n"
                 + "    ) AS presentCount,\n"
                 + "\n"
@@ -170,18 +170,18 @@ public class EmployeeSchedule extends javax.swing.JPanel {
                 + "    (SELECT COUNT(DISTINCT s.employee_id)\n"
                 + "     FROM shedule s\n"
                 + "     JOIN attendance a ON a.shedule_id = s.id\n"
-                + "     WHERE DATE(s.dateTime) = CURDATE()\n"
+                + "     WHERE DATE(s.dateTime) = %s\n"
                 + "       AND a.startTime > s.dateTime\n"
                 + "    ) AS lateCount,\n"
                 + "\n"
                 + "    -- Absent: scheduled today but no attendance at all\n"
                 + "    (SELECT COUNT(DISTINCT s.employee_id)\n"
                 + "     FROM shedule s\n"
-                + "     WHERE DATE(s.dateTime) = CURDATE()\n"
+                + "     WHERE DATE(s.dateTime) = %s\n"
                 + "       AND s.id NOT IN (\n"
                 + "           SELECT shedule_id FROM attendance\n"
                 + "       )\n"
-                + "    ) AS absentCount;";
+                + "    ) AS absentCount;", date, date, date, date);
 
         try {
             ResultSet widgetRs = MYsql.execute(query);
@@ -212,7 +212,7 @@ public class EmployeeSchedule extends javax.swing.JPanel {
         String type = String.valueOf(jComboBox2.getSelectedItem());
         String status = String.valueOf(jComboBox3.getSelectedItem());
 
-        StringBuilder searchBuilder = new StringBuilder(" WHERE 1=1");
+        StringBuilder searchBuilder = new StringBuilder(" WHERE `dateTime` = CURDATE()");
 
         if (!id.isBlank()) {
             searchBuilder.append(" AND `employee`.`id` LIKE '%").append(id).append("%' ");

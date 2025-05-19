@@ -1,7 +1,6 @@
 package gui.hrManager;
 
 import com.formdev.flatlaf.FlatClientProperties;
-import com.formdev.flatlaf.themes.FlatMacLightLaf;
 import gui.SignIn;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
@@ -10,11 +9,16 @@ import java.util.HashMap;
 import java.util.Vector;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.table.DefaultTableModel;
-import model.ComponentStorage;
 import model.MYsql;
 import model.ModifyTables;
 
 public class EmployeeList extends javax.swing.JFrame {
+
+    private HashMap<String, String> employeeMap;
+
+    public HashMap<String, String> getEmployeeMap() {
+        return employeeMap;
+    }
 
     private HashMap<String, String> departmentMap;
     private HashMap<String, String> statusMap;
@@ -40,6 +44,7 @@ public class EmployeeList extends javax.swing.JFrame {
         departmentMap = new HashMap<>();
         statusMap = new HashMap<>();
         employeeTypeMap = new HashMap<>();
+        employeeMap = new HashMap<>();
 
         ModifyTables modifyTables = new ModifyTables();
         modifyTables.modifyTables(jPanel1, jTable2, jScrollPane2);
@@ -396,8 +401,23 @@ public class EmployeeList extends javax.swing.JFrame {
         openTerminationDialog();
     }//GEN-LAST:event_jButton2ActionPerformed
     private void openTerminationDialog() {
-        HashMap<String, String> employeeMap = new HashMap<>();
-        TerminateEmployee.getInstance(this, employeeMap).setVisible(true);
+        if (jTable2.getSelectedRowCount() == 1) {
+            int row = jTable2.getSelectedRow();
+            employeeMap.put("id", String.valueOf(jTable2.getValueAt(row, 0)));
+            employeeMap.put("name", String.valueOf(jTable2.getValueAt(row, 1)));
+            employeeMap.put("email", String.valueOf(jTable2.getValueAt(row, 2)));
+            employeeMap.put("mobile", String.valueOf(jTable2.getValueAt(row, 3)));
+            employeeMap.put("nic", String.valueOf(jTable2.getValueAt(row, 4)));
+            employeeMap.put("department", String.valueOf(jTable2.getValueAt(row, 8)));
+            employeeMap.put("type", String.valueOf(jTable2.getValueAt(row, 9)));
+            employeeMap.put("gender", String.valueOf(jTable2.getValueAt(row, 5)));
+            employeeMap.put("regDate", String.valueOf(jTable2.getValueAt(row, 7)));
+            employeeMap.put("status", String.valueOf(jTable2.getValueAt(row, 10)));
+        }
+        Vector mapVector = new Vector();
+        mapVector.add(employeeMap);
+        mapVector.add(statusMap);
+        TerminateEmployee.getInstance(this, mapVector).setVisible(true);
     }
 
     private void terminationButtonActivity() {
@@ -462,7 +482,7 @@ public class EmployeeList extends javax.swing.JFrame {
 
     }
 
-    private void loadEmployeeTable() {
+    void loadEmployeeTable() {
         String name = jTextField1.getText();
         String id = jTextField2.getText();
         String department = String.valueOf(jComboBox4.getSelectedItem());
@@ -488,7 +508,6 @@ public class EmployeeList extends javax.swing.JFrame {
             searchBuilder.append(" AND `employee_status_id` = '").append(statusMap.get(status)).append("'");
         }
         String search = searchBuilder.toString();
-        System.out.println(search);
         DefaultTableModel tableModel = (DefaultTableModel) jTable2.getModel();
         tableModel.setRowCount(0);
         try {
