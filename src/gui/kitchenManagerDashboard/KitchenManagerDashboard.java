@@ -40,8 +40,7 @@ public class KitchenManagerDashboard extends javax.swing.JFrame {
         sideBarButtons.add(jButton5);
         sideBarButtons.add(jButton6);
 
-        sideBarButtonAnimate(jButton1);
-
+        loadOverview();
         for (JButton sideBarButton : sideBarButtons) {
             sideBarButton.putClientProperty(FlatClientProperties.STYLE, "arc:50");
         }
@@ -286,7 +285,7 @@ public class KitchenManagerDashboard extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        sideBarButtonAnimate(jButton1);
+        loadOverview();
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
@@ -317,15 +316,23 @@ public class KitchenManagerDashboard extends javax.swing.JFrame {
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
         sideBarButtonAnimate(jButton5);
-    Stock_Re_Check stkRchk = new Stock_Re_Check();
+        Stock_Re_Check stkRchk = new Stock_Re_Check();
         jPanel3.removeAll();
-        jPanel3.add(stkRchk , BorderLayout.CENTER);
+        jPanel3.add(stkRchk, BorderLayout.CENTER);
         SwingUtilities.updateComponentTreeUI(jPanel3);
     }//GEN-LAST:event_jButton5ActionPerformed
 
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
         sideBarButtonAnimate(jButton6);
     }//GEN-LAST:event_jButton6ActionPerformed
+    private void loadOverview() {
+
+        KitchenManagerOverview ordList = KitchenManagerOverview.getInstance();
+        jPanel3.removeAll();
+        jPanel3.add(ordList, BorderLayout.CENTER);
+        SwingUtilities.updateComponentTreeUI(jPanel3);
+        sideBarButtonAnimate(jButton1);
+    }
 
     /**
      * @param args the command line arguments

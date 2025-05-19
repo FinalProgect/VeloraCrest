@@ -131,8 +131,6 @@ public class RegisterNewEmployee extends javax.swing.JFrame {
             }
             DefaultComboBoxModel positionModel = new DefaultComboBoxModel(positionVector);
             jComboBox5.setModel(positionModel);
-
-            System.out.println(genderMap + " " + " " + departmentMap + " " + positionMap);
         } catch (Exception e) {
             e.printStackTrace();
             Loggers.logWarning(e.getMessage());

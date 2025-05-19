@@ -9,9 +9,10 @@ import java.awt.Font;
 import java.sql.ResultSet;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Vector;
 import javax.swing.BorderFactory;
 import javax.swing.SwingUtilities;
-import javax.swing.UIManager;
+import javax.swing.table.DefaultTableModel;
 import model.MYsql;
 import model.ModifyTables;
 import org.jfree.chart.ChartFactory;
@@ -19,12 +20,9 @@ import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.labels.StandardCategoryItemLabelGenerator;
 import org.jfree.chart.plot.CategoryPlot;
-import org.jfree.chart.plot.PiePlot;
 import org.jfree.chart.renderer.category.BarRenderer;
 import org.jfree.chart.renderer.category.StandardBarPainter;
-import org.jfree.chart.title.TextTitle;
 import org.jfree.data.category.DefaultCategoryDataset;
-import org.jfree.data.general.DefaultPieDataset;
 
 public class HROverview extends javax.swing.JPanel {
 
@@ -44,7 +42,9 @@ public class HROverview extends javax.swing.JPanel {
 
         jPanel15.putClientProperty(FlatClientProperties.STYLE, "arc:100");
         jPanel28.putClientProperty(FlatClientProperties.STYLE, "arc:100");
-        jPanel4.putClientProperty(FlatClientProperties.STYLE, "arc:100");
+//        jPanel4.putClientProperty(FlatClientProperties.STYLE, "arc:100");
+        jPanel26.putClientProperty(FlatClientProperties.STYLE, "arc:100");
+        jPanel17.putClientProperty(FlatClientProperties.STYLE, "arc:100");
 
         jPanel19.putClientProperty(FlatClientProperties.STYLE, "arc:50");
         jPanel20.putClientProperty(FlatClientProperties.STYLE, "arc:50");
@@ -58,10 +58,10 @@ public class HROverview extends javax.swing.JPanel {
 
         ModifyTables modifyTables = new ModifyTables();
         modifyTables.modifyTables(jPanel6, jTable1, jScrollPane2);
-        loadStaffAttendanceWidget();
         loadEmployeesChart();
-        loadScheduleChart();
-
+//        loadScheduleChart();
+        loadWidgets();
+        loadEmployeeList();
     }
 
     private void loadEmployeesChart() {
@@ -139,6 +139,34 @@ public class HROverview extends javax.swing.JPanel {
     }
 
 //    widgets
+    private void loadscheduledEmployeesWidget(int scheduledCount) {
+        jLabel27.setText("" + scheduledCount);
+    }
+
+//    total employees , enrollments this month, resignations  widgets
+    private void loadWidgets() {
+        String beginMonth = String.valueOf(new SimpleDateFormat("yyyy-MM-01").format(new Date()));
+        String query = String.format("SELECT\n"
+                + "    COUNT(CASE WHEN employee_status_id = 1 THEN 1 END) AS activeCount,\n"
+                + "    COUNT(CASE WHEN employee_status_id = 2 THEN 1 END) AS resignedCount,\n"
+                + "    COUNT(CASE WHEN registeredDate > '%s' THEN 1 END) AS recentRegs\n"
+                + "FROM employee;", beginMonth);
+        try {
+            ResultSet widgetRs = MYsql.execute(query);
+            if (widgetRs.next()) {
+                jLabel16.setText(widgetRs.getString("activeCount"));
+                jLabel30.setText(widgetRs.getString("resignedCount"));
+                jLabel18.setText(widgetRs.getString("recentRegs"));
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            SignIn.logger.severe(e.getMessage());
+        }
+        loadStaffAttendanceWidget();
+
+    }
+
     private void loadStaffAttendanceWidget() {
         Date today = new Date();
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
@@ -185,6 +213,7 @@ public class HROverview extends javax.swing.JPanel {
                 int late = widgetRs.getInt("lateCount");
 
                 loadAttendanceWidget(total, present, absent, late);
+                loadscheduledEmployeesWidget(total);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -212,9 +241,10 @@ public class HROverview extends javax.swing.JPanel {
         if (late_emp == 0) {
             lateCount = 1;
         }
-        System.out.println("absent " + absent_emp);
-        System.out.println("late " + late_emp);
-        System.out.println("present " + present_emp);
+        if (present_emp == 0 && absent_emp == 0 && late_emp == 0) {
+            presentCount = length;
+        }
+
         jPanel19.setPreferredSize(new Dimension((int) presentCount, 50));
         jPanel20.setPreferredSize(new Dimension((int) absentCount, 50));
         jPanel21.setPreferredSize(new Dimension((int) lateCount, 50));
@@ -222,52 +252,52 @@ public class HROverview extends javax.swing.JPanel {
 
     }
 
-    private void loadScheduleChart() {
-        DefaultPieDataset dataset = new DefaultPieDataset();
-        dataset.setValue("Scheduled", 300);
-        dataset.setValue("On Leave", 100);
-        dataset.setValue("Training", 57);
-
-        // Create chart
-        JFreeChart chart = ChartFactory.createPieChart(
-                "", // Chart title
-                dataset, // Dataset
-                true, // Include legend
-                true,
-                false);
-
-        // Customize the plot
-        PiePlot plot = (PiePlot) chart.getPlot();
-        plot.setSectionPaint("Scheduled", new Color(60, 186, 84));  // Green color for Scheduled
-        plot.setSectionPaint("On Leave", new Color(72, 133, 237));  // Blue color for On Leave
-        plot.setSectionPaint("Training", new Color(244, 81, 30));   // Orange color for Training
-
-        // Set the plot to be a donut (create a hole in the middle)
-        plot.setInteriorGap(0.02);  // Adjust this value to make the hole bigger or smaller
-        plot.setOutlineVisible(false);
-
-        // Remove default label generation and legend formatting
-        plot.setLabelGenerator(null);
-        plot.setShadowPaint(null);
-        // Center text (the total value)
-        String centralValue = "457";
-        plot.setSimpleLabels(true);
-        plot.setCircular(true);
-
-        // Customize chart appearance
-        chart.setBackgroundPaint(Color.white);
-
-        plot.setBackgroundPaint(new java.awt.Color(252, 252, 252));
-        chart.setBackgroundPaint(new java.awt.Color(252, 252, 252));
-
-        // Create ChartPanel
-        ChartPanel chartPanel = new ChartPanel(chart);
-        chartPanel.setPreferredSize(new Dimension(500, 300));
-
-        jPanel5.setLayout(new BorderLayout());
-        jPanel5.add(chartPanel, BorderLayout.CENTER);
-        jPanel5.validate();
-    }
+//    private void loadScheduleChart() {
+//        DefaultPieDataset dataset = new DefaultPieDataset();
+//        dataset.setValue("Scheduled", 300);
+//        dataset.setValue("On Leave", 100);
+//        dataset.setValue("Training", 57);
+//
+//        // Create chart
+//        JFreeChart chart = ChartFactory.createPieChart(
+//                "", // Chart title
+//                dataset, // Dataset
+//                true, // Include legend
+//                true,
+//                false);
+//
+//        // Customize the plot
+//        PiePlot plot = (PiePlot) chart.getPlot();
+//        plot.setSectionPaint("Scheduled", new Color(60, 186, 84));  // Green color for Scheduled
+//        plot.setSectionPaint("On Leave", new Color(72, 133, 237));  // Blue color for On Leave
+//        plot.setSectionPaint("Training", new Color(244, 81, 30));   // Orange color for Training
+//
+//        // Set the plot to be a donut (create a hole in the middle)
+//        plot.setInteriorGap(0.02);  // Adjust this value to make the hole bigger or smaller
+//        plot.setOutlineVisible(false);
+//
+//        // Remove default label generation and legend formatting
+//        plot.setLabelGenerator(null);
+//        plot.setShadowPaint(null);
+//        // Center text (the total value)
+//        String centralValue = "457";
+//        plot.setSimpleLabels(true);
+//        plot.setCircular(true);
+//
+//        // Customize chart appearance
+//        chart.setBackgroundPaint(Color.white);
+//
+//        plot.setBackgroundPaint(new java.awt.Color(252, 252, 252));
+//        chart.setBackgroundPaint(new java.awt.Color(252, 252, 252));
+//
+//        // Create ChartPanel
+//        ChartPanel chartPanel = new ChartPanel(chart);
+//        chartPanel.setPreferredSize(new Dimension(500, 300));
+//
+//        jPanel5.setLayout(new BorderLayout());
+//        jPanel5.add(chartPanel, BorderLayout.CENTER);
+//        jPanel5.validate();
+//    }
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -317,10 +347,6 @@ public class HROverview extends javax.swing.JPanel {
         jLabel28 = new javax.swing.JLabel();
         jLabel29 = new javax.swing.JLabel();
         jLabel30 = new javax.swing.JLabel();
-        jPanel4 = new javax.swing.JPanel();
-        jLabel4 = new javax.swing.JLabel();
-        jPanel5 = new javax.swing.JPanel();
-        jButton1 = new javax.swing.JButton();
         jPanel6 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
@@ -343,7 +369,7 @@ public class HROverview extends javax.swing.JPanel {
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
+            .addGap(0, 708, Short.MAX_VALUE)
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -619,7 +645,7 @@ public class HROverview extends javax.swing.JPanel {
 
         jPanel17.setBackground(new java.awt.Color(62, 161, 217));
 
-        jLabel14.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resource/wallet.png"))); // NOI18N
+        jLabel14.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resource/hire-me-32.png"))); // NOI18N
 
         javax.swing.GroupLayout jPanel17Layout = new javax.swing.GroupLayout(jPanel17);
         jPanel17.setLayout(jPanel17Layout);
@@ -628,7 +654,7 @@ public class HROverview extends javax.swing.JPanel {
             .addGroup(jPanel17Layout.createSequentialGroup()
                 .addGap(14, 14, 14)
                 .addComponent(jLabel14)
-                .addContainerGap(14, Short.MAX_VALUE))
+                .addContainerGap(12, Short.MAX_VALUE))
         );
         jPanel17Layout.setVerticalGroup(
             jPanel17Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -639,7 +665,7 @@ public class HROverview extends javax.swing.JPanel {
         );
 
         jLabel17.setFont(new java.awt.Font("Poppins SemiBold", 0, 14)); // NOI18N
-        jLabel17.setText("Pending Promotions");
+        jLabel17.setText("Enrollments this Month");
 
         jLabel18.setFont(new java.awt.Font("Poppins", 0, 36)); // NOI18N
         jLabel18.setForeground(new java.awt.Color(60, 179, 113));
@@ -653,8 +679,8 @@ public class HROverview extends javax.swing.JPanel {
                 .addGap(27, 27, 27)
                 .addGroup(jPanel16Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel16Layout.createSequentialGroup()
-                        .addComponent(jLabel17)
-                        .addContainerGap(62, Short.MAX_VALUE))
+                        .addComponent(jLabel17, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addContainerGap())
                     .addGroup(jPanel16Layout.createSequentialGroup()
                         .addComponent(jPanel17, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -677,7 +703,7 @@ public class HROverview extends javax.swing.JPanel {
 
         jPanel26.setBackground(new java.awt.Color(62, 161, 217));
 
-        jLabel25.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resource/wallet.png"))); // NOI18N
+        jLabel25.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resource/icons8-schedule-32.png"))); // NOI18N
 
         javax.swing.GroupLayout jPanel26Layout = new javax.swing.GroupLayout(jPanel26);
         jPanel26.setLayout(jPanel26Layout);
@@ -686,7 +712,7 @@ public class HROverview extends javax.swing.JPanel {
             .addGroup(jPanel26Layout.createSequentialGroup()
                 .addGap(14, 14, 14)
                 .addComponent(jLabel25)
-                .addContainerGap(14, Short.MAX_VALUE))
+                .addContainerGap(15, Short.MAX_VALUE))
         );
         jPanel26Layout.setVerticalGroup(
             jPanel26Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -697,7 +723,7 @@ public class HROverview extends javax.swing.JPanel {
         );
 
         jLabel26.setFont(new java.awt.Font("Poppins SemiBold", 0, 14)); // NOI18N
-        jLabel26.setText("New Hires");
+        jLabel26.setText("Scheduled Employees");
 
         jLabel27.setFont(new java.awt.Font("Poppins", 0, 36)); // NOI18N
         jLabel27.setForeground(new java.awt.Color(62, 161, 217));
@@ -707,17 +733,15 @@ public class HROverview extends javax.swing.JPanel {
         jPanel25.setLayout(jPanel25Layout);
         jPanel25Layout.setHorizontalGroup(
             jPanel25Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel25Layout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel25Layout.createSequentialGroup()
                 .addGap(27, 27, 27)
-                .addGroup(jPanel25Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel25Layout.createSequentialGroup()
-                        .addComponent(jLabel26)
-                        .addContainerGap(175, Short.MAX_VALUE))
+                .addGroup(jPanel25Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabel26, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(jPanel25Layout.createSequentialGroup()
                         .addComponent(jPanel26, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jLabel27)
-                        .addGap(52, 52, 52))))
+                        .addComponent(jLabel27)))
+                .addGap(52, 52, 52))
         );
         jPanel25Layout.setVerticalGroup(
             jPanel25Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -755,7 +779,7 @@ public class HROverview extends javax.swing.JPanel {
         );
 
         jLabel29.setFont(new java.awt.Font("Poppins Medium", 0, 14)); // NOI18N
-        jLabel29.setText("Resignations This Month");
+        jLabel29.setText("All Resignations");
 
         jLabel30.setFont(new java.awt.Font("Poppins", 0, 36)); // NOI18N
         jLabel30.setForeground(new java.awt.Color(255, 69, 0));
@@ -768,12 +792,12 @@ public class HROverview extends javax.swing.JPanel {
             .addGroup(jPanel27Layout.createSequentialGroup()
                 .addGap(27, 27, 27)
                 .addGroup(jPanel27Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel29)
+                    .addComponent(jLabel29, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(jPanel27Layout.createSequentialGroup()
                         .addComponent(jPanel28, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(jLabel30)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(jLabel30)
+                        .addContainerGap())))
         );
         jPanel27Layout.setVerticalGroup(
             jPanel27Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -787,54 +811,10 @@ public class HROverview extends javax.swing.JPanel {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        jPanel4.setBackground(new java.awt.Color(252, 252, 252));
-
-        jLabel4.setFont(new java.awt.Font("Poppins SemiBold", 0, 18)); // NOI18N
-        jLabel4.setText("Schedule");
-
-        javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
-        jPanel5.setLayout(jPanel5Layout);
-        jPanel5Layout.setHorizontalGroup(
-            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 705, Short.MAX_VALUE)
-        );
-        jPanel5Layout.setVerticalGroup(
-            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 324, Short.MAX_VALUE)
-        );
-
-        jButton1.setFont(new java.awt.Font("Poppins", 0, 12)); // NOI18N
-        jButton1.setText("View Schedule");
-
-        javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
-        jPanel4.setLayout(jPanel4Layout);
-        jPanel4Layout.setHorizontalGroup(
-            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel4Layout.createSequentialGroup()
-                .addGap(21, 21, 21)
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addComponent(jLabel4)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jButton1)))
-                .addGap(21, 21, 21))
-        );
-        jPanel4Layout.setVerticalGroup(
-            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel4Layout.createSequentialGroup()
-                .addGap(14, 14, 14)
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton1))
-                .addGap(18, 18, 18)
-                .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(27, 27, 27))
-        );
-
         jPanel6.setBackground(new java.awt.Color(252, 252, 252));
 
         jTable1.setBackground(new java.awt.Color(252, 252, 252));
+        jTable1.setFont(new java.awt.Font("Poppins", 0, 14)); // NOI18N
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
@@ -863,7 +843,7 @@ public class HROverview extends javax.swing.JPanel {
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel6Layout.createSequentialGroup()
                 .addGap(14, 14, 14)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 669, Short.MAX_VALUE)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 1543, Short.MAX_VALUE)
                 .addGap(14, 14, 14))
             .addGroup(jPanel6Layout.createSequentialGroup()
                 .addGap(37, 37, 37)
@@ -887,26 +867,28 @@ public class HROverview extends javax.swing.JPanel {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(46, 46, 46)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel2)
-                    .addComponent(jLabel1)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jPanel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addContainerGap())
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jPanel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addGap(18, 18, 18)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel2)
+                            .addComponent(jLabel1)
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jPanel13, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 16, Short.MAX_VALUE)
-                                .addComponent(jPanel14, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jPanel25, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addGap(18, 18, 18)
-                                .addComponent(jPanel16, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addGap(18, 18, 18)
-                                .addComponent(jPanel27, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                            .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
-                .addGap(40, 40, 40))
+                                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addGap(33, 33, 33)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addComponent(jPanel13, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(23, 23, 23)
+                                        .addComponent(jPanel14, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addComponent(jPanel25, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(jPanel16, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(jPanel27, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))))
+                        .addGap(40, 40, 40))))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -917,23 +899,20 @@ public class HROverview extends javax.swing.JPanel {
                 .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 18, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jPanel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addContainerGap())
+                    .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(jPanel13, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jPanel14, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addGap(18, 18, 18)
+                        .addGap(42, 42, 42)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                                 .addComponent(jPanel16, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(jPanel27, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                            .addComponent(jPanel25, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(19, 19, 19)
-                        .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addComponent(jPanel25, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jPanel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         jScrollPane1.setViewportView(jPanel1);
@@ -942,7 +921,7 @@ public class HROverview extends javax.swing.JPanel {
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 1524, Short.MAX_VALUE)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 1614, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -952,7 +931,6 @@ public class HROverview extends javax.swing.JPanel {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel12;
@@ -977,7 +955,6 @@ public class HROverview extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel30;
     private javax.swing.JLabel jLabel34;
-    private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel13;
@@ -998,11 +975,34 @@ public class HROverview extends javax.swing.JPanel {
     private javax.swing.JPanel jPanel27;
     private javax.swing.JPanel jPanel28;
     private javax.swing.JPanel jPanel3;
-    private javax.swing.JPanel jPanel4;
-    private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTable jTable1;
     // End of variables declaration//GEN-END:variables
+
+    private void loadEmployeeList() {
+        DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+        model.setRowCount(0);
+
+        try {
+            ResultSet employeeRs = MYsql.execute("SELECT employee.id AS empID ,fullName,`name`,mobile,`status` "
+                    + "FROM employee INNER JOIN department ON department.id = employee.department_id "
+                    + "INNER JOIN status ON status.id = employee.employee_status_id");
+            while (employeeRs.next()) {
+                Vector<String> vector = new Vector<>();
+                vector.add(employeeRs.getString("empID"));
+                vector.add(employeeRs.getString("fullName"));
+                vector.add(employeeRs.getString("name"));
+                vector.add(employeeRs.getString("mobile"));
+                vector.add(employeeRs.getString("status"));
+                model.addRow(vector);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            SignIn.logger.severe(e.getMessage());
+        }
+    }
+
 }
