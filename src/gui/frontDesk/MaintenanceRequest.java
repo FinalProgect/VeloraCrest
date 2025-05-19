@@ -3,13 +3,17 @@ package gui.frontDesk;
 import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.extras.FlatSVGIcon;
 import gui.SignIn;
+import java.awt.Color;
 import model.ModifyTables;
 import java.sql.SQLException;
 import java.sql.ResultSet;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Vector;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 import model.MYsql;
 import raven.toast.Notifications;
 
@@ -28,6 +32,8 @@ public class MaintenanceRequest extends javax.swing.JPanel {
         if (SignIn.employeeMap != null) {
             jLabel4.setText(SignIn.employeeMap.get("employee").getEmployeeName());
         }
+        setDate();
+        loadMaintenanceRequestToTable();
     }
 
     public MaintenanceRequest() {
@@ -40,10 +46,55 @@ public class MaintenanceRequest extends javax.swing.JPanel {
         if (SignIn.employeeMap != null) {
             jLabel4.setText(SignIn.employeeMap.get("employee").getEmployeeName());
         }
+        setDate();
+        loadMaintenanceRequestToTable();
     }
-    
+
+    //Load Room Maintenance Request to Table
+    private void loadMaintenanceRequestToTable() {
+        String maintenanceRequstsQuary = "SELECT `maintenance`.`id`, "
+                + "`maintenance`.`rooms_id`, `maintenance`.`issu`, `maintenanceservises`.`name`, "
+                + "`maintenance`.`dateTime`, `maintenanceprioritylevel`.`id`, `maintenanceprioritylevel`.`leval` FROM `maintenance` "
+                + "INNER JOIN `maintenanceprioritylevel` ON `maintenance`.`maintenancePriorityLevel_id` = `maintenanceprioritylevel`.`id` "
+                + "INNER JOIN `maintenanceservises` ON `maintenance`.`maintenanceServises_id` = `maintenanceservises`.`id` "
+                + "INNER JOIN `maintenancestatus` ON `maintenance`.`maintenanceStatus_id` = `maintenancestatus`.`id` "
+                + "WHERE `maintenance`.`rooms_id` = '" + FaontDeskOverview.roomsMap.get(roomNumberLable.getText()).getRoomId() + "' ORDER BY `maintenance`.`dateTime` DESC";
+
+        DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+        model.setRowCount(0);
+        
+        
+
+        try {
+            ResultSet maintenanceResult = MYsql.execute(maintenanceRequstsQuary);
+
+            while (maintenanceResult.next()) {
+                Vector<String> vector = new Vector();
+                vector.add("maintenance.id");
+                vector.add(roomNumberLable.getText());
+                vector.add(maintenanceResult.getString("maintenance.issu"));
+                vector.add(maintenanceResult.getString("maintenanceservises.name"));
+                vector.add(maintenanceResult.getString("maintenance.dateTime"));
+                vector.add(maintenanceResult.getString("maintenanceprioritylevel.leval"));
+                model.addRow(vector);
+            }
+            jTable1.setModel(model);
+
+        } catch (SQLException e) {
+            SignIn.logger.severe("Maintenance Requst Loading Error " + e.getMessage());
+        }
+
+    }
+
+    // Set Date
+    private void setDate() {
+        Date date = new Date();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        dateLable.setText(sdf.format(date));
+    }
+
     //Open Room Selector JDialog
-    private void OpenRoomSelector(){
+    private void OpenRoomSelector() {
         new SelectRoom(FrontDeskDashBoard.getInstance(), true, this).setVisible(true);
     }
 
@@ -132,7 +183,7 @@ public class MaintenanceRequest extends javax.swing.JPanel {
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
-        jLabel6 = new javax.swing.JLabel();
+        dateLable = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
         jLabel7 = new javax.swing.JLabel();
         roomNumberLable = new javax.swing.JLabel();
@@ -174,8 +225,8 @@ public class MaintenanceRequest extends javax.swing.JPanel {
         jLabel5.setFont(new java.awt.Font("Poppins", 0, 12)); // NOI18N
         jLabel5.setText("Date");
 
-        jLabel6.setFont(new java.awt.Font("Poppins", 0, 12)); // NOI18N
-        jLabel6.setText("2024-10-31");
+        dateLable.setFont(new java.awt.Font("Poppins", 0, 12)); // NOI18N
+        dateLable.setText("2024-10-31");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -202,7 +253,7 @@ public class MaintenanceRequest extends javax.swing.JPanel {
                                 .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 248, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addGap(15, 15, 15)
-                                .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 225, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addComponent(dateLable, javax.swing.GroupLayout.PREFERRED_SIZE, 225, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addGap(55, 55, 55))))
         );
         jPanel1Layout.setVerticalGroup(
@@ -218,7 +269,7 @@ public class MaintenanceRequest extends javax.swing.JPanel {
                 .addGap(9, 9, 9)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel5)
-                    .addComponent(jLabel6)))
+                    .addComponent(dateLable)))
         );
 
         jPanel2.setBackground(new java.awt.Color(255, 255, 255));
@@ -242,9 +293,17 @@ public class MaintenanceRequest extends javax.swing.JPanel {
         destriptionMaintence.setRows(5);
         jScrollPane1.setViewportView(destriptionMaintence);
 
+        saveIcon.setBackground(new java.awt.Color(255, 255, 255));
+        saveIcon.setOpaque(true);
         saveIcon.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 saveIconMouseClicked(evt);
+            }
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                saveIconMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                saveIconMouseExited(evt);
             }
         });
 
@@ -469,8 +528,8 @@ public class MaintenanceRequest extends javax.swing.JPanel {
             String level = String.valueOf(levelComboBox.getSelectedItem());
 
             try {
-                MYsql.execute("INSERT INTO `maintenance` (`rooms_id`,`maintenanceServises_id`,`maintenancePriorityLevel_id`,`issu`,`description`,`request`,`requestedEmployee`,`status`) "
-                        + "VALUES ('" + FaontDeskOverview.roomsMap.get(roomNumber).getRoomId() + "', '" + this.servisesMap.get(service) + "','" + this.maintenanceLevelMap.get(level) + "','" + issu + "','" + description + "','" + meintenanceRequest + "','" + SignIn.employeeMap.get("employee").getEmployeeId() + "','Not Approw')");
+                MYsql.execute("INSERT INTO `maintenance` (`rooms_id`,`maintenanceServises_id`,`maintenancePriorityLevel_id`,`issu`,`description`,`request`,`requestedEmployee`,`dateTime`, `maintenanceStatus_id`) "
+                        + "VALUES ('" + FaontDeskOverview.roomsMap.get(roomNumber).getRoomId() + "', '" + this.servisesMap.get(service) + "','" + this.maintenanceLevelMap.get(level) + "','" + issu + "','" + description + "','" + meintenanceRequest + "','" + SignIn.employeeMap.get("employee").getEmployeeId() + "','" + dateLable.getText() + "','1')");
 
                 SignIn.logger.severe("Maintenance Requst Added. Employee :" + SignIn.employeeMap.get("employee").getEmployeeName());
                 resetFilds();
@@ -483,10 +542,19 @@ public class MaintenanceRequest extends javax.swing.JPanel {
 
     }//GEN-LAST:event_saveIconMouseClicked
 
+    private void saveIconMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_saveIconMouseEntered
+        saveIcon.setBackground(new Color(173, 216, 230));
+    }//GEN-LAST:event_saveIconMouseEntered
+
+    private void saveIconMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_saveIconMouseExited
+        saveIcon.setBackground(new Color(255, 255, 255));
+    }//GEN-LAST:event_saveIconMouseExited
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextArea RequestMaintenance;
     private javax.swing.ButtonGroup buttonGroup1;
+    private javax.swing.JLabel dateLable;
     private javax.swing.JLabel deleteIcon;
     private javax.swing.JTextArea destriptionMaintence;
     private javax.swing.JTextField issuFild;
@@ -501,7 +569,6 @@ public class MaintenanceRequest extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
