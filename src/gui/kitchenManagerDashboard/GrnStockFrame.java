@@ -3,15 +3,68 @@ package gui.kitchenManagerDashboard;
 import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.themes.FlatMacLightLaf;
 import gui.SelectSupplier;
+import gui.SignIn;
+import java.util.HashMap;
+import java.util.Vector;
 import model.ModifyTables;
+import java.sql.SQLException;
+import java.sql.ResultSet;
+import java.util.HashSet;
+import java.util.Random;
+import java.util.Set;
+import javax.swing.DefaultComboBoxModel;
+import model.MYsql;
 
 public class GrnStockFrame extends javax.swing.JFrame {
-
+    
+    private HashMap<String, Integer> UnitsMap;
+    
     public GrnStockFrame() {
         initComponents();
         init();
+        loadUnits();
+        this.jTextField1.setText(String.valueOf(genarateUniqNumber()));
     }
+    
+     //GenarateQuniq 6digt number
+    private int genarateUniqNumber() {
+        int DIGIT_COUNT = 6;
+        int MAX_NUMBER = 999999;
+        int MIN_NUMBER = 100000;
+        Set<Integer> generatedNumbers = new HashSet<>();
+        Random random = new Random();
 
+        int number;
+        do {
+            number = random.nextInt((MAX_NUMBER - MIN_NUMBER) + 1) + MIN_NUMBER;
+        } while (generatedNumbers.contains(number));
+        generatedNumbers.add(number);
+
+        System.out.println(number);
+        return number;
+    }
+    
+    //Load Units To Table
+    private void loadUnits() {
+        String unitsQuary = "SELECT * FROM `mesherment`";
+        this.UnitsMap = new HashMap();
+        Vector<String> vector = new Vector();
+        vector.add("Select");
+        
+        try {
+            ResultSet unitsResult = MYsql.execute(unitsQuary);
+            
+            while (unitsResult.next()) {
+                this.UnitsMap.put(unitsResult.getString("mesherment.unit"), unitsResult.getInt("mesherment.id"));
+                vector.add(unitsResult.getString("mesherment.unit"));
+            }
+            jComboBox1.setModel(new DefaultComboBoxModel(vector));
+        } catch (SQLException e) {
+            SignIn.logger.severe(e.getMessage());
+        }
+        
+    }
+    
     private void init() {
         setExtendedState(GrnStockFrame.MAXIMIZED_BOTH);
 //quantity + - buttons
@@ -19,11 +72,11 @@ public class GrnStockFrame extends javax.swing.JFrame {
         jButton4.setBorderPainted(false);
         jButton5.putClientProperty(FlatClientProperties.STYLE, "arc:50");
         jButton5.setBorderPainted(false);
-
+        
         ModifyTables modifyTables = new ModifyTables();
         modifyTables.modifyTables(jPanel1, jTable2, jScrollPane2);
     }
-
+    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -52,7 +105,6 @@ public class GrnStockFrame extends javax.swing.JFrame {
         jDateChooser1 = new com.toedter.calendar.JDateChooser();
         jDateChooser2 = new com.toedter.calendar.JDateChooser();
         jButton7 = new javax.swing.JButton();
-        jButton8 = new javax.swing.JButton();
         jPanel7 = new javax.swing.JPanel();
         jPanel1 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
@@ -93,10 +145,10 @@ public class GrnStockFrame extends javax.swing.JFrame {
         jTextField2.setFont(new java.awt.Font("Poppins", 0, 14)); // NOI18N
 
         jLabel10.setFont(new java.awt.Font("Poppins", 0, 14)); // NOI18N
-        jLabel10.setText("Item");
+        jLabel10.setText("grnID");
 
         jLabel11.setFont(new java.awt.Font("Poppins", 0, 14)); // NOI18N
-        jLabel11.setText("Details");
+        jLabel11.setText("Product");
 
         jButton1.setBackground(new java.awt.Color(15, 140, 130));
         jButton1.setFont(new java.awt.Font("Poppins", 0, 14)); // NOI18N
@@ -108,6 +160,7 @@ public class GrnStockFrame extends javax.swing.JFrame {
             }
         });
 
+        jTextField1.setEditable(false);
         jTextField1.setFont(new java.awt.Font("Poppins", 0, 14)); // NOI18N
 
         jButton3.setBackground(new java.awt.Color(15, 140, 130));
@@ -157,10 +210,6 @@ public class GrnStockFrame extends javax.swing.JFrame {
         jButton7.setForeground(new java.awt.Color(255, 255, 255));
         jButton7.setText("Add Stock");
 
-        jButton8.setFont(new java.awt.Font("Poppins SemiBold", 0, 14)); // NOI18N
-        jButton8.setForeground(new java.awt.Color(15, 140, 130));
-        jButton8.setText("Edit Stock");
-
         javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
         jPanel6.setLayout(jPanel6Layout);
         jPanel6Layout.setHorizontalGroup(
@@ -195,11 +244,8 @@ public class GrnStockFrame extends javax.swing.JFrame {
                             .addGroup(jPanel6Layout.createSequentialGroup()
                                 .addComponent(jLabel6)
                                 .addGap(21, 21, 21)
-                                .addComponent(jFormattedTextField2, javax.swing.GroupLayout.DEFAULT_SIZE, 240, Short.MAX_VALUE))
-                            .addGroup(jPanel6Layout.createSequentialGroup()
-                                .addComponent(jButton7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jButton8, javax.swing.GroupLayout.PREFERRED_SIZE, 163, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addComponent(jFormattedTextField2, javax.swing.GroupLayout.DEFAULT_SIZE, 235, Short.MAX_VALUE))
+                            .addComponent(jButton7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addGap(12, 12, 12)
                         .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel15)
@@ -250,8 +296,7 @@ public class GrnStockFrame extends javax.swing.JFrame {
                             .addComponent(jButton5)
                             .addComponent(jFormattedTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jButton7)
-                            .addComponent(jButton8)))
+                            .addComponent(jButton7)))
                     .addGroup(jPanel6Layout.createSequentialGroup()
                         .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel15, javax.swing.GroupLayout.Alignment.TRAILING)
@@ -390,11 +435,11 @@ public class GrnStockFrame extends javax.swing.JFrame {
         SelectSupplier selectSupplier = new SelectSupplier(this, true);
         selectSupplier.setVisible(true);
     }//GEN-LAST:event_jButton1ActionPerformed
-
+    
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         FlatMacLightLaf.setup();
-
+        
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 new GrnStockFrame().setVisible(true);
@@ -410,7 +455,6 @@ public class GrnStockFrame extends javax.swing.JFrame {
     private javax.swing.JButton jButton5;
     private javax.swing.JButton jButton6;
     private javax.swing.JButton jButton7;
-    private javax.swing.JButton jButton8;
     private javax.swing.JComboBox<String> jComboBox1;
     private com.toedter.calendar.JDateChooser jDateChooser1;
     private com.toedter.calendar.JDateChooser jDateChooser2;
