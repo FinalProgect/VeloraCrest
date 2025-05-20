@@ -3,6 +3,7 @@ package gui.kitchenManagerDashboard;
 import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.themes.FlatMacLightLaf;
 import gui.SelectSupplier;
+import gui.kitchenStaffDashboard.SelectProduct;
 import model.ModifyTables;
 
 public class GrnStockFrame extends javax.swing.JFrame {
@@ -114,6 +115,11 @@ public class GrnStockFrame extends javax.swing.JFrame {
         jButton3.setFont(new java.awt.Font("Poppins", 0, 14)); // NOI18N
         jButton3.setForeground(new java.awt.Color(255, 255, 255));
         jButton3.setText("Select Product");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
 
         jTextField3.setFont(new java.awt.Font("Poppins", 0, 14)); // NOI18N
 
@@ -390,6 +396,13 @@ public class GrnStockFrame extends javax.swing.JFrame {
         SelectSupplier selectSupplier = new SelectSupplier(this, true);
         selectSupplier.setVisible(true);
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+      
+        SelectProduct selectProduct = new SelectProduct(this, true);
+        selectProduct.setVisible(true);
+        
+    }//GEN-LAST:event_jButton3ActionPerformed
 
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
