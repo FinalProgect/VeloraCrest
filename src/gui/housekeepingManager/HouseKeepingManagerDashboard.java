@@ -1,6 +1,5 @@
 package gui.housekeepingManager;
 
-import gui.kitchenManagerDashboard.KitchenManagerOverview;
 import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.extras.FlatSVGIcon;
 import com.formdev.flatlaf.themes.FlatMacLightLaf;
@@ -9,7 +8,6 @@ import java.util.List;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
-import model.ComponentStorage;
 
 /**
  *
@@ -18,10 +16,18 @@ import model.ComponentStorage;
 public class HouseKeepingManagerDashboard extends javax.swing.JFrame {
 
     private static List<JButton> sideBarButtons = new ArrayList<>();
+    private static HouseKeepingManagerDashboard houseKeepingManagerDashboard;
 
-    public HouseKeepingManagerDashboard() {
+    private HouseKeepingManagerDashboard() {
         initComponents();
         init();
+    }
+
+    public static synchronized HouseKeepingManagerDashboard getInstance() {
+        if (houseKeepingManagerDashboard == null) {
+            houseKeepingManagerDashboard = new HouseKeepingManagerDashboard();
+        }
+        return houseKeepingManagerDashboard;
     }
 
     private void init() {
@@ -301,9 +307,6 @@ public class HouseKeepingManagerDashboard extends javax.swing.JFrame {
 
     }//GEN-LAST:event_jButton5ActionPerformed
 
-    /**
-     * @param args the command line arguments
-     */
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         FlatMacLightLaf.setup();
@@ -333,12 +336,15 @@ public class HouseKeepingManagerDashboard extends javax.swing.JFrame {
     // End of variables declaration//GEN-END:variables
 
     private void loadOverview() {
+        sideBarButtonAnimate(jButton1);
         HouseKeepingManagerOverview overview = HouseKeepingManagerOverview.getInstance();
         jPanel3.removeAll();
         jPanel3.add(overview);
         SwingUtilities.updateComponentTreeUI(jPanel3);
-        sideBarButtonAnimate(jButton1);
 
     }
 
+    public synchronized void selectOverview() {
+        loadOverview();
+    }
 }

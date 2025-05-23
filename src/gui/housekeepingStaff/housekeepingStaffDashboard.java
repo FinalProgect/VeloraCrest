@@ -1,33 +1,38 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
- */
 package gui.housekeepingStaff;
 
 import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.extras.FlatSVGIcon;
 import com.formdev.flatlaf.themes.FlatMacLightLaf;
+import gui.housekeepingManager.HouseKeepingManagerDashboard;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
+import raven.toast.Notifications;
 
-/**
- *
- * @author kovid
- */
 public class housekeepingStaffDashboard extends javax.swing.JFrame {
-    private static List<JButton> sideBarButtons = new ArrayList<>();
 
-    public housekeepingStaffDashboard() {
+    private static List<JButton> sideBarButtons = new ArrayList<>();
+    private static housekeepingStaffDashboard housekeepingStaffDashboard;
+
+    private housekeepingStaffDashboard() {
         initComponents();
         init();
     }
 
-     private void init() {
+    public static housekeepingStaffDashboard getInstance() {
+        if (housekeepingStaffDashboard == null) {
+            housekeepingStaffDashboard = new housekeepingStaffDashboard();
+        }
+
+        return housekeepingStaffDashboard;
+    }
+
+    private void init() {
         this.setExtendedState(JFrame.MAXIMIZED_BOTH);
         FlatSVGIcon icon = new FlatSVGIcon("resource//veloraCrestSVG.svg", jLabel1.getWidth(), jLabel1.getHeight());
+        Notifications.getInstance().setJFrame(HouseKeepingManagerDashboard.getInstance());
         jLabel1.setIcon(icon);
         jButton11.putClientProperty(FlatClientProperties.STYLE, "arc:40");
         jButton12.putClientProperty(FlatClientProperties.STYLE, "arc:40");
@@ -40,13 +45,11 @@ public class housekeepingStaffDashboard extends javax.swing.JFrame {
         sideBarButtons.add(jButton2);
         sideBarButtons.add(jButton3);
         sideBarButtons.add(jButton4);
-   
-     
-        sideBarButtonAnimate(jButton1);
-        
-         for (JButton sideBarButton : sideBarButtons) {
-             sideBarButton.putClientProperty(FlatClientProperties.STYLE, "arc:50");
-         }
+
+        loadOverview();
+        for (JButton sideBarButton : sideBarButtons) {
+            sideBarButton.putClientProperty(FlatClientProperties.STYLE, "arc:50");
+        }
     }
 
     private void sideBarButtonAnimate(JButton button) {
@@ -106,6 +109,7 @@ public class housekeepingStaffDashboard extends javax.swing.JFrame {
         t.start();
 
     }
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -125,19 +129,10 @@ public class housekeepingStaffDashboard extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Dashboard | Kitchen Staff");
+        setUndecorated(true);
 
         jPanel3.setBackground(new java.awt.Color(255, 255, 255));
-
-        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
-        jPanel3.setLayout(jPanel3Layout);
-        jPanel3Layout.setHorizontalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
-        jPanel3Layout.setVerticalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
+        jPanel3.setLayout(new java.awt.BorderLayout());
 
         jPanel2.setBackground(new java.awt.Color(255, 255, 255));
 
@@ -273,7 +268,7 @@ public class housekeepingStaffDashboard extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        sideBarButtonAnimate(jButton1);
+        loadOverview();
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
@@ -317,4 +312,12 @@ public class housekeepingStaffDashboard extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     // End of variables declaration//GEN-END:variables
+private void loadOverview() {
+        HouseKeepingStaffOverview overview = HouseKeepingStaffOverview.getInstance();
+        jPanel3.removeAll();
+        jPanel3.add(overview);
+        SwingUtilities.updateComponentTreeUI(jPanel3);
+
+        sideBarButtonAnimate(jButton1);
+    }
 }
