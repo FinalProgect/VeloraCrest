@@ -1,20 +1,59 @@
 package gui.kitchenManagerDashboard;
 
 import com.formdev.flatlaf.themes.FlatMacLightLaf;
+import gui.SignIn;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.Vector;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+import model.MYsql;
 import model.ModifyTables;
+import raven.toast.Notifications;
 
 public class RegisterNewSupplier extends javax.swing.JDialog {
-GrnStockFrame grnStockFrame;
-    public RegisterNewSupplier(java.awt.Frame parent, boolean modal) {
+
+    GrnStockFrame grnStockFrame;
+    SelectSupplier selectSupplier;
+
+    public RegisterNewSupplier(java.awt.Frame parent, boolean modal, SelectSupplier selectSupplier) {
         super(parent, modal);
-        grnStockFrame = (GrnStockFrame)parent;
+        grnStockFrame = (GrnStockFrame) parent;
         initComponents();
         init();
+        loaadCompanies();
+        this.selectSupplier = selectSupplier;
     }
 
     private void init() {
         ModifyTables modifyTable = new ModifyTables();
         modifyTable.modifyTables(jPanel4, jTable1, jScrollPane1);
+    }
+
+
+
+    //Load companys to table
+     void loaadCompanies() {
+        System.out.println("KO1");
+        try {
+            ResultSet resultSet = MYsql.execute("SELECT * FROM `company`");
+
+            DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+            model.setRowCount(0);
+            while (resultSet.next()) {
+                Vector<String> vector = new Vector<>();
+                System.out.println("OK");
+                vector.add(resultSet.getString("id"));
+                vector.add(resultSet.getString("name"));
+                vector.add(resultSet.getString("hotLine"));
+                model.addRow(vector);
+            }
+
+            jTable1.setModel(model);
+        } catch (SQLException e) {
+            SignIn.logger.severe("Load Companis Error : " + e.getMessage());
+        }
+
     }
 
     @SuppressWarnings("unchecked")
@@ -101,6 +140,11 @@ GrnStockFrame grnStockFrame;
         jButton2.setFont(new java.awt.Font("Poppins", 1, 14)); // NOI18N
         jButton2.setForeground(new java.awt.Color(255, 255, 255));
         jButton2.setText("Register");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
 
         jPanel4.setBackground(new java.awt.Color(255, 255, 255));
 
@@ -109,11 +153,11 @@ GrnStockFrame grnStockFrame;
 
             },
             new String [] {
-                "Company Name", "Hotline"
+                "Id", "Company Name", "Hotline"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false
+                false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -121,6 +165,11 @@ GrnStockFrame grnStockFrame;
             }
         });
         jTable1.getTableHeader().setReorderingAllowed(false);
+        jTable1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jTable1MouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(jTable1);
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
@@ -200,29 +249,51 @@ GrnStockFrame grnStockFrame;
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        RegisterNewCompany newCompany = new RegisterNewCompany(grnStockFrame, true);
+        RegisterNewCompany newCompany = new RegisterNewCompany(grnStockFrame, true, this);
         newCompany.setVisible(true);
 
     }//GEN-LAST:event_jButton1ActionPerformed
 
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        FlatMacLightLaf.setup();
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
 
-        /* Create and display the dialog */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                RegisterNewSupplier dialog = new RegisterNewSupplier(new javax.swing.JFrame(), true);
-                dialog.addWindowListener(new java.awt.event.WindowAdapter() {
-                    @Override
-                    public void windowClosing(java.awt.event.WindowEvent e) {
-                        System.exit(0);
-                    }
-                });
-                dialog.setVisible(true);
+        try {
+
+            String SupplierName = jTextField1.getText();
+            String SupplierMobile = jTextField2.getText();
+
+            if (SupplierName.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Please enter address Supplier Name", "warning", JOptionPane.WARNING_MESSAGE);
+            } else if (SupplierMobile.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Please enter Supplier Mobile", "warning", JOptionPane.WARNING_MESSAGE);
+            } else if (jTable1.getSelectedRow() < 0) {
+
+                JOptionPane.showMessageDialog(this, "Please select A Cpmpany to contine. ", "warning", JOptionPane.WARNING_MESSAGE);
+
+            } else {
+
+                int selectedRow = jTable1.getSelectedRow();
+
+                MYsql.execute("INSERT INTO `suppliers` (`name`,`mobile`,`company_id`) VALUES ('" + SupplierName + "','" + SupplierMobile + "','" + String.valueOf(jTable1.getValueAt(selectedRow, 0)) + "')");
+                SignIn.logger.info("Seppler Registerd Successfull.");
+                this.selectSupplier.loadSuppliers();
+                this.dispose();
+                Notifications.getInstance().show(Notifications.Type.SUCCESS, Notifications.Location.BOTTOM_RIGHT, 10000, "Supplier registered Successfully");
             }
-        });
-    }
+
+        } catch (SQLException e) {
+            SignIn.logger.severe("Sullier Registration Error." + e.getMessage());
+        }
+
+    }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jTable1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable1MouseClicked
+        if (evt.getClickCount() == 2) {
+            int selectedRow = jTable1.getSelectedRow();
+
+        }
+    }//GEN-LAST:event_jTable1MouseClicked
+
+   
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
@@ -230,17 +301,10 @@ GrnStockFrame grnStockFrame;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel10;
     private javax.swing.JPanel jPanel11;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
-    private javax.swing.JPanel jPanel5;
-    private javax.swing.JPanel jPanel6;
-    private javax.swing.JPanel jPanel7;
-    private javax.swing.JPanel jPanel8;
-    private javax.swing.JPanel jPanel9;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable1;
     private javax.swing.JTextField jTextField1;

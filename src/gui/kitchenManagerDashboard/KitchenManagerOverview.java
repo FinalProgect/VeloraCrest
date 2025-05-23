@@ -54,7 +54,7 @@ public class KitchenManagerOverview extends javax.swing.JPanel {
         jPanel22.putClientProperty(FlatClientProperties.STYLE, "arc:100");
         jPanel23.putClientProperty(FlatClientProperties.STYLE, "arc:100");
         jPanel24.putClientProperty(FlatClientProperties.STYLE, "arc:100");
-
+        jButton1.putClientProperty(FlatClientProperties.STYLE, "arc:100");
         jScrollPane5.setBorder(BorderFactory.createEmptyBorder());
 
         loadAttendance(100, 75, 25);
@@ -119,17 +119,17 @@ public class KitchenManagerOverview extends javax.swing.JPanel {
 //
 //    }
     private void loadExpensesChart() {
-          DefaultCategoryDataset dataset = new DefaultCategoryDataset();
+        DefaultCategoryDataset dataset = new DefaultCategoryDataset();
 
         // Use LinkedHashMaps to preserve insertion order (month order)
         Map<String, Double> revenueMap = new LinkedHashMap<>();
         Map<String, Double> expenseMap = new LinkedHashMap<>();
-        
+
         try {
             // Get revenue grouped by month
             ResultSet rsRevenue = MYsql.execute("SELECT DATE_FORMAT(`dateTime`, '%Y-%m') AS `month`, SUM(`total`) AS `revenue` "
                     + "FROM `invoice` GROUP BY `month` ORDER BY `month` ASC");
-            
+
             while (rsRevenue.next()) {
                 String month = rsRevenue.getString("month");
                 double revenue = rsRevenue.getDouble("revenue");
@@ -139,7 +139,7 @@ public class KitchenManagerOverview extends javax.swing.JPanel {
             // Get expenses grouped by month
             ResultSet rsExpense = MYsql.execute("SELECT DATE_FORMAT(`date_time`, '%Y-%m') AS `month`, SUM(`paidPrice`) AS `expense` "
                     + "FROM `grn` GROUP BY `month` ORDER BY `month` ASC");
-            
+
             while (rsExpense.next()) {
                 String month = rsExpense.getString("month");
                 double expense = rsExpense.getDouble("expense");
@@ -150,12 +150,12 @@ public class KitchenManagerOverview extends javax.swing.JPanel {
             Set<String> allMonths = new TreeSet<>();
             allMonths.addAll(revenueMap.keySet());
             allMonths.addAll(expenseMap.keySet());
-            
+
             for (String month : allMonths) {
                 dataset.addValue(revenueMap.getOrDefault(month, 0.0), "Revenue", month);
                 dataset.addValue(expenseMap.getOrDefault(month, 0.0), "Expenses", month);
             }
-            
+
         } catch (Exception e) {
             SignIn.logger.severe(e.getMessage());
         }
@@ -167,7 +167,7 @@ public class KitchenManagerOverview extends javax.swing.JPanel {
                 "Amount (LKR)", // Y-axis label
                 dataset
         );
-        
+
         CategoryPlot plot = chart.getCategoryPlot();
         chart.setBackgroundPaint(new java.awt.Color(252, 252, 252));
         plot.setBackgroundPaint(new java.awt.Color(252, 252, 252));
@@ -189,13 +189,12 @@ public class KitchenManagerOverview extends javax.swing.JPanel {
         ChartPanel chartPanel = new ChartPanel(chart);
         chartPanel.setBorder(BorderFactory.createEmptyBorder());
         chartPanel.setPreferredSize(new java.awt.Dimension(400, 300));
-        
+
         jPanel2.removeAll();  // Clear previous chart
         jPanel2.setLayout(new BorderLayout());
         jPanel2.add(chartPanel, BorderLayout.CENTER);
         jPanel2.validate();
-    
-    
+
     }
 
     private void loadAttendance(double pres, double abs, double late) {
@@ -270,6 +269,7 @@ public class KitchenManagerOverview extends javax.swing.JPanel {
         jLabel18 = new javax.swing.JLabel();
         jScrollPane3 = new javax.swing.JScrollPane();
         jTable3 = new javax.swing.JTable();
+        jButton1 = new javax.swing.JButton();
 
         setBackground(new java.awt.Color(255, 255, 255));
 
@@ -658,6 +658,15 @@ public class KitchenManagerOverview extends javax.swing.JPanel {
 
         jScrollPane5.setViewportView(jPanel26);
 
+        jButton1.setBackground(new java.awt.Color(0, 153, 51));
+        jButton1.setFont(new java.awt.Font("Poppins", 1, 14)); // NOI18N
+        jButton1.setText("Register New Good Recives");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -665,25 +674,40 @@ public class KitchenManagerOverview extends javax.swing.JPanel {
             .addGroup(layout.createSequentialGroup()
                 .addGap(46, 46, 46)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel2)
-                    .addComponent(jLabel1))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel2)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jButton1)
+                        .addGap(40, 40, 40))))
             .addComponent(jScrollPane5)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(26, 26, 26)
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(0, 0, 0)
                 .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 18, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(jScrollPane5))
+                .addComponent(jScrollPane5, javax.swing.GroupLayout.DEFAULT_SIZE, 821, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        
+       GrnStockFrame grnFrame = new GrnStockFrame();
+       grnFrame.setVisible(true);
+        
+    }//GEN-LAST:event_jButton1ActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel1;

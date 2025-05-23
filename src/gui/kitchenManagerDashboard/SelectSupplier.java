@@ -1,12 +1,14 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JDialog.java to edit this template
- */
-package gui;
+package gui.kitchenManagerDashboard;
 
+import com.mysql.cj.xdevapi.Result;
+import gui.SignIn;
+import java.sql.ResultSet;
 import gui.kitchenManagerDashboard.GrnStockFrame;
 import gui.kitchenManagerDashboard.RegisterNewCompany;
 import gui.kitchenManagerDashboard.RegisterNewSupplier;
+import java.util.Vector;
+import javax.swing.table.DefaultTableModel;
+import model.MYsql;
 import model.ModifyTables;
 
 /**
@@ -16,17 +18,44 @@ import model.ModifyTables;
 public class SelectSupplier extends javax.swing.JDialog {
 
     GrnStockFrame grnStockFrame;
+    
+   
+    
 
     public SelectSupplier(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         grnStockFrame = (GrnStockFrame) parent;
         initComponents();
         init();
+        loadSuppliers();
+        this.grnStockFrame = (GrnStockFrame)parent;
     }
-    
-    private void init(){
-        ModifyTables modifyTables = new  ModifyTables();
+
+    private void init() {
+        ModifyTables modifyTables = new ModifyTables();
         modifyTables.modifyTables(jPanel4, jTable1, jScrollPane1);
+    }
+
+   void loadSuppliers() {
+
+        try {
+            ResultSet resultSet = MYsql.execute("SELECT * FROM `suppliers` INNER JOIN `company` ON `suppliers`.`company_id` = `company`.`id`");
+
+            DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+            model.setRowCount(0);
+
+            while (resultSet.next()) {
+                Vector<String> vector = new Vector<>();
+                vector.add(resultSet.getString("suppliers.id"));
+                vector.add(resultSet.getString("suppliers.name"));
+                vector.add(resultSet.getString("company.name"));
+                model.addRow(vector);
+            }
+            jTable1.setModel(model);
+            
+        } catch (Exception e) {
+            SignIn.logger.severe(e.getMessage());
+        }
     }
 
     @SuppressWarnings("unchecked")
@@ -99,6 +128,11 @@ public class SelectSupplier extends javax.swing.JDialog {
             }
         });
         jTable1.getTableHeader().setReorderingAllowed(false);
+        jTable1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jTable1MouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(jTable1);
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
@@ -187,9 +221,22 @@ public class SelectSupplier extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-RegisterNewSupplier newSupplier = new RegisterNewSupplier(grnStockFrame, true);
+        RegisterNewSupplier newSupplier = new RegisterNewSupplier(grnStockFrame, true, this);
         newSupplier.setVisible(true);
+
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jTable1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable1MouseClicked
+       if(evt.getClickCount() == 2){
+           int selectedRow = jTable1.getSelectedRow();
+           
+           grnStockFrame.jTextField2.setText(String.valueOf(jTable1.getValueAt(selectedRow, 1))); 
+           
+           grnStockFrame.supplierID = Integer.parseInt(String.valueOf(jTable1.getValueAt(selectedRow, 0)));
+           
+           this.dispose();
+       }
+    }//GEN-LAST:event_jTable1MouseClicked
 
     /**
      * @param args the command line arguments
