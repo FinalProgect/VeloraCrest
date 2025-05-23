@@ -22,7 +22,6 @@ import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import model.FormatDate;
 import model.MYsql;
-import model.ModifyTables;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
@@ -332,7 +331,16 @@ public class HouseKeepingManagerOverview extends javax.swing.JPanel {
                 double late = cleanProgress.getDouble("dirty");
 
                 loadCleaningProcess(total, present, abs, late);
+            }
 
+            ResultSet taskCount = MYsql.execute("SELECT \n"
+                    + "	COUNT(*) AS total,\n"
+                    + "    COUNT(CASE WHEN taskStatus_id = 1 THEN 1 END) AS pending,\n"
+                    + "    COUNT(CASE WHEN taskStatus_id = 2 THEN 1 END) AS ongoing,\n"
+                    + "    COUNT(CASE WHEN taskStatus_id = 3 THEN 1 END) AS completed\n"
+                    + "FROM taskshedule WHERE `date` = '" + today + "' ");
+            if (taskCount.next()) {
+                int total = taskCount.getInt("total");
             }
         } catch (Exception e) {
             e.printStackTrace();
