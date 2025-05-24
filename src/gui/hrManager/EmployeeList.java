@@ -4,13 +4,24 @@ import com.formdev.flatlaf.FlatClientProperties;
 import gui.SignIn;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
+import java.io.InputStream;
+import java.net.URL;
 import java.sql.ResultSet;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Vector;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import model.FormatDate;
 import model.MYsql;
 import model.ModifyTables;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperPrintManager;
+import net.sf.jasperreports.engine.data.JRTableModelDataSource;
+import net.sf.jasperreports.view.JasperViewer;
+import raven.toast.Notifications;
 
 public class EmployeeList extends javax.swing.JFrame {
 
@@ -298,6 +309,11 @@ public class EmployeeList extends javax.swing.JFrame {
         jButton3.setFont(new java.awt.Font("Poppins SemiBold", 0, 14)); // NOI18N
         jButton3.setForeground(new java.awt.Color(252, 252, 252));
         jButton3.setText("Print Report");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
         jPanel7.setLayout(jPanel7Layout);
@@ -400,6 +416,10 @@ public class EmployeeList extends javax.swing.JFrame {
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         openTerminationDialog();
     }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        printReport();
+    }//GEN-LAST:event_jButton3ActionPerformed
     private void openTerminationDialog() {
         if (jTable2.getSelectedRowCount() == 1) {
             int row = jTable2.getSelectedRow();
@@ -562,4 +582,35 @@ public class EmployeeList extends javax.swing.JFrame {
     private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField jTextField2;
     // End of variables declaration//GEN-END:variables
+
+    private void printReport() {
+        InputStream input = this.getClass().getResourceAsStream("/reports/VeloaCrest_EmployeeReport.jasper");
+        // Load logo from classpath
+        URL logoUrl = this.getClass().getResource("/reports/logo.png");
+        if (logoUrl == null || input == null) {
+            Notifications.getInstance().show(
+                    Notifications.Type.ERROR,
+                    Notifications.Location.TOP_CENTER,
+                    3000L,
+                    "Required files not found!"
+            );
+            return;
+        }
+
+        String logoPath = logoUrl.getPath(); // This is the absolute path for Jasper
+
+        String date = FormatDate.getToday(new Date(), "yyyy-MM-dd");
+        HashMap<String, Object> params = new HashMap<>();
+        params.put("dateTime", date);
+        params.put("logo", logoPath);
+        try {
+            JasperPrint jasper = JasperFillManager.fillReport(input, params, MYsql.getConnection());
+            JasperViewer.viewReport(jasper);
+            JasperPrintManager.printReport(jasper, false);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            Notifications.getInstance().show(Notifications.Type.ERROR, Notifications.Location.TOP_CENTER, 3000l, "Error Printing Report!");
+        }
+    }
 }

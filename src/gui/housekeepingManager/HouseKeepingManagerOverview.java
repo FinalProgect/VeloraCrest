@@ -69,14 +69,10 @@ public class HouseKeepingManagerOverview extends javax.swing.JPanel {
 //        increase scroll speed
         jScrollPane1.getVerticalScrollBar().setUnitIncrement(10);
         loadWidgets();
-        loadOperationsChart();
         loadRoomsDynamically();
     }
 
-    private void loadOperationsChart() {
-        // Sample data
-        double completed = 75;
-        double incomplete = 25;
+    private void loadOperationsChart(double completed, double incomplete) {
 
         // Dataset
         DefaultPieDataset dataset = new DefaultPieDataset();
@@ -204,6 +200,7 @@ public class HouseKeepingManagerOverview extends javax.swing.JPanel {
 
     public void loadrooms() {
         loadRoomsDynamically();
+        loadWidgets();
     }
 
     private JLabel createCleanerLabel(String cleanerQuery, String date, String roomId, String status) throws NullPointerException {
@@ -335,12 +332,17 @@ public class HouseKeepingManagerOverview extends javax.swing.JPanel {
 
             ResultSet taskCount = MYsql.execute("SELECT \n"
                     + "	COUNT(*) AS total,\n"
-                    + "    COUNT(CASE WHEN taskStatus_id = 1 THEN 1 END) AS pending,\n"
-                    + "    COUNT(CASE WHEN taskStatus_id = 2 THEN 1 END) AS ongoing,\n"
+                    + "    COUNT(CASE WHEN taskStatus_id != 3 THEN 1 END) AS ongoing,\n"
                     + "    COUNT(CASE WHEN taskStatus_id = 3 THEN 1 END) AS completed\n"
-                    + "FROM taskshedule WHERE `date` = '" + today + "' ");
+                    + "FROM taskshedule WHERE `date` = ' " + today + "' ");
             if (taskCount.next()) {
                 int total = taskCount.getInt("total");
+                total = Math.round(total);
+                jLabel5.setText(String.valueOf(total));
+                double complete = taskCount.getDouble("completed");
+                double ongoing = taskCount.getDouble("ongoing");
+                loadOperationsChart(complete, ongoing);
+
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -682,6 +684,11 @@ public class HouseKeepingManagerOverview extends javax.swing.JPanel {
 
         jButton3.setFont(new java.awt.Font("Poppins", 0, 12)); // NOI18N
         jButton3.setText("Refresh");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel13Layout = new javax.swing.GroupLayout(jPanel13);
         jPanel13.setLayout(jPanel13Layout);
@@ -805,6 +812,10 @@ public class HouseKeepingManagerOverview extends javax.swing.JPanel {
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
         loadRoomsDynamically();
     }//GEN-LAST:event_jButton4ActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        loadWidgets();
+    }//GEN-LAST:event_jButton3ActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

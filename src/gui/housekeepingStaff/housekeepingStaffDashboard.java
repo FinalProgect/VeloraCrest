@@ -45,6 +45,10 @@ public class housekeepingStaffDashboard extends javax.swing.JFrame {
         sideBarButtons.add(jButton2);
         sideBarButtons.add(jButton3);
         sideBarButtons.add(jButton4);
+        
+        jButton2.setVisible(false);
+        jButton3.setVisible(false);
+        jButton4.setVisible(false);
 
         loadOverview();
         for (JButton sideBarButton : sideBarButtons) {

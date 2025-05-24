@@ -50,6 +50,11 @@ public class HouseKeepingManagerDashboard extends javax.swing.JFrame {
             sideBarButton.putClientProperty(FlatClientProperties.STYLE, "arc:80");
 
         }
+        
+        jButton2.setVisible(false);
+        jButton3.setVisible(false);
+        jButton4.setVisible(false);
+        jButton5.setVisible(false);
     }
 
     private void sideBarButtonAnimate(JButton button) {
