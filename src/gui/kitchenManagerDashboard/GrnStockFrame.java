@@ -214,6 +214,7 @@ public class GrnStockFrame extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Add New Stock | Velora Crest");
+        setUndecorated(true);
 
         jPanel5.setBackground(new java.awt.Color(15, 140, 130));
 

@@ -29,7 +29,7 @@ public class LoadTaskCards {
         loadTasksDynamically(pane, date, employee, status);
     }
 
-    private JPanel createTaskCard(String taskName, String duration, int status, String taskID) {
+    private JPanel createTaskCard(String roomNo, String taskName, String duration, int status, String taskID) {
         JPanel card = new JPanel();
 //        card.setPreferredSize(new Dimension(300, 70));
         card.setBackground(Color.WHITE);
@@ -42,7 +42,7 @@ public class LoadTaskCards {
         // Text part
         JPanel textPanel = new JPanel(new GridLayout(2, 1));
         textPanel.setOpaque(false);
-        JLabel title = new JLabel(taskName);
+        JLabel title = new JLabel(taskName+" "+ roomNo);
         title.setFont(new Font("Poppins", Font.BOLD, 14));
         JLabel durationLabel = new JLabel(duration + "s");
         durationLabel.setFont(new Font("Poppins", Font.PLAIN, 12));
@@ -111,10 +111,11 @@ public class LoadTaskCards {
         int taskCount = 0;
 
         String query = String.format(
-                "SELECT `task` AS `task_name`, `date` AS `duration`, taskstatus.id AS `status_id`, taskshedule.id AS taskid "
-                + "FROM taskshedule "
+                "SELECT `task` AS `task_name`, `date` AS `duration`, taskstatus.id AS `status_id`, taskshedule.id AS taskid, "
+                + " `no` as `room_no` FROM taskshedule "
                 + "INNER JOIN task ON task.id = taskshedule.task_id "
-                + "INNER JOIN taskstatus ON taskstatus.id = taskshedule.taskStatus_id "
+                + "INNER JOIN taskstatus ON taskstatus.id = taskshedule.taskStatus_id INNER JOIN rooms ON "
+                + "rooms.id = taskshedule.rooms_id "
                 + "WHERE assignTo = '%d' AND `date` = '%s' AND taskstatus.id = '%d'",
                 empID, today, status
         );
@@ -126,8 +127,9 @@ public class LoadTaskCards {
                 String duration = rs.getString("duration");
                 String taskID = rs.getString("taskid");
                 int statusId = rs.getInt("status_id");
+                String roomNo = rs.getString("room_no");
 
-                JPanel card = createTaskCard(name, duration, statusId, taskID);
+                JPanel card = createTaskCard(roomNo, name, duration, statusId, taskID);
                 card.setAlignmentX(Component.LEFT_ALIGNMENT);
                 panel.add(Box.createVerticalStrut(10));
                 panel.add(card);
